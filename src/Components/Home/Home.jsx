@@ -20,7 +20,7 @@ const Home = () => {
               <span className="text-buttonColor">Bitcoin</span> – Learn, Invest,
               Succeed!
             </h1>
-            <p className="text-[16px] lg:text-[18px] font-Inter font-light text-white mt-5 lg:mt-8 leading-relaxed">
+            <p className="text-[16px] lg:text-[18px] font-Inter font-light text-white mt-5 lg:mt-8 leading-10">
               Welcome to 5 Minute Bitcoin! Your crash course in Bitcoin: simple,
               clear, and free of sales pitches. We aim to tell you everything
               you need to know about Bitcoin without overcomplicating it. No
@@ -40,7 +40,7 @@ const Home = () => {
               alt="Bitcoin"
             />
           </div>
-          <div className="absolute w-100 h-100 bottom-[50px] right-0">
+          <div className="absolute w-100 h-100 bottom-[70px] right-0">
             <img className="w-full" src={Shaperigjt} alt="" />
           </div>
         </div>

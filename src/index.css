@@ -17,3 +17,18 @@
 .motion-item {
   transition: all 0.3s ease;
 }
+
+.courses-text {
+  position: relative;
+  display: inline-block;
+}
+
+.courses-text::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50%;
+  height: 4px;
+  background-color: #2d6a4b; /* Replace with your color */
+}
