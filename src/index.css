@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@theme {
+  --font-Inter: "Inter", serif;
+  --color-bgPrimary: #002e33;
+  --color-bgSecondary: #2d6a4b;
+  --color-buttonColor: #a3dc2f;
+
+  /* ... */
+}
+
+/* Add this to your CSS or Tailwind config */
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+/* Smooth transitions for Framer Motion */
+.motion-item {
+  transition: all 0.3s ease;
+}
