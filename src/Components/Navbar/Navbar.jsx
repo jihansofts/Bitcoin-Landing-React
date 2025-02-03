@@ -20,10 +20,11 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-full  bg-white py-7 fixed top-0 left-0 z-50">
+    <div className="w-full bg-white py-7">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           <img className="w-[120px]" src={Logo} alt="Logo" />
+
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center justify-between">
             <ul className="flex items-center space-x-16 max-xl:space-x-10">
