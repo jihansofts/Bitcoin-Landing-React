@@ -1,6 +1,6 @@
 import React from "react";
-import Shape from "../../../public/img/shape.png";
-import Bitcoin from "../../../public/img/Bitcoin.png";
+import Shape from "../../assets/img/shape.png";
+import Bitcoin from "../../assets/img/Bitcoin.png";
 const Home = () => {
   return (
     <div className="w-full relative bg-bgPrimary h-screen">

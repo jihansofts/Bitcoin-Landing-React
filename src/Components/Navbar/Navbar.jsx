@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Logo from "../../../public/img/logo.png";
+import Logo from "../../assets/img/Logo.png";
 import { FaBars, FaTimes } from "react-icons/fa"; // Icons for hamburger menu
 
 const Navbar = () => {
