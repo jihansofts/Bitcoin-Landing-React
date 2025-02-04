@@ -115,7 +115,7 @@ const Login = () => {
                     <button
                       type="submit"
                       className="bg-buttonColor w-full text-bgPrimary py-3 px-7 rounded-sm font-Inter font-semibold hover:bg-opacity-90 transition-all">
-                      Sign Up
+                      Login
                     </button>
                   </div>
                   {/* Already have an account? Login */}
