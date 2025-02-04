@@ -3,7 +3,7 @@ import Shaperigjt from "../../assets/img/shaperight.png";
 import AboutImg from "../../assets/img/About.png";
 const About = () => {
   return (
-    <div className="w-full relative bg-bgPrimary py-20">
+    <div className="w-full relative bg-bgPrimary py-20 pb-30">
       <div className="container mx-auto px-4 text-start">
         <div className=" grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
           <div className="col-span-12 lg:col-span-7 text-center lg:text-left">
@@ -36,14 +36,14 @@ const About = () => {
           </div>
           <div className="col-span-12 lg:col-span-5 flex justify-center lg:justify-end">
             <img
-              className="w-full max-w-[400px] lg:max-w-full"
+              className="w-full max-w-[450px] sm:max-w-auto lg:max-w-full"
               src={AboutImg}
               alt=""
             />
           </div>
         </div>
       </div>
-      <div className="absolute w-100 h-100 bottom-0 right-0">
+      <div className="absolute w-100 h-100 bottom-[200px] right-0">
         <img className="w-full" src={Shaperigjt} alt="" />
       </div>
     </div>
