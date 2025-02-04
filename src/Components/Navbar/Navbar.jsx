@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaBars, FaTimes } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { Link } from "react-scroll"; // Import Link from react-scroll
 import Logo from "../../assets/img/Logo.png";
 
 const Navbar = () => {
@@ -9,11 +10,11 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { id: 1, name: "Home" },
-    { id: 2, name: "Course" },
-    { id: 3, name: "About" },
-    { id: 4, name: "Testimonials" },
-    { id: 5, name: "FAQ" },
+    { id: 1, name: "Home", target: "home" },
+    { id: 2, name: "Course", target: "course" },
+    { id: 3, name: "About", target: "about" },
+    { id: 4, name: "Testimonials", target: "testimonials" },
+    { id: 5, name: "FAQ", target: "faq" },
   ];
 
   const toggleMobileMenu = () => {
@@ -24,10 +25,9 @@ const Navbar = () => {
     <div className="w-full bg-white py-7">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
-          <NavLink to="/">
+          <NavLink to="/" smooth={true} duration={500}>
             <img className="w-[120px]" src={Logo} alt="Logo" />
           </NavLink>
-
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center justify-between">
             <ul className="flex items-center space-x-16 max-xl:space-x-10">
@@ -40,7 +40,15 @@ const Navbar = () => {
                       : "text-[#57886F] font-medium text-[16px]"
                   }`}
                   onClick={() => setActiveItem(item.name)}>
-                  {item.name}
+                  <Link
+                    to={item.target}
+                    smooth={true}
+                    duration={500}
+                    spy={true}
+                    activeClass="active"
+                    onSetActive={() => setActiveItem(item.name)}>
+                    {item.name}
+                  </Link>
                   {activeItem === item.name && (
                     <motion.span
                       className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-bgSecondary rounded-full"
@@ -67,10 +75,13 @@ const Navbar = () => {
           {/* Sign Up Button (Desktop) */}
           <NavLink
             to={"/signup"}
+            smooth={true}
+            duration={500}
             className="hidden lg:block border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2">
             Sign Up
           </NavLink>
         </div>
+
         {/* Mobile Menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
@@ -93,7 +104,15 @@ const Navbar = () => {
                       setActiveItem(item.name);
                       setIsMobileMenuOpen(false); // Close mobile menu after clicking
                     }}>
-                    {item.name}
+                    <Link
+                      to={item.target}
+                      smooth={true}
+                      duration={500}
+                      spy={true}
+                      activeClass="active"
+                      onSetActive={() => setActiveItem(item.name)}>
+                      {item.name}
+                    </Link>
                     {activeItem === item.name && (
                       <motion.span
                         className="absolute -bottom-2 left-[25px] transform -translate-x-1/2 w-1.5 h-1.5 bg-bgSecondary rounded-full"
@@ -109,11 +128,13 @@ const Navbar = () => {
                 ))}
               </ul>
               {/* Sign Up Button (Mobile) */}
-              <NavLink to={"/signup"}>
-                <button className="mt-4 coursr-pointer border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-full">
-                  Sign Up
-                </button>
-              </NavLink>
+              <Link
+                to="signup"
+                smooth={true}
+                duration={500}
+                className="mt-4 cursor-pointer border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-full block text-center">
+                Sign Up
+              </Link>
             </motion.div>
           )}
         </AnimatePresence>

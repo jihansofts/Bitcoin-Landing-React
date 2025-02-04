@@ -17,7 +17,7 @@ const Login = () => {
       <div className="container mx-auto mt-5 px-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
           {/* Left Column (Content) */}
-          <div className="col-span-12 lg:col-span-6 xl:col-span-6 max-lg:text-center">
+          <div className="col-span-12 lg:col-span-6 xl:col-span-6 max-lg:text-left">
             <div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-Inter text-white font-bold leading-tight">
                 Login To Account
@@ -99,7 +99,7 @@ const Login = () => {
                     <label
                       htmlFor="terms"
                       className="ml-2 text-sm font-Inter text-buttonColor">
-                      Accept Terms of Service
+                      Remember Me
                     </label>
                   </div>
                   <a
@@ -121,11 +121,11 @@ const Login = () => {
                   {/* Already have an account? Login */}
                   <div className="mt-6 text-center">
                     <p className="text-[#D0D0D0] text-sm font-Inter">
-                      Already have an account?{" "}
+                      Don’t Have an Account?{" "}
                       <Link
                         to={"/login"}
                         className="text-buttonColor font-semibold hover:underline">
-                        Login
+                        Sign up
                       </Link>
                     </p>
                   </div>

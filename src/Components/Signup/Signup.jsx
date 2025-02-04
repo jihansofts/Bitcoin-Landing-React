@@ -18,7 +18,7 @@ const Signup = () => {
       <div className="container mx-auto mt-5 px-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
           {/* Left Column (Content) */}
-          <div className="col-span-12 lg:col-span-6 xl:col-span-6 max-lg:text-center">
+          <div className="col-span-12 lg:col-span-6 xl:col-span-6 max-lg:text-left">
             <div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-Inter text-white font-bold leading-tight">
                 Create Account
