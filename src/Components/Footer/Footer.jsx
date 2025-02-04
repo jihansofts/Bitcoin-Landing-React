@@ -12,7 +12,7 @@ const Footer = () => {
     >
       <div className="container mx-auto py-20 px-4 ">
         {/* Logo */}
-        <div className="grid grid-cols-12 max-sm:text-center gap-2">
+        <div className="grid grid-cols-12 max-sm:text-center gap-x-40 max-2xl:gap-x-32 max-xl:gap-x-20 max-lg:gap-x-10 max-md:gap-x-4 max-sm:gap-2">
           <div className="col-span-4 max-sm:col-span-12 max-sm:mx-auto">
             <img className="w-[200px]" src={Logo} alt="Logo" />
           </div>

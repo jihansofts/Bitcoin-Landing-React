@@ -24,7 +24,9 @@ const Navbar = () => {
     <div className="w-full bg-white py-7">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
-          <img className="w-[120px]" src={Logo} alt="Logo" />
+          <NavLink to="/">
+            <img className="w-[120px]" src={Logo} alt="Logo" />
+          </NavLink>
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center justify-between">
