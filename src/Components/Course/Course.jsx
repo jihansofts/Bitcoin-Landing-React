@@ -67,7 +67,7 @@ const Course = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}>
-                  <Card data={Data} />
+                  <Card data={courses} />
                 </motion.div>
               )}
             </AnimatePresence>
