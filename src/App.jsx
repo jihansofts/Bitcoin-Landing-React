@@ -6,6 +6,7 @@ import About from "./Components/About/About";
 import Course from "./Components/Course/Course";
 import Testimonials from "./Components/Testimonials/Testimonials";
 import FAQ from "./Components/FAQ/Faq";
+import Footer from "./Components/Footer/Footer";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <FAQ />
         </section>
       </main>
+      <Footer />
     </>
   );
 }

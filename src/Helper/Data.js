@@ -4,6 +4,9 @@ import Client3 from "../assets/img/client3.png";
 import Client4 from "../assets/img/client4.png";
 import Client5 from "../assets/img/client5.png";
 import Client6 from "../assets/img/client6.png";
+import Card1 from "../assets/img/Card1.png";
+import Card2 from "../assets/img/Card2.png";
+import Card3 from "../assets/img/Card3.png";
 const ReviewsData = [
   {
     id: 1,
@@ -53,6 +56,45 @@ const ReviewsData = [
     review:
       "It was a pleasure working with the Coca team. They understood the brief correctly and delivered great designs exceeding the expectations.",
   },
+  {
+    id: 7,
+    name: "Savannah Nguyen",
+    image: Client1,
+    company: "CEO Sans Brothers",
+    review:
+      "It was a pleasure working with the Coca team. They understood the brief correctly and delivered great designs exceeding the expectations.",
+  },
+  {
+    id: 8,
+    name: "Zhafira Azalea",
+    image: Client2,
+    company: "CEO Sans Brothers",
+    review:
+      "It was a pleasure working with the Coca team. They understood the brief correctly and delivered great designs exceeding the expectations.",
+  },
+];
+const courses = [
+  {
+    id: 1,
+    image: Card1,
+    title: "5 Minute Bitcoin, Course 3, Advanced",
+    description:
+      "Learn about bitcoin and start earning from it. This course will help you a lot.",
+  },
+  {
+    id: 2,
+    image: Card2,
+    title: "5 Minute Bitcoin, Course 2, Intermediate",
+    description:
+      "Learn about bitcoin and start earning from it. This course will help you a lot.",
+  },
+  {
+    id: 3,
+    image: Card3,
+    title: "5 Minute Bitcoin, Course 1, Beginner",
+    description:
+      "Learn about bitcoin and start earning from it. This course will help you a lot.",
+  },
 ];
 
-export { ReviewsData };
+export { ReviewsData, courses };

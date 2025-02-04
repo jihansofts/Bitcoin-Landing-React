@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LiaLongArrowAltLeftSolid, LiaArrowRightSolid } from "react-icons/lia";
 import Shape from "../../assets/img/shape.png";
-
-import Card1 from "../../assets/img/Card1.png";
-import Card2 from "../../assets/img/Card2.png";
-import Card3 from "../../assets/img/Card3.png";
+import { courses } from "../../Helper/Data";
 import Card from "../Common/Card";
 const Course = () => {
   const [activeItem, setActiveItem] = useState("All Programs");
@@ -15,29 +12,7 @@ const Course = () => {
     { id: 3, name: "Intermediate" },
     { id: 4, name: "Beginner" },
   ];
-  const courses = [
-    {
-      id: 1,
-      image: Card1,
-      title: "5 Minute Bitcoin, Course 3, Advanced",
-      description:
-        "Learn about bitcoin and start earning from it. This course will help you a lot.",
-    },
-    {
-      id: 2,
-      image: Card2,
-      title: "5 Minute Bitcoin, Course 2, Intermediate",
-      description:
-        "Learn about bitcoin and start earning from it. This course will help you a lot.",
-    },
-    {
-      id: 3,
-      image: Card3,
-      title: "5 Minute Bitcoin, Course 1, Beginner",
-      description:
-        "Learn about bitcoin and start earning from it. This course will help you a lot.",
-    },
-  ];
+
   return (
     <div className="w-full relative bg-bgPrimary py-10 overflow-hidden">
       <div className="absolute w-100 h-100 top-[-50px] left-0">
@@ -92,7 +67,7 @@ const Course = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}>
-                  <Card data={courses} />
+                  <Card data={Data} />
                 </motion.div>
               )}
             </AnimatePresence>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ReviewsData } from "../../Helper/ReviewData";
+import { ReviewsData } from "../../Helper/Data";
 import ReviewCard from "../Common/ReviewCard";
 const Testimonials = () => {
   const [activeIndex, setActiveIndex] = useState(0);
