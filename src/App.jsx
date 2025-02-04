@@ -1,35 +1,47 @@
 import { useState } from "react";
 import "./App.css";
+import { Routes, Route } from "react-router";
 import Navbar from "./Components/Navbar/Navbar";
-import Home from "./Components/Home/Home";
-import About from "./Components/About/About";
-import Course from "./Components/Course/Course";
-import Testimonials from "./Components/Testimonials/Testimonials";
-import FAQ from "./Components/FAQ/Faq";
+import LandingPages from "./Components/Landing/LandingPages";
 import Footer from "./Components/Footer/Footer";
 import Login from "./Components/Login/Login";
+import Signup from "./Components/Signup/Signup";
 function App() {
   return (
     <>
-      <Navbar />
-      <main>
-        <section id="home">
-          <Home />
-        </section>
-        <section id="course">
-          <Course />
-        </section>
-        <section id="about">
-          <About />
-        </section>
-        <section id="testimonials">
-          <Testimonials />
-        </section>
-        <section id="faq">
-          <FAQ />
-        </section>
-      </main>
-      <Footer />
+      <Routes>
+        {/* Landing Page Route */}
+        <Route
+          path="/"
+          element={
+            <>
+              <Navbar />
+              <LandingPages />
+              <Footer />
+            </>
+          }
+        />
+        {/* Login Page Route */}
+        <Route
+          path="/login"
+          element={
+            <>
+              <Navbar />
+              <Login />
+              <Footer />
+            </>
+          }
+        />
+        {/* Signup Page Route */}
+        <Route
+          path="/signup"
+          element={
+            <>
+              <Navbar /> <Signup /> <Footer />
+            </>
+          }
+        />
+      </Routes>
     </>
   );
 }

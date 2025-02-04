@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Logo from "../../assets/img/Logo.png";
 
 const Navbar = () => {
@@ -63,11 +63,12 @@ const Navbar = () => {
           </button>
 
           {/* Sign Up Button (Desktop) */}
-          <button className="hidden lg:block border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2">
+          <NavLink
+            to={"/signup"}
+            className="hidden lg:block border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2">
             Sign Up
-          </button>
+          </NavLink>
         </div>
-
         {/* Mobile Menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
@@ -106,11 +107,11 @@ const Navbar = () => {
                 ))}
               </ul>
               {/* Sign Up Button (Mobile) */}
-              <Link to="/signup">
-                <button className="mt-4 border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-full">
+              <NavLink to={"/signup"}>
+                <button className="mt-4 coursr-pointer border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-full">
                   Sign Up
                 </button>
-              </Link>
+              </NavLink>
             </motion.div>
           )}
         </AnimatePresence>

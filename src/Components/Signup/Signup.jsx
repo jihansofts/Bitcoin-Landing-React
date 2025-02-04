@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
-import { Eye, EyeOff } from "react-feather";
-const Login = () => {
+import { Eye, EyeOff } from "react-feather"; // For show/hide password icons
+const Signup = () => {
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
   const [acceptTerms, setAcceptTerms] = useState(false); // State for terms checkbox
   const togglePasswordVisibility = () => {
@@ -12,6 +12,7 @@ const Login = () => {
   const handleTermsCheckbox = () => {
     setAcceptTerms(!acceptTerms);
   };
+
   return (
     <div className="w-full bg-bgPrimary py-20">
       <div className="container mx-auto mt-5 px-4">
@@ -20,7 +21,7 @@ const Login = () => {
           <div className="col-span-12 lg:col-span-6 xl:col-span-6 max-lg:text-center">
             <div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-Inter text-white font-bold leading-tight">
-                Login To Account
+                Create Account
               </h1>
               <p className="text-base sm:text-lg lg:text-xl font-Inter font-normal text-[#D0D0D0] mt-5 lg:mt-8 leading-relaxed">
                 Welcome! Fill up the form below and sign in to enroll to your
@@ -45,6 +46,20 @@ const Login = () => {
             {/* Signup Form */}
             <div className="mt-8">
               <form action="">
+                {/* Name Input */}
+                <div className="mb-6">
+                  <label
+                    className="text-white text-[16px] font-Inter font-semibold"
+                    htmlFor="name">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    placeholder="@username"
+                    className="w-full bg-[#002E337D] border border-[#E1E1E1] text-white py-3 px-5 rounded-sm font-Inter font-normal  mt-2 placeholder:text-[#D0D0D0] focus:outline-none focus:border-buttonColor"
+                  />
+                </div>
                 {/* Email Input */}
                 <div className="mb-6">
                   <label
@@ -86,9 +101,32 @@ const Login = () => {
                     </button>
                   </div>
                 </div>
-                {/* Accept Terms Checkbox */}
-                <div className="flex justify-between items-center">
-                  <div className="mt-2  flex items-center  rounded-lg">
+                <div className="mb-6">
+                  <label
+                    className="text-white text-[16px] font-Inter font-semibold"
+                    htmlFor="password">
+                    Confirm Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      placeholder="Re-type your password"
+                      className="w-full bg-[#002E337D] border border-[#E1E1E1] text-white py-3 px-5 rounded-sm font-Inter font-normal mt-2 placeholder:text-[#D0D0D0] focus:outline-none focus:border-buttonColor"
+                    />
+                    <button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 mt-2">
+                      {showPassword ? (
+                        <EyeOff className="text-[#D0D0D0]" size={20} />
+                      ) : (
+                        <Eye className="text-[#D0D0D0]" size={20} />
+                      )}
+                    </button>
+                  </div>
+                  {/* Accept Terms Checkbox */}
+                  <div className="mt-4  flex items-center  rounded-lg">
                     <input
                       type="checkbox"
                       id="terms"
@@ -102,13 +140,7 @@ const Login = () => {
                       Accept Terms of Service
                     </label>
                   </div>
-                  <a
-                    className="text-[14px] font-Inter text-buttonColor"
-                    href="#">
-                    Forgot Password
-                  </a>
                 </div>
-
                 <div className="flex flex-col justify-center items-center">
                   {/* Submit Button */}
                   <div className="mt-2 lg:mt-10 w-[300px]">
@@ -147,4 +179,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
