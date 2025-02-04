@@ -17,7 +17,7 @@ const Footer = () => {
             <img className="w-[200px]" src={Logo} alt="Logo" />
           </div>
           <div className="col-span-4 max-sm:col-span-12 max-sm:mt-5">
-            <div className="flex flex-col gap-y-10">
+            <div className="flex flex-col gap-y-10 max-sm:gap-y-5">
               <h4 className="text-[24px] text-bgPrimary font-Inter font-semibold">
                 Terms And Policies
               </h4>
@@ -43,8 +43,8 @@ const Footer = () => {
               </a>
             </div>
           </div>
-          <div className="col-span-4 max-sm:col-span-12">
-            <div className="flex flex-col max-sm:items-center gap-y-10">
+          <div className="col-span-4 max-sm:col-span-12 max-sm:mt-5">
+            <div className="flex flex-col max-sm:items-center gap-y-10 max-sm:gap-y-5">
               <h4 className="text-[24px] text-bgPrimary font-Inter font-semibold">
                 Contact Us
               </h4>

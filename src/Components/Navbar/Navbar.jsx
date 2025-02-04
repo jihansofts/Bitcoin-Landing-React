@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import Logo from "../../assets/img/Logo.png";
-import { FaBars, FaTimes } from "react-icons/fa"; // Icons for hamburger menu
 
 const Navbar = () => {
   const [activeItem, setActiveItem] = useState("Home");
@@ -105,9 +106,11 @@ const Navbar = () => {
                 ))}
               </ul>
               {/* Sign Up Button (Mobile) */}
-              <button className="mt-4 border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-full">
-                Sign Up
-              </button>
+              <Link to="/signup">
+                <button className="mt-4 border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-full">
+                  Sign Up
+                </button>
+              </Link>
             </motion.div>
           )}
         </AnimatePresence>
