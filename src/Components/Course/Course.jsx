@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { LiaLongArrowAltLeftSolid, LiaArrowRightSolid } from "react-icons/lia";
 import Shape from "../../assets/img/shape.png";
-import Shaperigjt from "../../assets/img/shaperight.png";
-import CardShape from "../../assets/img/CardShape.png";
+
 import Card1 from "../../assets/img/Card1.png";
 import Card2 from "../../assets/img/Card2.png";
 import Card3 from "../../assets/img/Card3.png";
 import Card from "../Common/Card";
 const Course = () => {
   const [activeItem, setActiveItem] = useState("All Programs");
-
   const tabItems = [
     { id: 1, name: "All Programs" },
     { id: 2, name: "Advanced" },
@@ -44,12 +43,12 @@ const Course = () => {
       <div className="absolute w-100 h-100 top-[-50px] left-0">
         <img className="w-full" src={Shape} alt="" />
       </div>
-      <div className="container mx-auto text-center">
+      <div className="container mx-auto px-4 text-center">
         <div>
           <h4 className="text-[24px] font-Inter text-buttonColor font-bold">
             Course
           </h4>
-          <h2 className="relative text-[50px] lg:text-[72px] font-Inter text-white font-bold">
+          <h2 className="relative text-[60px] max-lg:text-[50px] max-md:text-[40px] font-Inter text-white font-bold">
             Enroll To Our{" "}
             <span className="relative inline-block group">
               <span className="relative z-10">Courses</span>
@@ -118,10 +117,15 @@ const Course = () => {
               )}
             </AnimatePresence>
           </div>
+          <div>
+            <button className="bg-buttonColor mr-3 text-bgPrimary py-4 px-4 cursor-pointer rounded-full font-Inter font-semibold hover:bg-opacity-90 transition-all mt-10">
+              <LiaLongArrowAltLeftSolid size={20} />
+            </button>
+            <button className=" mr-3 text-bgPrimary py-4 px-4 cursor-pointer border-2 border-[#707070] rounded-full font-Inter font-semibold hover:bg-opacity-90 transition-all mt-10">
+              <LiaArrowRightSolid color="#ffffff" size={20} />
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="absolute w-100 h-100 bottom-0 right-0">
-        <img className="w-full" src={Shaperigjt} alt="" />
       </div>
     </div>
   );
