@@ -47,7 +47,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-
       {/* Background Right Shape */}
       <div className="absolute hidden sm:block w-[120px] md:w-[200px] lg:w-[250px] bottom-0 right-0">
         <img className="w-full" src={Shaperight} alt="Right Shape" />
