@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { Link } from "react-scroll"; // Import Link from react-scroll
+import { Link } from "react-scroll";
 import Logo from "../../assets/img/Logo.png";
 
 const Navbar = () => {
@@ -10,7 +10,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { id: 1, name: "Home", target: "home" },
+    { id: 1, name: "Home", target: "/" },
     { id: 2, name: "Course", target: "course" },
     { id: 3, name: "About", target: "about" },
     { id: 4, name: "Testimonials", target: "testimonials" },
@@ -64,7 +64,6 @@ const Navbar = () => {
               ))}
             </ul>
           </div>
-
           {/* Mobile Menu Toggle Button */}
           <button
             className="lg:hidden text-bgSecondary text-2xl"
@@ -128,13 +127,14 @@ const Navbar = () => {
                 ))}
               </ul>
               {/* Sign Up Button (Mobile) */}
-              <Link
-                to="signup"
+              <NavLink
+                to="/signup"
                 smooth={true}
                 duration={500}
+                onClick={() => setIsMobileMenuOpen(false)}
                 className="mt-4 cursor-pointer border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-full block text-center">
                 Sign Up
-              </Link>
+              </NavLink>
             </motion.div>
           )}
         </AnimatePresence>

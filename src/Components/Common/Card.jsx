@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import CardShape from "../../assets/img/CardShape.png";
-
-const Card = ({ data }) => {
+const Card = ({ data, onOpenModal }) => {
   const Course = data;
+  const HandleOpen = () => {
+    setIsOpen(true);
+  };
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-20">
       {Course.map((item) => (
@@ -38,8 +40,10 @@ const Card = ({ data }) => {
                   {item.price} Free
                 </span>
               </div>
-              <button className="text-[14px] sm:text-[16px] md:text-[18px] mt-6 sm:mt-8 cursor-pointer w-full bg-buttonColor py-2 sm:py-3 px-5 sm:px-7 rounded-3xl font-Inter font-bold text-bgPrimary hover:bg-opacity-90 transition-all">
-                Enroll Now
+              <button
+                onClick={() => onOpenModal(item)}
+                className="text-[14px] sm:text-[16px] md:text-[18px] mt-6 sm:mt-8 cursor-pointer w-full bg-buttonColor py-2 sm:py-3 px-5 sm:px-7 rounded-3xl font-Inter font-bold text-bgPrimary hover:bg-opacity-90 transition-all">
+                Take Course
               </button>
             </div>
           </div>

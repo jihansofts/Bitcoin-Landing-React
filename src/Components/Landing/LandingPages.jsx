@@ -7,7 +7,7 @@ import FAQ from "../FAQ/Faq";
 const LandingPages = () => {
   return (
     <main>
-      <section id="home">
+      <section id="/">
         <Home />
       </section>
       <section id="course">

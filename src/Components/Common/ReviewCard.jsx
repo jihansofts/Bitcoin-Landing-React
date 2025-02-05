@@ -2,7 +2,6 @@ import React from "react";
 import { MdOutlineStar } from "react-icons/md";
 import Client1 from "../../assets/img/client1.png";
 const ReviewCard = ({ data }) => {
-  console.log(data);
   return (
     <div>
       <div

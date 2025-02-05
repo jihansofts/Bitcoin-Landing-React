@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
-import { Eye, EyeOff } from "react-feather";
+import InputField from "../Common/InputField";
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
   const [acceptTerms, setAcceptTerms] = useState(false); // State for terms checkbox
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const handleTermsCheckbox = () => {
-    setAcceptTerms(!acceptTerms);
-  };
+
   return (
     <div className="w-full bg-bgPrimary py-20">
       <div className="container mx-auto mt-5 px-4">
@@ -42,93 +44,63 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Signup Form */}
+            {/* Login Form */}
             <div className="mt-8">
-              <form action="">
-                {/* Email Input */}
-                <div className="mb-6">
-                  <label
-                    className="text-white text-[16px] font-Inter font-semibold"
-                    htmlFor="email">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    placeholder="Enter your email"
-                    className="w-full bg-[#002E337D] border border-[#E1E1E1] text-white py-3 px-5 rounded-sm font-Inter font-normal  mt-2 placeholder:text-[#D0D0D0] focus:outline-none focus:border-buttonColor"
-                  />
-                </div>
+              <form className="mt-8">
+                <InputField
+                  label="Email"
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+                <InputField
+                  label="Password"
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
 
-                {/* Password Input */}
-                <div className="mb-6">
-                  <label
-                    className="text-white text-[16px] font-Inter font-semibold"
-                    htmlFor="password">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      id="password"
-                      placeholder="Enter your password"
-                      className="w-full bg-[#002E337D] border border-[#E1E1E1] text-white py-3 px-5 rounded-sm font-Inter font-normal  mt-2 placeholder:text-[#D0D0D0] focus:outline-none focus:border-buttonColor"
-                    />
-                    <button
-                      type="button"
-                      onClick={togglePasswordVisibility}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 mt-2">
-                      {showPassword ? (
-                        <EyeOff className="text-[#D0D0D0]" size={20} />
-                      ) : (
-                        <Eye className="text-[#D0D0D0]" size={20} />
-                      )}
-                    </button>
-                  </div>
-                </div>
                 {/* Accept Terms Checkbox */}
-                <div className="flex justify-between items-center">
-                  <div className="mt-2  flex items-center  rounded-lg">
+                <div className="mt-4 flex items-center justify-between">
+                  <div>
                     <input
                       type="checkbox"
-                      id="terms"
                       checked={acceptTerms}
-                      onChange={handleTermsCheckbox}
-                      className="w-4 h-4 accent-buttonColor  border-gray-300 rounded focus:ring-buttonColor focus:ring-2"
+                      onChange={() => setAcceptTerms(!acceptTerms)}
+                      className="w-4 h-4 accent-buttonColor border-gray-300 rounded"
                     />
-                    <label
-                      htmlFor="terms"
-                      className="ml-2 text-sm font-Inter text-buttonColor">
+                    <label className="ml-2 text-sm text-buttonColor">
                       Remember Me
                     </label>
                   </div>
-                  <a
-                    className="text-[14px] font-Inter text-buttonColor"
-                    href="#">
-                    Forgot Password
-                  </a>
+                  <div>
+                    <Link
+                      to="/forgot-password"
+                      className="ml-2 text-sm text-buttonColor hover:underline">
+                      Forgot Password?
+                    </Link>
+                  </div>
                 </div>
-
-                <div className="flex flex-col justify-center items-center">
+                <div className="mt-4 flex flex-col items-center">
                   {/* Submit Button */}
-                  <div className="mt-2 lg:mt-10 w-[300px]">
-                    <button
-                      type="submit"
-                      className="bg-buttonColor w-full text-bgPrimary py-3 px-7 rounded-sm font-Inter font-semibold hover:bg-opacity-90 transition-all">
-                      Login
-                    </button>
-                  </div>
-                  {/* Already have an account? Login */}
-                  <div className="mt-6 text-center">
-                    <p className="text-[#D0D0D0] text-sm font-Inter">
-                      Don’t Have an Account?{" "}
-                      <Link
-                        to={"/login"}
-                        className="text-buttonColor font-semibold hover:underline">
-                        Sign up
-                      </Link>
-                    </p>
-                  </div>
+                  <button
+                    type="submit"
+                    className="mt-6 bg-buttonColor w-[50%] text-white py-3 px-7 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
+                    Login
+                  </button>
+                  {/* Already have an account? */}
+                  <p className="mt-4 text-[#FFFFFF] text-[15px]">
+                    Don’t Have an Account?
+                    <Link
+                      to="/signup"
+                      className="text-buttonColor ml-1 font-semibold hover:underline">
+                      Sign up
+                    </Link>
+                  </p>
                 </div>
               </form>
             </div>
