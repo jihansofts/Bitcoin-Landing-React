@@ -17,9 +17,9 @@ const Testimonials = () => {
     <div className="w-full bg-bgSecondary py-20 overflow-hidden">
       <div className="container mx-auto px-4 text-center">
         <h4 className="text-[24px] font-Inter text-buttonColor font-bold">
-          Course
+          Testimonials
         </h4>
-        <h1 className="text-[48px] font-Inter text-white font-bold">
+        <h1 className="text-[48px] max-sm:text-[32px] font-Inter text-white font-bold">
           What customers say about <br /> Fiveminutebitcoin
         </h1>
       </div>

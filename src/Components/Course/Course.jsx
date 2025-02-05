@@ -25,7 +25,7 @@ const Course = () => {
     });
 
   return (
-    <div className="w-full  bg-bgPrimary py-10 overflow-hidden">
+    <div className="w-full bg-bgPrimary py-10 overflow-hidden">
       {isOpen && (
         <div className="fixed bg-bgSecondary top-0 left-0 bg-opacity-30 w-full h-full z-50">
           <Model onClose={setIsOpen} />
