@@ -27,21 +27,21 @@ const Course = () => {
   return (
     <div className="w-full  bg-bgPrimary py-10 overflow-hidden">
       {isOpen && (
-        <div className="fixed  bg-bgSecondary top-0 left-0 bg-opacity-30 w-full h-full z-50">
+        <div className="fixed bg-bgSecondary top-0 left-0 bg-opacity-30 w-full h-full z-50">
           <Model onClose={setIsOpen} />
         </div>
       )}
-      <div className="container mx-auto px-4 text-center">
-        <h2 className="text-[60px] max-md:[30px] font-bold text-white">
+      <div className="container overflow-auto mx-auto px-4 text-center">
+        <h2 className="text-[60px] max-md:[30px] max-sm:text-[28px] font-bold text-white">
           Enroll To Our <span className="text-buttonColor">Courses</span>
         </h2>
         {/* Tab Items */}
         <div className="w-full mt-5 text-center">
-          <ul className="flex items-center justify-center space-x-10 max-md:spac">
+          <ul className="flex items-center justify-center space-x-10 max-md:space-x-8">
             {tabItems.map((item, index) => (
               <li
                 key={index}
-                className={`cursor-pointer ${
+                className={`cursor-pointer max-sm:text-[12px] ${
                   activeItem === item
                     ? "text-buttonColor font-bold"
                     : "text-[#689D30]"
