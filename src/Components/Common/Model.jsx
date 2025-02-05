@@ -19,41 +19,47 @@ const Model = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="relative bg-bgPrimary w-[90%] h-auto max-sm:py-5 max-w-2xl md:max-w-4xl rounded-lg shadow-lg p-6 md:p-10 flex flex-col md:flex-row">
+    <div className="fixed top-0 max-sm:top-[-12px]  left-0 max-sm:left-[-5px] w-full h-full flex items-center justify-center z-50 ">
+      <div className="relative bg-bgPrimary w-[90%] max-w-2xl md:max-w-4xl rounded-lg shadow-lg p-4 md:p-8 flex flex-col md:flex-row">
         {/* Close Button */}
         <button
           onClick={() => onClose(false)}
-          className="absolute cursor-pointer top-4 right-4 text-red-500 hover:text-gray-700">
-          <IoCloseSharp size={30} />
+          className="absolute cursor-pointer top-2 right-2 text-red-500 hover:text-gray-700">
+          <IoCloseSharp size={24} />
         </button>
 
         {/* Left Column (Form) */}
-        <div className="w-full md:w-1/2 flex flex-col justify-center px-4 md:px-8">
-          <h1 className="text-3xl max-sm:text-2xl font-bold text-white">
+        <div className="w-full flex flex-col justify-center px-2 md:px-6">
+          <h1 className="text-2xl max-sm:text-xl font-bold text-white">
             Create Account
           </h1>
-          <p className="text-white mt-2 text-sm max-sm:text-[12px]">
+          <p className="text-white mt-1 text-xs max-sm:text-[10px]">
             Welcome! Fill up the form below and sign up to enroll in your
             desired{" "}
             <span className="text-buttonColor">bitcoin learning course</span>
           </p>
 
           {/* Google Sign Up Button */}
-          <button className="bg-white border cursor-pointer w-full text-sm flex items-center justify-center gap-x-2 text-bgPrimary py-3 px-4 rounded-lg font-semibold hover:bg-gray-100 transition-all mt-4">
+          <button className="bg-white border cursor-pointer w-full text-[14px] max-sm:text-[12px] flex items-center justify-center gap-x-2 text-[#002E337D] py-2 px-3 rounded-lg font-semibold hover:bg-gray-100 transition-all mt-3">
             Continue with{" "}
-            <img className="w-30 max-sm:w-20" src={Google} alt="Google" />
+            <img
+              className="w-28 max-md:w-20 max-sm:w-14"
+              src={Google}
+              alt="Google"
+            />
           </button>
 
           {/* Divider */}
-          <div className="w-full flex items-center my-4">
+          <div className="w-full flex items-center my-3 max-sm:my-1">
             <div className="flex-1 h-px bg-gray-300"></div>
-            <p className="text-gray-500 text-xs px-2">Or Continue with Email</p>
+            <p className="text-gray-500 text-[10px] px-2">
+              Or Continue with Email
+            </p>
             <div className="flex-1 h-px bg-gray-300"></div>
           </div>
 
           {/* Signup Form */}
-          <form className="space-y-4">
+          <form className="space-y-3 max-sm:space-none">
             <InputField
               label="Name"
               type="text"
@@ -86,29 +92,26 @@ const Model = ({ onClose }) => {
               value={formData.confirmPassword}
               onChange={handleChange}
             />
-
             {/* Accept Terms Checkbox */}
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
                 checked={acceptTerms}
                 onChange={() => setAcceptTerms(!acceptTerms)}
-                className="w-4 h-4 accent-buttonColor border-gray-300 rounded"
+                className="w-3 h-3 accent-buttonColor border-gray-300 rounded"
               />
-              <label className="text-sm text-buttonColor">
+              <label className="text-xs text-buttonColor">
                 Accept Terms of Service
               </label>
             </div>
-
             {/* Submit Button */}
             <button
               type="submit"
-              className="mt-4 bg-buttonColor w-full md:w-3/4 text-white py-3 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
+              className="mt-3 max-sm:mt-1 bg-buttonColor w-full text-white py-2 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
               Sign Up
             </button>
-
             {/* Already have an account? */}
-            <p className="mt-4 text-white text-sm text-center">
+            <p className="mt-3 max-sm:mt-1 text-white text-xs text-center">
               Already have an account?{" "}
               <Link
                 to="/login"
