@@ -37,7 +37,7 @@ const Course = () => {
         </h2>
         {/* Tab Items */}
         <div className="w-full mt-5 text-center">
-          <ul className="flex items-center justify-center space-x-10 max-md:space-x-4">
+          <ul className="flex items-center justify-center space-x-10 max-md:spac">
             {tabItems.map((item, index) => (
               <li
                 key={index}
