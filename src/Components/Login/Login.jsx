@@ -19,7 +19,7 @@ const Login = () => {
       <div className="container mx-auto mt-5 px-4">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
           {/* Left Column (Content) */}
-          <div className="col-span-12 lg:col-span-6 xl:col-span-6 max-lg:text-left">
+          <div className="col-span-12 lg:col-span-6 xl:col-span-6 max-sm:col-span-12 max-lg:text-left">
             <div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-Inter text-white font-bold leading-tight">
                 Login To Account
@@ -31,9 +31,13 @@ const Login = () => {
                   bitcoin learning course
                 </span>
               </p>
-              <button className="bg-white w-full text-sm sm:text-base cursor-pointer flex items-center justify-center gap-x-4 text-[#002E337D] py-3 px-6 rounded-sm font-Inter font-semibold hover:bg-opacity-90 transition-all mt-8">
+              <button className="bg-white w-full text-sm sm:text-base cursor-pointer flex items-center justify-center gap-x-4 max-sm:gap-x-2 text-[#002E337D] py-3 px-6 rounded-sm font-Inter font-semibold hover:bg-opacity-90 transition-all mt-8">
                 Continue with{" "}
-                <img className="block w-30" src={Google} alt="Google" />
+                <img
+                  className="block w-30 max-sm:w-20"
+                  src={Google}
+                  alt="Google"
+                />
               </button>
               <div className="w-full flex justify-between items-center mt-8">
                 <div className="w-[250px] max-xl:w-[150px] max-md:w-50 max-lg:w-60 max-sm:w-30 h-[1px] bg-[#E1E1E1]"></div>
@@ -106,7 +110,7 @@ const Login = () => {
             </div>
           </div>
           {/* Right Column (Image) */}
-          <div className="col-span-12 lg:col-span-6 xl:col-span-6 flex justify-center lg:justify-end">
+          <div className="col-span-12 lg:col-span-6 xl:col-span-6 max-sm:col-span-12 flex justify-center lg:justify-end">
             <img
               className="w-full max-w-[500px] sm:max-w-full lg:max-w-[600px]"
               src={Bitcoin}

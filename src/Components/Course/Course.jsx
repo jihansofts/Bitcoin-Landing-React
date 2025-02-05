@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 // import { LiaLongArrowAltLeftSolid, LiaArrowRightSolid } from "react-icons/lia";
 import { courses } from "../../Helper/Data";
-// import Model from "../Common/Model";
+import Model from "../Common/Model";
 import Card from "../Common/Card";
 
 const Course = () => {
   const [activeItem, setActiveItem] = useState("All Programs");
+  const [isOpen, setIsOpen] = useState(false); // Modal open/close state
   const tabItems = ["All Programs", "Advanced", "Intermediate", "Beginner"];
 
   // **Filter & Sort Courses Based on Active Tab**
@@ -24,14 +25,19 @@ const Course = () => {
     });
 
   return (
-    <div className="w-full relative bg-bgPrimary py-10 overflow-hidden">
+    <div className="w-full  bg-bgPrimary py-10 overflow-hidden">
+      {isOpen && (
+        <div className="fixed  bg-bgSecondary top-0 left-0 bg-opacity-30 w-full h-full z-50">
+          <Model onClose={setIsOpen} />
+        </div>
+      )}
       <div className="container mx-auto px-4 text-center">
-        <h2 className="text-[60px] font-bold text-white">
+        <h2 className="text-[60px] max-md:[30px] font-bold text-white">
           Enroll To Our <span className="text-buttonColor">Courses</span>
         </h2>
         {/* Tab Items */}
         <div className="w-full mt-5 text-center">
-          <ul className="flex items-center justify-center space-x-10">
+          <ul className="flex items-center justify-center space-x-10 max-md:space-x-4">
             {tabItems.map((item, index) => (
               <li
                 key={index}
@@ -52,7 +58,7 @@ const Course = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}>
-            <Card data={filteredCourses} />
+            <Card onOpenModal={setIsOpen} data={filteredCourses} />
           </motion.div>
         </AnimatePresence>
       </div>

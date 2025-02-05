@@ -11,11 +11,9 @@ const Signup = () => {
     confirmPassword: "",
   });
   const [acceptTerms, setAcceptTerms] = useState(false);
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   return (
     <div className="w-full bg-bgPrimary py-20">
       <div className="container mx-auto mt-5 px-4">
@@ -25,13 +23,16 @@ const Signup = () => {
             <h1 className="text-3xl lg:text-5xl font-Inter text-white font-bold">
               Create Account
             </h1>
-            <p className="text-lg text-[#D0D0D0] mt-5">
-              Welcome! Fill up the form below to sign up.
+            <p className="text-[18px] text-white mt-2">
+              Welcome! Fill up the form below and sign up to enroll to your
+              desired{" "}
+              <span className="text-buttonColor">bitcoin learning course</span>
             </p>
 
             {/* Google Sign Up Button */}
-            <button className="bg-white w-full text-sm flex items-center justify-center gap-x-4 text-[#002E337D] py-3 px-6 rounded-sm font-semibold hover:bg-opacity-90 transition-all mt-8">
-              Continue with <img className="w-30" src={Google} alt="Google" />
+            <button className="bg-white w-full text-sm flex items-center justify-center gap-x-4 max-sm:gap-x-2 text-[#002E337D] py-3 px-6 rounded-sm font-semibold hover:bg-opacity-90 transition-all mt-8">
+              Continue with{" "}
+              <img className="w-30 max-sm:w-20" src={Google} alt="Google" />
             </button>
 
             {/* Divider */}

@@ -8,6 +8,9 @@
   /* ... */
 }
 
+body {
+  overflow-x: hidden;
+}
 /* Add this to your CSS or Tailwind config */
 .transition-all {
   transition: all 0.3s ease;

@@ -22,12 +22,14 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-full bg-white py-7">
+    <div className="w-full overflow-hidden bg-white max-lg:h-auto py-7">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
-          <NavLink to="/" smooth={true} duration={500}>
+          {/* Logo - Always Navigate to Home */}
+          <NavLink to="/" onClick={() => setActiveItem("Home")}>
             <img className="w-[120px]" src={Logo} alt="Logo" />
           </NavLink>
+
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center justify-between">
             <ul className="flex items-center space-x-16 max-xl:space-x-10">
@@ -40,15 +42,21 @@ const Navbar = () => {
                       : "text-[#57886F] font-medium text-[16px]"
                   }`}
                   onClick={() => setActiveItem(item.name)}>
-                  <Link
-                    to={item.target}
-                    smooth={true}
-                    duration={500}
-                    spy={true}
-                    activeClass="active"
-                    onSetActive={() => setActiveItem(item.name)}>
-                    {item.name}
-                  </Link>
+                  {item.name === "Home" ? (
+                    <NavLink to="/" onClick={() => setActiveItem("Home")}>
+                      {item.name}
+                    </NavLink>
+                  ) : (
+                    <Link
+                      to={item.target}
+                      smooth={true}
+                      duration={500}
+                      spy={true}
+                      activeClass="active"
+                      onSetActive={() => setActiveItem(item.name)}>
+                      {item.name}
+                    </Link>
+                  )}
                   {activeItem === item.name && (
                     <motion.span
                       className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-bgSecondary rounded-full"
@@ -64,9 +72,10 @@ const Navbar = () => {
               ))}
             </ul>
           </div>
+
           {/* Mobile Menu Toggle Button */}
           <button
-            className="lg:hidden text-bgSecondary text-2xl"
+            className="lg:hidden text-bgSecondary cursor-pointer text-2xl"
             onClick={toggleMobileMenu}>
             {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
@@ -74,8 +83,6 @@ const Navbar = () => {
           {/* Sign Up Button (Desktop) */}
           <NavLink
             to={"/signup"}
-            smooth={true}
-            duration={500}
             className="hidden lg:block border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2">
             Sign Up
           </NavLink>
@@ -85,7 +92,7 @@ const Navbar = () => {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              className="lg:hidden mt-4"
+              className="lg:hidden  mt-4"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -103,15 +110,28 @@ const Navbar = () => {
                       setActiveItem(item.name);
                       setIsMobileMenuOpen(false); // Close mobile menu after clicking
                     }}>
-                    <Link
-                      to={item.target}
-                      smooth={true}
-                      duration={500}
-                      spy={true}
-                      activeClass="active"
-                      onSetActive={() => setActiveItem(item.name)}>
-                      {item.name}
-                    </Link>
+                    {item.name === "Home" ? (
+                      <NavLink
+                        to="/"
+                        onClick={() => {
+                          setActiveItem("Home");
+                          setIsMobileMenuOpen(false);
+                        }}>
+                        {item.name}
+                      </NavLink>
+                    ) : (
+                      <Link
+                        to={item.target}
+                        smooth={true}
+                        duration={500}
+                        spy={true}
+                        activeClass="active"
+                        onSetActive={() => setActiveItem(item.name)}
+                        onClick={() => setIsMobileMenuOpen(false)} // Added this line
+                      >
+                        {item.name}
+                      </Link>
+                    )}
                     {activeItem === item.name && (
                       <motion.span
                         className="absolute -bottom-2 left-[25px] transform -translate-x-1/2 w-1.5 h-1.5 bg-bgSecondary rounded-full"
@@ -126,11 +146,10 @@ const Navbar = () => {
                   </li>
                 ))}
               </ul>
+
               {/* Sign Up Button (Mobile) */}
               <NavLink
                 to="/signup"
-                smooth={true}
-                duration={500}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="mt-4 cursor-pointer border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-full block text-center">
                 Sign Up
