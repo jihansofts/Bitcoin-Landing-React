@@ -14,6 +14,7 @@ const Model = ({ onClose }) => {
     email: "",
     password: "",
   });
+  const [user, setUser] = useState(null);
   const [acceptTerms, setAcceptTerms] = useState(false);
 
   const handleChange = (e) => {
