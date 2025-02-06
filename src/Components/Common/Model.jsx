@@ -123,7 +123,7 @@ const Model = ({ onClose }) => {
               <Link
                 to="/signup"
                 className="text-green-600 font-semibold hover:underline">
-                Login
+                Sign Up
               </Link>
             </p>
           </form>
