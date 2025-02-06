@@ -68,7 +68,9 @@ const Signup = () => {
         createdAt: new Date(),
       });
       // Show success message
+      navigator("/dashboard/course");
       toast.success("Registration successful!");
+
       // Redirect to login page or perform other actions
       // Clear form data
       setFormData({

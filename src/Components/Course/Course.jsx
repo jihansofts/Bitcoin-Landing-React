@@ -23,17 +23,6 @@ const Course = () => {
       const order = ["Beginner", "Intermediate", "Advanced"]; // Define sorting order
       return order.indexOf(lastWordA) - order.indexOf(lastWordB);
     });
-  // const handleGoogleSignIn = async () => {
-  //   try {
-  //     const result = await signInWithPopup(auth, provider);
-  //     setUser(result.user);
-  //     toast.success("Login Successful!");
-  //     onClose(false);
-  //     navigator("/dashboard/course");
-  //   } catch (error) {
-  //     toast.error("Login Failed!", error.message);
-  //   }
-  // };
   const handleSlide = (direction) => {
     const currentIndex = tabItems.indexOf(activeItem);
     let newIndex = currentIndex;
@@ -80,11 +69,7 @@ const Course = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}>
-            <Card
-              // handleSingleCourse={handleGoogleSignIn}
-              onOpenModal={setIsOpen}
-              data={filteredCourses}
-            />
+            <Card onOpenModal={setIsOpen} data={filteredCourses} />
           </motion.div>
         </AnimatePresence>
         <div className="flex items-center justify-center gap-4">
