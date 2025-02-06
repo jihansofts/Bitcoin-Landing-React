@@ -34,11 +34,7 @@ const About = () => {
           </div>
           {/* Right Column (Image) */}
           <div className="col-span-12 lg:col-span-5 flex justify-center lg:justify-end mt-6 sm:mt-0">
-            <img
-              className="w-full max-w-[200px] sm:max-w-xs md:max-w-md lg:max-w-full"
-              src={AboutImg}
-              alt="Bitcoin"
-            />
+            <img className="w-full" src={AboutImg} alt="Bitcoin" />
           </div>
         </div>
       </div>

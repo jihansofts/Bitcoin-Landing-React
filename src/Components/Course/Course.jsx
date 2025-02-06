@@ -32,12 +32,12 @@ const Course = () => {
         </div>
       )}
       <div className="container mx-auto px-4 text-center">
-        <h2 className="text-[60px] max-md:[30px] max-sm:text-[28px] font-bold text-white">
+        <h2 className="text-[72px] max-sm:text-[42px] max-md:text-[40px] max-lg:text-[50px] max-xl:text-[60px]  font-Inter text-center font-bold leading-tight text-white">
           Enroll To Our <span className="text-buttonColor">Courses</span>
         </h2>
         {/* Tab Items */}
         <div className="w-full mt-5 text-center">
-          <ul className="flex items-center justify-center space-x-10 max-md:space-x-8">
+          <ul className="flex items-center justify-center space-x-10 max-md:space-x-8 max-sm:space-x-4">
             {tabItems.map((item, index) => (
               <li
                 key={index}
