@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 import { Link } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
@@ -11,8 +14,28 @@ const Signup = () => {
     confirmPassword: "",
   });
   const [acceptTerms, setAcceptTerms] = useState(false);
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = async (e) => {
+    e.preventDefault();
+    try {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+      await createUserWithEmailAndPassword(
+        auth,
+        formData.name,
+        formData.email,
+        formData.password
+      );
+      let user = auth.currentUser;
+      if (user) {
+        await setDoc(doc(db, "users", user.uid), {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        });
+      }
+      console.log(user, "user register successfully");
+    } catch (error) {
+      console.log(error, "error");
+    }
   };
   return (
     <div className="w-full bg-bgPrimary py-20">
@@ -45,7 +68,7 @@ const Signup = () => {
             </div>
 
             {/* Signup Form */}
-            <form className="mt-8">
+            <form onSubmit={handleChange} className="mt-8">
               <InputField
                 label="Name"
                 type="text"
@@ -95,7 +118,7 @@ const Signup = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="mt-6 bg-buttonColor w-[50%] text-white py-3 px-7 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
+                  className="mt-6 bg-buttonColor w-[50%] py-3 px-7 text-bgPrimary  max-md:text-[16px] rounded-sm font-semibold hover:bg-opacity-90 transition-all">
                   Sign Up
                 </button>
 

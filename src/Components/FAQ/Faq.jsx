@@ -12,7 +12,7 @@ const Faq = () => {
   };
 
   return (
-    <div className="w-full relative bg-bgPrimary py-20">
+    <div className="w-full relative overflow-hidden bg-bgPrimary py-20">
       <div className="absolute w-100 h-100 top-[50px] left-0">
         <img className="w-full" src={Shape} alt="" />
       </div>
@@ -25,7 +25,7 @@ const Faq = () => {
             Most Common{" "}
             <span className="relative inline-block group">
               <span className="relative z-10">Questions</span>
-              <span className="absolute left-0 bottom-5 w-full h-[35px] bg-bgSecondary opacity-50 z-0"></span>
+              <span className="absolute left-0 bottom-5 max-sm:bottom-0 max-md:bottom-1 max-lg:bottom-2 w-full h-[35px] bg-bgSecondary opacity-50 z-0"></span>
             </span>
           </h2>
         </div>

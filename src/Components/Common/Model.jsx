@@ -107,11 +107,11 @@ const Model = ({ onClose }) => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="mt-3 max-sm:mt-1 bg-buttonColor w-full text-white py-2 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
+              className="mt-3 max-sm:mt-1 bg-buttonColor w-full text-bgPrimary  max-md:text-[16px] py-2 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
               Sign Up
             </button>
             {/* Already have an account? */}
-            <p className="mt-3 max-sm:mt-1 text-white text-xs text-center">
+            <p className="mt-3 max-sm:mt-1 text-white text-xs text-center ">
               Already have an account?{" "}
               <Link
                 to="/login"
