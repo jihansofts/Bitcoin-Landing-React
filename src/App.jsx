@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router";
+import { Routes, Route, Navigate } from "react-router";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./Context/AuthContext";
@@ -50,11 +50,13 @@ function App() {
 
         {/* 🔐 Protected Route (Only accessible if logged in) */}
         <Route
-          path="/dashboard"
+          path="/dashboard/*"
           element={
             <ProtectedRoute>
               <Navbar />
-              <Dashboard />
+              <Routes>
+                <Route path="course" element={<Dashboard />} />
+              </Routes>
               <Footer />
             </ProtectedRoute>
           }

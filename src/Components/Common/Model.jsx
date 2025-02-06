@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { auth, db, provider, signInWithPopup } from "../firebase";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
@@ -6,18 +9,27 @@ import InputField from "../Common/InputField"; // Import reusable input componen
 import { IoCloseSharp } from "react-icons/io5";
 
 const Model = ({ onClose }) => {
+  const navigator = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
   const [acceptTerms, setAcceptTerms] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      setUser(result.user);
+      toast.success("Login Successful!");
+      onClose(false);
+      navigator("/dashboard/course");
+    } catch (error) {
+      toast.error("Login Failed!", error.message);
+    }
+  };
   return (
     <div className="fixed top-0 max-sm:top-[-12px]  left-0 max-sm:left-[-5px] w-full h-full flex items-center justify-center z-50 ">
       <div className="relative bg-bgPrimary w-[90%] max-w-2xl md:max-w-4xl rounded-lg shadow-lg p-4 md:p-8 flex flex-col md:flex-row">
@@ -27,7 +39,6 @@ const Model = ({ onClose }) => {
           className="absolute cursor-pointer top-2 right-2 text-red-500 hover:text-gray-700">
           <IoCloseSharp size={24} />
         </button>
-
         {/* Left Column (Form) */}
         <div className="w-full flex flex-col justify-center px-2 md:px-6">
           <h1 className="text-2xl max-sm:text-xl font-bold text-white">
@@ -40,7 +51,9 @@ const Model = ({ onClose }) => {
           </p>
 
           {/* Google Sign Up Button */}
-          <button className="bg-white border cursor-pointer w-full text-[14px] max-sm:text-[12px] flex items-center justify-center gap-x-2 text-[#002E337D] py-2 px-3 rounded-lg font-semibold hover:bg-gray-100 transition-all mt-3">
+          <button
+            onClick={handleGoogleSignIn}
+            className="bg-white border cursor-pointer w-full text-[14px] max-sm:text-[12px] flex items-center justify-center gap-x-2 text-[#002E337D] py-2 px-3 rounded-lg font-semibold hover:bg-gray-100 transition-all mt-3">
             Continue with{" "}
             <img
               className="w-28 max-md:w-20 max-sm:w-14"
@@ -61,14 +74,6 @@ const Model = ({ onClose }) => {
           {/* Signup Form */}
           <form className="space-y-3 max-sm:space-none">
             <InputField
-              label="Name"
-              type="text"
-              name="name"
-              placeholder="@username"
-              value={formData.name}
-              onChange={handleChange}
-            />
-            <InputField
               label="Email"
               name="email"
               type="email"
@@ -84,44 +89,44 @@ const Model = ({ onClose }) => {
               value={formData.password}
               onChange={handleChange}
             />
-            <InputField
-              label="Confirm Password"
-              type="password"
-              name="confirmPassword"
-              placeholder="Re-type your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
             {/* Accept Terms Checkbox */}
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={acceptTerms}
-                onChange={() => setAcceptTerms(!acceptTerms)}
-                className="w-3 h-3 accent-buttonColor border-gray-300 rounded"
-              />
-              <label className="text-xs text-buttonColor">
-                Accept Terms of Service
-              </label>
+            <div className="mt-4 flex items-center justify-between">
+              <div>
+                <input
+                  type="checkbox"
+                  checked={acceptTerms}
+                  onChange={() => setAcceptTerms(!acceptTerms)}
+                  className="w-4 h-4 accent-buttonColor border-gray-300 rounded"
+                />
+                <label className="ml-2 text-sm text-buttonColor">
+                  Remember Me
+                </label>
+              </div>
+              <div>
+                <Link
+                  to="/forgot-password"
+                  className="ml-2 text-sm text-buttonColor hover:underline">
+                  Forgot Password?
+                </Link>
+              </div>
             </div>
             {/* Submit Button */}
             <button
               type="submit"
               className="mt-3 max-sm:mt-1 bg-buttonColor w-full text-bgPrimary  max-md:text-[16px] py-2 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
-              Sign Up
+              Login
             </button>
-            {/* Already have an account? */}
+            {/* don't have an account */}
             <p className="mt-3 max-sm:mt-1 text-white text-xs text-center ">
-              Already have an account?{" "}
+              Don’t Have an Account?{" "}
               <Link
-                to="/login"
+                to="/signup"
                 className="text-green-600 font-semibold hover:underline">
                 Login
               </Link>
             </p>
           </form>
         </div>
-
         {/* Right Column (Image) */}
         <div className="hidden md:flex md:w-1/2 items-center justify-center">
           <img

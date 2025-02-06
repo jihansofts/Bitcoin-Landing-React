@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db, provider, signInWithPopup } from "../firebase";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
@@ -9,6 +10,9 @@ import InputField from "../Common/InputField"; // Import reusable input componen
 import { toast } from "react-toastify";
 
 const Signup = () => {
+  // State variables
+  const navigator = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,6 +29,7 @@ const Signup = () => {
       const result = await signInWithPopup(auth, provider);
       setUser(result.user);
       toast.success("Login Successful!");
+      navigator("/dashboard/course");
     } catch (error) {
       toast.error("Login Failed!", error.message);
     }

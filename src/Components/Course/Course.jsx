@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-// import { LiaLongArrowAltLeftSolid, LiaArrowRightSolid } from "react-icons/lia";
+import { LiaLongArrowAltLeftSolid, LiaArrowRightSolid } from "react-icons/lia";
 import { courses } from "../../Helper/Data";
 import Model from "../Common/Model";
 import Card from "../Common/Card";
@@ -23,6 +23,19 @@ const Course = () => {
       const order = ["Beginner", "Intermediate", "Advanced"]; // Define sorting order
       return order.indexOf(lastWordA) - order.indexOf(lastWordB);
     });
+
+  const handleSlide = (direction) => {
+    const currentIndex = tabItems.indexOf(activeItem);
+    let newIndex = currentIndex;
+
+    if (direction === "left") {
+      newIndex = currentIndex === 0 ? tabItems.length - 1 : currentIndex - 1;
+    } else {
+      newIndex = currentIndex === tabItems.length - 1 ? 0 : currentIndex + 1;
+    }
+
+    setActiveItem(tabItems[newIndex]);
+  };
 
   return (
     <div className="w-full bg-bgPrimary py-10 overflow-hidden">
@@ -61,6 +74,18 @@ const Course = () => {
             <Card onOpenModal={setIsOpen} data={filteredCourses} />
           </motion.div>
         </AnimatePresence>
+        <div className="flex items-center justify-center gap-4">
+          <button
+            onClick={() => handleSlide("left")}
+            className="text-[16px] bg-buttonColor cursor-pointer flex justify-center items-center w-16 h-16 rounded-full font-Inter font-semibold text-bgPrimary mt-10">
+            <LiaLongArrowAltLeftSolid size={35} />
+          </button>
+          <button
+            onClick={() => handleSlide("right")}
+            className="text-[16px] border-2 cursor-pointer border-[#707070] flex justify-center items-center w-16 h-16 rounded-full font-Inter font-semibold text-white mt-10">
+            <LiaArrowRightSolid size={35} />
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { FaHome, FaUsers, FaCog, FaSignOutAlt } from "react-icons/fa"; // React Icons
 
-const Sidebar = ({ onLogout }) => {
+const Sidebar = ({ onLogout, children }) => {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -35,24 +35,7 @@ const Sidebar = ({ onLogout }) => {
           </button>
         </Tabs>
       </div>
-
-      {/* Content Area */}
-      <div className="flex-1 bg-gray-100 p-6">
-        <Tabs>
-          <TabPanel>
-            <h2 className="text-2xl font-semibold">🏠 Home Content</h2>
-            <p>Welcome to your dashboard!</p>
-          </TabPanel>
-          <TabPanel>
-            <h2 className="text-2xl font-semibold">👥 User Management</h2>
-            <p>Manage your users here.</p>
-          </TabPanel>
-          <TabPanel>
-            <h2 className="text-2xl font-semibold">⚙️ Settings</h2>
-            <p>Configure your settings here.</p>
-          </TabPanel>
-        </Tabs>
-      </div>
+      {children}
     </div>
   );
 };

@@ -1,17 +1,50 @@
 import React, { useState } from "react";
+import { auth, db, provider, signInWithPopup } from "../firebase";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
 import InputField from "../Common/InputField";
 const Login = () => {
+  const navigator = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [user, setUser] = useState(null);
   const [acceptTerms, setAcceptTerms] = useState(false); // State for terms checkbox
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      console.log(result, "res");
+      setUser(result.user);
+      toast.success("Login Successful!");
+      navigator("/dashboard/course");
+    } catch (error) {
+      toast.error("Login Failed!", error.message);
+    }
+  };
+
+  const HandleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const user = userCredential.user;
+      toast.success("Login Successful!");
+      navigator("/dashboard/course");
+    } catch (error) {
+      console.log(error);
+      toast.error("Login Failed!", error.message);
+    }
   };
 
   return (
@@ -31,13 +64,11 @@ const Login = () => {
                   bitcoin learning course
                 </span>
               </p>
-              <button className="bg-white w-full text-sm sm:text-base cursor-pointer flex items-center justify-center gap-x-4 max-sm:gap-x-2 text-[#002E337D] py-3 px-6 rounded-sm font-Inter font-semibold hover:bg-opacity-90 transition-all mt-8">
-                Continue with{" "}
-                <img
-                  className="block w-30 max-sm:w-20"
-                  src={Google}
-                  alt="Google"
-                />
+              <button
+                onClick={handleGoogleSignIn}
+                className="bg-white cursor-pointer w-full text-sm flex items-center justify-center gap-x-4 text-[#002E337D] py-3 px-6 rounded-sm font-semibold hover:bg-opacity-90 transition-all mt-8">
+                Continue with
+                <img className="w-30 max-sm:w-20" src={Google} alt="Google" />
               </button>
               <div className="w-full flex justify-between items-center mt-8">
                 <div className="w-[250px] max-xl:w-[150px] max-md:w-50 max-lg:w-60 max-sm:w-30 h-[1px] bg-[#E1E1E1]"></div>
@@ -47,10 +78,9 @@ const Login = () => {
                 <div className="w-[250px] max-xl:w-[150px] max-md:w-50 max-lg:w-60 max-sm:w-30 h-[1px] bg-[#E1E1E1]"></div>
               </div>
             </div>
-
             {/* Login Form */}
             <div className="mt-8">
-              <form className="mt-8">
+              <form onSubmit={HandleLogin} className="mt-8">
                 <InputField
                   label="Email"
                   name="email"

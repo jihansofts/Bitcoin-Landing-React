@@ -23,9 +23,11 @@ const Card = ({ data, onOpenModal }) => {
 
             {/* Content */}
             <div className="relative z-10">
-              <h3 className="text-white text-[26px] max-xl:text-[20px] max-lg:text-[24px] max-sm:text-[28px] max-md:text-[32px] font-Inter font-semibold">
-                {item.title}
-              </h3>
+              <div className="max-w-[400px]">
+                <h3 className="text-white text-[26px] max-xl:text-[20px] max-lg:text-[24px] max-sm:text-[28px] max-md:text-[32px] font-Inter font-semibold">
+                  {item.title}
+                </h3>
+              </div>
               <p className="text-[14px] sm:text-[16px] font-Inter font-light text-white mt-4 sm:mt-5">
                 {item.description}
               </p>
