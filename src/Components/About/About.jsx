@@ -55,17 +55,4 @@ const About = () => {
 
 export default About;
 
-{
-  /* <h4 className="text-[24px] font-Inter text-buttonColor font-bold">About Us</h4>; */
-}
-<div className="w-full mx-auto">
-  // //{" "}
-  <div className="mt-4 sm:mt-6">
-    //{" "}
-    <button className="bg-buttonColor text-bgPrimary py-2 sm:py-3 px-4 sm:px-6 rounded-3xl font-semibold hover:bg-opacity-90 transition-all text-sm sm:text-base">
-      // Ready To Dive In? //{" "}
-    </button>
-    //{" "}
-  </div>
-  //{" "}
-</div>;
+
