@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @theme {
   --font-Inter: "Inter", serif;
   --color-bgPrimary: #002e33;
@@ -10,6 +11,7 @@
 
 body {
   overflow-x: hidden;
+  font-family: "Inter", sans-serif !important;
 }
 /* Add this to your CSS or Tailwind config */
 .transition-all {
@@ -34,4 +36,33 @@ body {
   width: 50%;
   height: 4px;
   background-color: #2d6a4b; /* Replace with your color */
+}
+/* Custom Scrollbar */
+
+/* Scrollbar Thumb */
+/* .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d7f0e6;
+  border-radius: 20px;
+  height: 30px;
+} */
+
+/* Scrollbar Track */
+/* Custom scrollbar styling */
+/* Firefox */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #2d6a4b; /* Color of the track */
+  border-radius: 4px; /* Rounded corners for the track */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #a3dc2f; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Rounded corners for the thumb */
+}
+
+.custom-scrollbar::-webkit-scrollbar-button{
+  display: none;
 }

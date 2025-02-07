@@ -1,44 +1,51 @@
 import React, { useState } from "react";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
 import { motion } from "framer-motion";
 import { FaChevronDown, FaChevronUp, FaCheckCircle } from "react-icons/fa";
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(true); // Toggle sidebar
-  const [activeIndex, setActiveIndex] = useState(0); // Track active tab
-  const completedLessons = [0, 2, 3]; // Completed lesson indices
+  const [isOpen, setIsOpen] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const completedLessons = [1, 2, 3];
 
   const tabItems = [
     "Introduction",
     "How can I start buying Bitcoin safely and securely?",
     "How does the fees work?",
     "Can I buy larger amounts or buy without an exchange account?",
-    "How can I start buying Bitcoin safely and securely?",
-    "How does the fees work?",
-    "Can I buy larger amounts or buy without an exchange account?",
-    "How can I start buying Bitcoin safely and securely?",
-    "How does the fees work?",
-    "How does the fees work?",
-  ]; // Add more as needed
+    "What are the risks of buying Bitcoin?",
+    "What are the best platforms for Bitcoin transactions?",
+    "Understanding Bitcoin Wallets",
+    "How does blockchain work?",
+    "Bitcoin security tips",
+    "Final thoughts & resources",
+    "Conclusion",
+    "FAQs",
+    "References",
+    "Testimonials",
+    "Contact",
+    "Privacy Policy",
+    "Terms & Conditions",
+  ];
 
   return (
-    <div className="w-80 h-screen bg-[#123C2E] rounded-2xl p-5 flex flex-col text-white">
-      {/* Title & Progress Bar */}
-      <h2 className="text-lg font-bold">
+    <div className="w-80 bg-bgSecondary h-[750px] rounded-2xl p-5 flex flex-col text-white shadow-lg">
+      {/* Title */}
+      <h2 className="text-lg font-semibold">
         5 Minute Bitcoin, Course 3, Advanced
       </h2>
-      <div className="relative w-full h-2 bg-[#1F4C3A] rounded-full mt-3">
-        <div className="absolute top-0 left-0 h-2 bg-[#A3F68A] w-[20%] rounded-full"></div>
+
+      {/* Progress Bar */}
+      <div className="relative w-full h-1 bg-bgPrimary rounded-full mt-3">
+        <div className="absolute top-0 left-0 h-1 bg-buttonColor w-[20%] rounded-full"></div>
       </div>
-      <div className="w-full flex justify-between text-xs text-gray-300 mt-1">
+      <div className="flex justify-between text-xs text-gray-300 mt-1">
         <span>20%</span>
         <span>100%</span>
       </div>
 
       {/* Course Dropdown */}
       <div
-        className="bg-[#1F4C3A] flex items-center justify-between px-4 py-3 mt-5 rounded-xl cursor-pointer"
+        className="bg-bgPrimary flex items-center justify-between px-4 py-3 mt-5 rounded-xl cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}>
         <div>
           <h4 className="text-white font-semibold">Course 01</h4>
@@ -47,39 +54,42 @@ const Sidebar = () => {
           </p>
         </div>
         <motion.div
+          className="text-buttonColor"
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3 }}>
           {isOpen ? <FaChevronUp size={18} /> : <FaChevronDown size={18} />}
         </motion.div>
       </div>
 
-      {/* Animated Course List with Scroll */}
+      {/* Lessons List with Scrollbar on the Right */}
       <motion.div
         initial={{ height: 0, opacity: 0 }}
         animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
         transition={{ duration: 0.3 }}
         className="overflow-hidden mt-2">
-        <Tabs selectedIndex={activeIndex} onSelect={setActiveIndex}>
-          <TabList className="mt-2 max-h-64 overflow-y-auto pr-2 space-y-1">
+        <div className="bg-bgPrimary h-[650px] pl-4 pt-4 rounded-2xl px-4 ">
+          {/* Scrollable Container */}
+          <div className="max-h-[450px] overflow-y-auto custom-scrollbar pr-2">
             {tabItems.map((item, index) => (
-              <Tab
+              <div
                 key={index}
-                className={`flex items-center justify-between px-3 py-2 rounded-md cursor-pointer text-sm transition
-                  ${
-                    activeIndex === index
-                      ? "bg-[#228B53] text-white font-bold"
-                      : "hover:bg-[#1F4C3A] text-gray-300"
-                  }`}>
-                <span className="flex items-center">
+                className={`flex items-center mt-4 justify-between px-5 py-2 rounded-md cursor-pointer text-sm transition
+                ${
+                  activeIndex === index
+                    ? "bg-bgSecondary mt-5 border-r-4 border-buttonColor text-[14px] text-white font-bold"
+                    : "hover:bg-bgSecondary text-gray-300"
+                }`}
+                onClick={() => setActiveIndex(index)}>
+                <span className="flex  items-center">
                   {index + 1}. {item}
                 </span>
                 {completedLessons.includes(index) && (
-                  <FaCheckCircle className="text-[#A3F68A]" />
+                  <FaCheckCircle size={18} className="text-buttonColor" />
                 )}
-              </Tab>
+              </div>
             ))}
-          </TabList>
-        </Tabs>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

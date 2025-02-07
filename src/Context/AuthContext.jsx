@@ -4,7 +4,9 @@ import { auth, onAuthStateChanged, signOut } from "../Components/firebase";
 const AuthContext = createContext();
 
 // Custom Hook to use Auth
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
