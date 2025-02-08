@@ -1,38 +1,19 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaChevronDown, FaChevronUp, FaCheckCircle } from "react-icons/fa";
+import { useAuth } from "../../Context/AuthContext";
 
-const Sidebar = () => {
+const Sidebar = ({ lessons, loading, onLessonClick, activeIndex }) => {
+  const { courseTitle, totalLessons } = useAuth();
   const [isOpen, setIsOpen] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const completedLessons = [1, 2, 3];
-
-  const tabItems = [
-    "Introduction",
-    "How can I start buying Bitcoin safely and securely?",
-    "How does the fees work?",
-    "Can I buy larger amounts or buy without an exchange account?",
-    "What are the risks of buying Bitcoin?",
-    "What are the best platforms for Bitcoin transactions?",
-    "Understanding Bitcoin Wallets",
-    "How does blockchain work?",
-    "Bitcoin security tips",
-    "Final thoughts & resources",
-    "Conclusion",
-    "FAQs",
-    "References",
-    "Testimonials",
-    "Contact",
-    "Privacy Policy",
-    "Terms & Conditions",
-  ];
-
+  const completedLessons = [0, 2]; // Indices of completed lessons
+  const handleLessonClick = (lesson, index) => {
+    onLessonClick(lesson, index); // Pass the selected lesson and index to the parent
+  };
   return (
-    <div className="w-80 bg-bgSecondary h-[750px] rounded-2xl p-5 flex flex-col text-white shadow-lg">
+    <div className="w-full bg-bgSecondary h-[750px] rounded-2xl p-5 flex flex-col text-white shadow-lg">
       {/* Title */}
-      <h2 className="text-lg font-semibold">
-        5 Minute Bitcoin, Course 3, Advanced
-      </h2>
+      <h2 className="text-lg font-semibold">{courseTitle}</h2>
 
       {/* Progress Bar */}
       <div className="relative w-full h-1 bg-bgPrimary rounded-full mt-3">
@@ -42,7 +23,11 @@ const Sidebar = () => {
         <span>20%</span>
         <span>100%</span>
       </div>
-
+      <div className="w-full flex gap-x-2 items-center mt-8">
+        <div className="flex-1 h-[2px] bg-bgPrimary"></div>
+        <p className="bg-bgPrimary w-2 h-2 rounded-full"></p>
+        <div className="flex-1 h-[2px] bg-bgPrimary"></div>
+      </div>
       {/* Course Dropdown */}
       <div
         className="bg-bgPrimary flex items-center justify-between px-4 py-3 mt-5 rounded-xl cursor-pointer"
@@ -50,7 +35,7 @@ const Sidebar = () => {
         <div>
           <h4 className="text-white font-semibold">Course 01</h4>
           <p className="text-xs text-gray-300">
-            Completed <span className="font-bold">1/12</span>
+            Completed <span className="font-bold">1/{totalLessons}</span>
           </p>
         </div>
         <motion.div
@@ -61,33 +46,38 @@ const Sidebar = () => {
         </motion.div>
       </div>
 
-      {/* Lessons List with Scrollbar on the Right */}
+      {/* Lessons List */}
       <motion.div
         initial={{ height: 0, opacity: 0 }}
         animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
         transition={{ duration: 0.3 }}
-        className="overflow-hidden mt-2">
-        <div className="bg-bgPrimary h-[650px] pl-4 pt-4 rounded-2xl px-4 ">
+        className="overflow-hidden rounded-2xl mt-2">
+        <div className="bg-bgPrimary h-[500px] pl-4 pt-4 px-4">
           {/* Scrollable Container */}
-          <div className="max-h-[450px] overflow-y-auto custom-scrollbar pr-2">
-            {tabItems.map((item, index) => (
-              <div
-                key={index}
-                className={`flex items-center mt-4 justify-between px-5 py-2 rounded-md cursor-pointer text-sm transition
-                ${
-                  activeIndex === index
-                    ? "bg-bgSecondary mt-5 border-r-4 border-buttonColor text-[14px] text-white font-bold"
-                    : "hover:bg-bgSecondary text-gray-300"
-                }`}
-                onClick={() => setActiveIndex(index)}>
-                <span className="flex  items-center">
-                  {index + 1}. {item}
-                </span>
-                {completedLessons.includes(index) && (
-                  <FaCheckCircle size={18} className="text-buttonColor" />
-                )}
-              </div>
-            ))}
+          <div className="max-h-[450px] overflow-y-auto custom-scrollbar customM-scrollbar pr-2">
+            <ul className="space-y-3">
+              {!loading &&
+                lessons &&
+                lessons.map((lesson, index) => (
+                  <li
+                    key={lesson.id}
+                    className={`flex justify-between items-center px-4 py-4 mr-3 rounded-lg cursor-pointer transition 
+                      ${
+                        activeIndex === index
+                          ? "bg-bgSecondary border-r-5 border-buttonColor text-white" // Active state
+                          : "hover:bg-bgSecondary text-gray-300" // Default state
+                      }`}
+                    onClick={() => handleLessonClick(lesson, index)}>
+                    {lesson.question}
+                    {/* Icon with custom background */}
+                    {completedLessons.includes(index) && (
+                      <span className="w-[16px] h-[16px] flex items-center justify-center bg-white rounded-full">
+                        <FaCheckCircle className="text-[#5EDD60]" size={18} />
+                      </span>
+                    )}
+                  </li>
+                ))}
+            </ul>
           </div>
         </div>
       </motion.div>

@@ -1,28 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LiaLongArrowAltLeftSolid, LiaArrowRightSolid } from "react-icons/lia";
-import { courses } from "../../Helper/Data";
+import { db } from "../../Components/firebase";
+import { collection, getDocs } from "firebase/firestore";
+import Card1 from "../../assets/img/Card1.png";
 import Model from "../Common/Model";
 import Card from "../Common/Card";
-
+// Store courses
 const Course = () => {
+  const [courses, setCourses] = useState([]);
   const [activeItem, setActiveItem] = useState("All Programs");
+  const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false); // Modal open/close state
   const tabItems = ["All Programs", "Advanced", "Intermediate", "Beginner"];
+  useEffect(() => {
+    const fetchCourses = async () => {
+      setLoading(true); // Start loading
+      try {
+        const querySnapshot = await getDocs(collection(db, "course"));
+        if (querySnapshot.empty) {
+          console.log("No documents found");
+        } else {
+          console.log(
+            "Fetched Documents:",
+            querySnapshot.docs.map((doc) => doc.data())
+          );
+        }
+        const courseData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCourses(courseData);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false); // Stop loading
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   // **Filter & Sort Courses Based on Active Tab**
   const filteredCourses = courses
     .filter(
       (course) =>
-        activeItem === "All Programs" || course.title.includes(activeItem)
+        activeItem === "All Programs" || course.category === activeItem
     )
     .sort((a, b) => {
-      const lastWordA = a.title.split(", ").pop(); // Get last word after last comma
-      const lastWordB = b.title.split(", ").pop();
-
-      const order = ["Beginner", "Intermediate", "Advanced"]; // Define sorting order
-      return order.indexOf(lastWordA) - order.indexOf(lastWordB);
+      const order = ["Beginner", "Intermediate", "Advanced"];
+      return order.indexOf(a.category) - order.indexOf(b.category);
     });
+
   const handleSlide = (direction) => {
     const currentIndex = tabItems.indexOf(activeItem);
     let newIndex = currentIndex;
@@ -69,7 +98,13 @@ const Course = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}>
-            <Card onOpenModal={setIsOpen} data={filteredCourses} />
+            <Card
+              image={Card1}
+              loading={loading}
+              courses={courses}
+              onOpenModal={setIsOpen}
+              data={filteredCourses}
+            />
           </motion.div>
         </AnimatePresence>
         <div className="flex items-center justify-center gap-4">

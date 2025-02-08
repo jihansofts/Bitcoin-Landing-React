@@ -60,9 +60,14 @@ body {
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #a3dc2f; /* Color of the scrollbar thumb */
-  border-radius: 4px; /* Rounded corners for the thumb */
+  border-radius: 10px; /* Rounded corners for the thumb */
 }
 
-.custom-scrollbar::-webkit-scrollbar-button{
-  display: none;
+span .icons {
+  width: 20px;
+  height: 20px;
+  padding: 10px;
+  color: #5edd60;
+  background: #fff;
+  border-radius: 50%;
 }

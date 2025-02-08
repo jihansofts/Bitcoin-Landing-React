@@ -1,24 +1,108 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import { LuMoveRight } from "react-icons/lu";
+import { toast } from "react-toastify";
 
-const Content = () => {
+const Content = ({
+  lesson,
+  lessons,
+  setSelectLesson,
+  onLogout,
+  completeLesson,
+  activeIndex,
+  setActiveIndex,
+}) => {
+  const navigator = useNavigate();
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [showUndo, setShowUndo] = useState(false);
+
+  const handleLogout = () => {
+    onLogout();
+    window.reload();
+    navigator("/");
+  };
+
+  const handleMarkAsComplete = () => {
+    if (!isCompleted) {
+      setIsCompleted(true);
+      setShowUndo(true);
+    } else {
+      if (lesson && lesson.id) {
+        completeLesson(lesson.id);
+      }
+      setShowUndo(false);
+    }
+  };
+
+  const handleUndo = () => {
+    setIsCompleted(false);
+    setShowUndo(false);
+  };
+
+  const handleGoNext = () => {
+    if (!lesson || !lessons || lessons.length === 0) return;
+
+    const currentIndex = lessons.findIndex((l) => l.id === lesson.id);
+    if (currentIndex === -1) return;
+
+    if (currentIndex < lessons.length - 1) {
+      const nextLesson = lessons[currentIndex + 1];
+      setSelectLesson(nextLesson); // Update the selected lesson
+      setActiveIndex(currentIndex + 1); // Update the active index
+    } else {
+     toast.warn("You have reached the last lesson.");
+    }
+  };
+
   return (
-    <div className="flex w-full h-screen">
-      <div className="bg-bgSecondary  rounded-2xl  p-5 flex flex-col">
-        <h1>Hello</h1>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-          ipsum veritatis modi, harum alias nihil consequatur aspernatur
-          molestias et. Fuga velit quasi architecto debitis, eius nostrum ut
-          excepturi. Modi blanditiis ratione impedit magni provident, nisi
-          possimus accusantium maxime fugit laborum pariatur quisquam ipsum
-          deserunt id, asperiores architecto. Labore, ea nemo quam ullam
-          laboriosam quidem distinctio eaque adipisci tempora perferendis,
-          dolorem tempore, cum quas quisquam inventore aperiam asperiores
-          consequatur illum. Sunt molestias optio voluptatem consectetur id quas
-          laboriosam nulla neque nostrum adipisci aliquid, enim distinctio ad
-          quam, aliquam magni numquam accusantium aperiam odio dolor ipsam
-          corrupti mollitia. Dolore dicta hic commodi.
+    <div className="flex flex-col w-full h-[750px]">
+      <div className="bg-bgSecondary h-screen rounded-2xl p-5">
+        <h1 className="text-white font-Inter text-[32px] font-bold">
+          {lesson ? lesson.question : "Select a Lesson"}
+        </h1>
+        <p className="text-white font-Inter text-[20px] font-medium leading-9 mt-5">
+          {lesson ? lesson.answer : "Please select a lesson from the sidebar."}
         </p>
+      </div>
+      {/* Buttons Section */}
+      <div className="flex justify-between items-center mt-5">
+        <div>
+          {/* "Mark As Complete" / "Completed" Button */}
+          {!isCompleted ? (
+            <button
+              onClick={handleMarkAsComplete}
+              className="cursor-pointer border-2 border-buttonColor text-buttonColor py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
+              Mark As Complete
+            </button>
+          ) : (
+            <button
+              onClick={handleMarkAsComplete}
+              className="cursor-pointer bg-buttonColor text-bgPrimary py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
+              Completed
+            </button>
+          )}
+
+          {/* Undo Button (Visible only after first click) */}
+          {showUndo && (
+            <button
+              onClick={handleUndo}
+              className="ml-3 underline cursor-pointer text-buttonColor py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
+              Undo
+            </button>
+          )}
+        </div>
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="flex justify-center items-center cursor-pointer text-buttonColor py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
+          Logout
+        </button>
+        {/* Next Button */}
+        <button
+          onClick={handleGoNext}
+          className="flex justify-center items-center cursor-pointer text-buttonColor py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
+          Go Next <LuMoveRight className="ml-2 mt-[1px]" size={30} />
+        </button>
       </div>
     </div>
   );

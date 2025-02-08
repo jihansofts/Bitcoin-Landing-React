@@ -20,6 +20,7 @@ function App() {
           element={
             <>
               <Navbar />
+              <ToastContainer position="top-center" autoClose={2000} />
               <LandingPages />
               <Footer />
             </>
@@ -30,7 +31,7 @@ function App() {
           element={
             <>
               <Navbar />
-              <ToastContainer position="top-center" autoClose={5000} />
+              <ToastContainer position="top-center" autoClose={2000} />
               <Login />
               <Footer />
             </>
@@ -41,7 +42,7 @@ function App() {
           element={
             <>
               <Navbar />
-              <ToastContainer position="top-center" autoClose={5000} />
+              <ToastContainer position="top-center" autoClose={2000} />
               <Signup />
               <Footer />
             </>

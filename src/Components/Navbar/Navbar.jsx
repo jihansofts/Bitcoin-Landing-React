@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-scroll";
+import { getToken } from "../../Helper/localStorage";
 import Logo from "../../assets/img/Logo.png";
 
 const Navbar = () => {
@@ -17,6 +18,11 @@ const Navbar = () => {
     { id: 5, name: "FAQ", target: "faq" },
   ];
 
+  // Function userLogin to check if user is logged in
+  const userLogin = () => {
+    return getToken.getToken() !== null;
+  };
+  console.log(userLogin(), "userLogin");
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -72,7 +78,6 @@ const Navbar = () => {
               ))}
             </ul>
           </div>
-
           {/* Mobile Menu Toggle Button */}
           <button
             className="lg:hidden text-bgSecondary cursor-pointer text-2xl"
@@ -82,12 +87,11 @@ const Navbar = () => {
 
           {/* Sign Up Button (Desktop) */}
           <NavLink
-            to={"/signup"}
+            to={userLogin() ? "/dashboard/course" : "/signup"}
             className="hidden lg:block border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2">
-            Sign Up
+            {userLogin() ? "Dashboard" : "Sign Up"}
           </NavLink>
         </div>
-
         {/* Mobile Menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (

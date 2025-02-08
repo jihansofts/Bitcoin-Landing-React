@@ -1,18 +1,19 @@
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { auth, db, provider, signInWithPopup } from "../firebase";
+import { db } from "../firebase";
+import {
+  auth,
+  createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
+} from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
-import Google from "../../assets/img/google.png";
 import InputField from "../Common/InputField"; // Import reusable input component
 import { toast } from "react-toastify";
-
 const Signup = () => {
   // State variables
   const navigator = useNavigate();
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -22,56 +23,57 @@ const Signup = () => {
   const [user, setUser] = useState(null);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [loading, setLoading] = useState(false);
-
   // Handle Google Sign-In
-  const handleGoogleSignIn = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      setUser(result.user);
-      toast.success("Login Successful!");
-      navigator("/dashboard/course");
-    } catch (error) {
-      toast.error("Login Failed!", error.message);
-    }
-  };
-  // Handle Input Changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   // Handle User Registration
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Check if passwords match
+
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-    // Check if terms are accepted
+
     if (!acceptTerms) {
       toast.error("Please accept terms and conditions!");
       return;
     }
+
+    if (formData.password.length < 6) {
+      toast.error("Password must be at least 6 characters!");
+      return;
+    }
+
+    const emailExists = await fetchSignInMethodsForEmail(auth, formData.email);
+    if (emailExists.length > 0) {
+      toast.error("Email already exists!");
+      return;
+    }
+
     try {
       setLoading(true);
-      // Register User with Firebase Auth
+
+      // 🔥 Create user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
-      const user = userCredential.user;
-      // Save User Data to Firestore
-      await setDoc(doc(db, "Users", user.uid), {
+
+      const user = userCredential.user; // Get authenticated user
+
+      // 🔥 Save user data to Firestore
+      await setDoc(doc(db, "users", user.uid), {
         name: formData.name,
         email: formData.email,
-        uid: user.uid, // Save UID instead of password for security
+        token: user.accessToken,
+        uid: user.uid,
         createdAt: new Date(),
       });
-      // Show success message
-      navigator("/dashboard/course");
-      toast.success("Registration successful!");
-
-      // Redirect to login page or perform other actions
+      toast.success("Signup successful!");
+      navigator("/login"); // Redirect to login
       // Clear form data
       setFormData({
         name: "",
@@ -80,8 +82,7 @@ const Signup = () => {
         confirmPassword: "",
       });
     } catch (error) {
-      // Show error message
-      toast.error(error.message);
+      toast.error("email already exists!");
     } finally {
       setLoading(false);
     }
@@ -101,23 +102,6 @@ const Signup = () => {
               desired{" "}
               <span className="text-buttonColor">bitcoin learning course</span>
             </p>
-
-            {/* Google Sign Up Button */}
-            <button
-              onClick={handleGoogleSignIn}
-              className="bg-white cursor-pointer w-full text-sm flex items-center justify-center gap-x-4 text-[#002E337D] py-3 px-6 rounded-sm font-semibold hover:bg-opacity-90 transition-all mt-8">
-              Continue with
-              <img className="w-30 max-sm:w-20" src={Google} alt="Google" />
-            </button>
-
-            {/* Divider */}
-            <div className="w-full flex items-center mt-8">
-              <div className="flex-1 h-[1px] bg-[#E1E1E1]"></div>
-              <p className="text-[#ABB3BB] text-xs px-2">
-                Or Continue with Email
-              </p>
-              <div className="flex-1 h-[1px] bg-[#E1E1E1]"></div>
-            </div>
             <form onSubmit={handleSubmit} className="mt-8">
               <InputField
                 label="Name"
@@ -151,7 +135,6 @@ const Signup = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
               />
-
               {/* Accept Terms Checkbox */}
               <div className="mt-4 flex items-center">
                 <input
@@ -186,7 +169,6 @@ const Signup = () => {
               </div>
             </form>
           </div>
-
           {/* Right Column (Image) */}
           <div className="col-span-12 lg:col-span-6 flex justify-center lg:justify-end">
             <img

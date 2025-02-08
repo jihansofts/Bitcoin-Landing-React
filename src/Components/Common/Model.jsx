@@ -16,7 +16,6 @@ const Model = ({ onClose }) => {
   });
   const [user, setUser] = useState(null);
   const [acceptTerms, setAcceptTerms] = useState(false);
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -26,7 +25,7 @@ const Model = ({ onClose }) => {
       setUser(result.user);
       toast.success("Login Successful!");
       onClose(false);
-      navigator("/dashboard/course");
+      navigator("/");
     } catch (error) {
       toast.error("Login Failed!", error.message);
     }
