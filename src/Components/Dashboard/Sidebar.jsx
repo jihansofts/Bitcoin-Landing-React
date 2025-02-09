@@ -2,9 +2,16 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaChevronDown, FaChevronUp, FaCheckCircle } from "react-icons/fa";
 import { useAuth } from "../../Context/AuthContext";
-
-const Sidebar = ({ lessons, loading, onLessonClick, activeIndex }) => {
-  const { courseTitle, totalLessons } = useAuth();
+const Sidebar = ({
+  lessons,
+  loading,
+  onLessonClick,
+  activeIndex,
+  courseTitle,
+  totalLessons,
+  userCourseData,
+}) => {
+  console.log(userCourseData, "users");
   const [isOpen, setIsOpen] = useState(true);
   const completedLessons = [0, 2]; // Indices of completed lessons
   const handleLessonClick = (lesson, index) => {
@@ -13,14 +20,15 @@ const Sidebar = ({ lessons, loading, onLessonClick, activeIndex }) => {
   return (
     <div className="w-full bg-bgSecondary h-[750px] rounded-2xl p-5 flex flex-col text-white shadow-lg">
       {/* Title */}
-      <h2 className="text-lg font-semibold">{courseTitle}</h2>
-
+      <h2 className="text-lg font-semibold">
+        {courseTitle || "Course dashboard"}
+      </h2>
       {/* Progress Bar */}
       <div className="relative w-full h-1 bg-bgPrimary rounded-full mt-3">
         <div className="absolute top-0 left-0 h-1 bg-buttonColor w-[20%] rounded-full"></div>
       </div>
       <div className="flex justify-between text-xs text-gray-300 mt-1">
-        <span>20%</span>
+        <span>{userCourseData?.progressPercentage || 0}</span>
         <span>100%</span>
       </div>
       <div className="w-full flex gap-x-2 items-center mt-8">
@@ -35,7 +43,9 @@ const Sidebar = ({ lessons, loading, onLessonClick, activeIndex }) => {
         <div>
           <h4 className="text-white font-semibold">Course 01</h4>
           <p className="text-xs text-gray-300">
-            Completed <span className="font-bold">1/{totalLessons}</span>
+            <span className="font-bold">
+              {userCourseData?.completedLessons.length || 0}/{totalLessons || 0}
+            </span>
           </p>
         </div>
         <motion.div
@@ -70,11 +80,11 @@ const Sidebar = ({ lessons, loading, onLessonClick, activeIndex }) => {
                     onClick={() => handleLessonClick(lesson, index)}>
                     {lesson.question}
                     {/* Icon with custom background */}
-                    {completedLessons.includes(index) && (
+                    {userCourseData?.completedLessons?.includes(lesson.id) ? (
                       <span className="w-[16px] h-[16px] flex items-center justify-center bg-white rounded-full">
                         <FaCheckCircle className="text-[#5EDD60]" size={18} />
                       </span>
-                    )}
+                    ) : null}
                   </li>
                 ))}
             </ul>

@@ -47,10 +47,10 @@ const Login = () => {
           createdAt: new Date(), // Store Timestamp
           authProvider: "google", // Identify Provider
         });
-        navigator("/");
+        navigator("/dashboard/course");
       }
       toast.success("Login Successful!");
-      navigator("/");
+      navigator("/dashboard/course");
     } catch (error) {
       console.error("Google Sign-In Error:", error);
       toast.error("Google Login Failed!");

@@ -1,59 +1,53 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import React, { useState, useEffect } from "react";
 import { LuMoveRight } from "react-icons/lu";
 import { toast } from "react-toastify";
 
 const Content = ({
   lesson,
+  completeLesson,
+  handleUndo,
+  userCourseData,
   lessons,
   setSelectLesson,
-  onLogout,
-  completeLesson,
-  activeIndex,
   setActiveIndex,
 }) => {
-  const navigator = useNavigate();
   const [isCompleted, setIsCompleted] = useState(false);
   const [showUndo, setShowUndo] = useState(false);
 
-  const handleLogout = () => {
-    onLogout();
-    window.reload();
-    navigator("/");
-  };
+  // Check completion status when `lesson` or `userCourseData` changes
+  useEffect(() => {
+    if (lesson && lesson.id && userCourseData?.completedLessons) {
+      const completed = userCourseData.completedLessons.includes(lesson.id);
+      setIsCompleted(completed);
+      setShowUndo(completed);
+    }
+  }, [lesson, userCourseData]);
 
   const handleMarkAsComplete = () => {
-    if (!isCompleted) {
-      setIsCompleted(true);
-      setShowUndo(true);
-    } else {
-      if (lesson && lesson.id) {
-        completeLesson(lesson.id);
-      }
-      setShowUndo(false);
-    }
+    if (!lesson || !lesson.id) return;
+    completeLesson(lesson.id);
+    setIsCompleted(true);
+    setShowUndo(true);
   };
 
-  const handleUndo = () => {
+  const handleUndoClick = () => {
+    if (!lesson || !lesson.id) return;
+    handleUndo(lesson.id);
     setIsCompleted(false);
     setShowUndo(false);
   };
-
   const handleGoNext = () => {
     if (!lesson || !lessons || lessons.length === 0) return;
-
     const currentIndex = lessons.findIndex((l) => l.id === lesson.id);
     if (currentIndex === -1) return;
-
     if (currentIndex < lessons.length - 1) {
       const nextLesson = lessons[currentIndex + 1];
       setSelectLesson(nextLesson); // Update the selected lesson
       setActiveIndex(currentIndex + 1); // Update the active index
     } else {
-     toast.warn("You have reached the last lesson.");
+      toast.warn("You have reached the last lesson.");
     }
   };
-
   return (
     <div className="flex flex-col w-full h-[750px]">
       <div className="bg-bgSecondary h-screen rounded-2xl p-5">
@@ -64,10 +58,11 @@ const Content = ({
           {lesson ? lesson.answer : "Please select a lesson from the sidebar."}
         </p>
       </div>
+
       {/* Buttons Section */}
       <div className="flex justify-between items-center mt-5">
         <div>
-          {/* "Mark As Complete" / "Completed" Button */}
+          {/* Show "Mark As Complete" when lesson is NOT completed */}
           {!isCompleted ? (
             <button
               onClick={handleMarkAsComplete}
@@ -75,28 +70,24 @@ const Content = ({
               Mark As Complete
             </button>
           ) : (
-            <button
-              onClick={handleMarkAsComplete}
-              className="cursor-pointer bg-buttonColor text-bgPrimary py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
-              Completed
-            </button>
-          )}
+            <>
+              {/* Show "Completed" button when lesson is completed */}
+              <button className="cursor-pointer bg-buttonColor text-bgPrimary py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
+                Completed
+              </button>
 
-          {/* Undo Button (Visible only after first click) */}
-          {showUndo && (
-            <button
-              onClick={handleUndo}
-              className="ml-3 underline cursor-pointer text-buttonColor py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
-              Undo
-            </button>
+              {/* Show "Undo" button when lesson is completed */}
+              {showUndo && (
+                <button
+                  onClick={handleUndoClick}
+                  className="ml-3 underline cursor-pointer text-buttonColor py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
+                  Undo
+                </button>
+              )}
+            </>
           )}
         </div>
-        {/* Logout Button */}
-        <button
-          onClick={handleLogout}
-          className="flex justify-center items-center cursor-pointer text-buttonColor py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
-          Logout
-        </button>
+
         {/* Next Button */}
         <button
           onClick={handleGoNext}

@@ -23,7 +23,6 @@ const Card = ({ image, onOpenModal, courses, loading }) => {
         courseId
       );
       const docSnap = await getDoc(userCourseRef);
-      console.log(docSnap.exists());
       if (docSnap.exists()) {
         toast.info("You are already enrolled!");
         navigator("/dashboard/course");
