@@ -11,9 +11,7 @@ const Sidebar = ({
   totalLessons,
   userCourseData,
 }) => {
-  console.log(userCourseData, "users");
   const [isOpen, setIsOpen] = useState(true);
-  const completedLessons = [0, 2]; // Indices of completed lessons
   const handleLessonClick = (lesson, index) => {
     onLessonClick(lesson, index); // Pass the selected lesson and index to the parent
   };
@@ -25,10 +23,16 @@ const Sidebar = ({
       </h2>
       {/* Progress Bar */}
       <div className="relative w-full h-1 bg-bgPrimary rounded-full mt-3">
-        <div className="absolute top-0 left-0 h-1 bg-buttonColor w-[20%] rounded-full"></div>
+        <div
+          className="absolute top-0 left-0 h-1 rounded-full"
+          style={{
+            width: `${userCourseData?.progressPercentage || 0}%`,
+            backgroundColor: "#a3dc2f", // Use the CSS variable for text-buttonColor
+          }}></div>
       </div>
       <div className="flex justify-between text-xs text-gray-300 mt-1">
-        <span>{userCourseData?.progressPercentage || 0}</span>
+        <span>{`${userCourseData?.progressPercentage || 0}%`}</span>{" "}
+        {/* Dynamically show percentage */}
         <span>100%</span>
       </div>
       <div className="w-full flex gap-x-2 items-center mt-8">

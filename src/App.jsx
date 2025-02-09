@@ -51,13 +51,12 @@ function App() {
 
         {/* 🔐 Protected Route (Only accessible if logged in) */}
         <Route
-          path="/dashboard/*"
+          path="/dashboard/course/:courseId"
           element={
             <ProtectedRoute>
+              <ToastContainer position="top-center" autoClose={2000} />
               <Navbar />
-              <Routes>
-                <Route path="course" element={<Dashboard />} />
-              </Routes>
+              <Dashboard /> {/* 🔹 Pass courseId inside Dashboard */}
               <Footer />
             </ProtectedRoute>
           }

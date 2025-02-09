@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { NavLink } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-scroll";
-import { getToken } from "../../Helper/localStorage";
+import { toast } from "react-toastify";
+import { useNavigate, NavLink } from "react-router-dom";
+import { useAuth } from "../../Context/AuthContext";
 import Logo from "../../assets/img/Logo.png";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const { user, courseId } = useAuth(); // Assuming `user` is in context
   const [activeItem, setActiveItem] = useState("Home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -17,12 +20,19 @@ const Navbar = () => {
     { id: 4, name: "Testimonials", target: "testimonials" },
     { id: 5, name: "FAQ", target: "faq" },
   ];
+  // // Function to check if the user is logged in and has a courseId
+  // const handleDashboardClick = (selectedCourseId) => {
+  //   if (user) {
+  //     if (selectedCourseId) {
+  //       navigate(`/dashboard/course/${courseId}`); // 🔥 Go to dashboard if enrolled
+  //     } else {
+  //       toast.error("Please enroll in a course first!");
+  //     }
+  //   } else {
+  //     onOpenModal(true); // Show login modal
+  //   }
+  // };
 
-  // Function userLogin to check if user is logged in
-  const userLogin = () => {
-    return getToken.getToken() !== null;
-  };
-  console.log(userLogin(), "userLogin");
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -85,18 +95,19 @@ const Navbar = () => {
             {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
           </button>
 
-          {/* Sign Up Button (Desktop) */}
+          {/* Sign Up / Dashboard Button */}
           <NavLink
-            to={userLogin() ? "/dashboard/course" : "/signup"}
-            className="hidden lg:block border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2">
-            {userLogin() ? "Dashboard" : "Sign Up"}
+            to={user ? `/dashboard/course/${courseId}` : "/signup"}
+            className="hidden cursor-pointer lg:block border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2">
+            {user ? "Dashboard" : "Sign Up"}
           </NavLink>
         </div>
+
         {/* Mobile Menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              className="lg:hidden  mt-4"
+              className="lg:hidden mt-4"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -131,7 +142,7 @@ const Navbar = () => {
                         spy={true}
                         activeClass="active"
                         onSetActive={() => setActiveItem(item.name)}
-                        onClick={() => setIsMobileMenuOpen(false)} // Added this line
+                        onClick={() => setIsMobileMenuOpen(false)} // Close menu after clicking
                       >
                         {item.name}
                       </Link>

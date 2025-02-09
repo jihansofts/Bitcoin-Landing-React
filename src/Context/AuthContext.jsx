@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
           })
         );
         setEnrolledCourses(courses);
-        setCourseId(courses.length > 0 ? courses[0].id : null);
+        setCourseId(courses.length > 0 ? courses[0].id : null); // Set courseId based on the first enrolled course
       } else {
         setEnrolledCourses([]);
         setCourseId(null);
@@ -88,6 +88,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         courseId,
+        setCourseId,
         enrolledCourses,
         courseTitle,
         totalLessons,

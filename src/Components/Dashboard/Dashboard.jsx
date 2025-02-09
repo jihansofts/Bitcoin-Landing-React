@@ -38,8 +38,6 @@ const Dashboard = () => {
     if (!courseId) return;
     const user = auth.currentUser;
     if (!user) return;
-    toast.error("enroll in this course first!");
-
     const userCourseRef = doc(
       db,
       "users",
@@ -98,8 +96,7 @@ const Dashboard = () => {
       );
       const userCourseSnap = await getDoc(userCourseRef);
 
-      if (!userCourseSnap.exists())
-        return alert("Enroll in this course first!");
+      if (!userCourseSnap.exists()) toast.error("Enroll in this course first!");
       let { completedLessons = [], totalLessons = 0 } = userCourseSnap.data();
       completedLessons = completedLessons.filter((id) => id !== lessonId); // Remove lesson from completed list
       const progressPercentage = (completedLessons.length / totalLessons) * 100;

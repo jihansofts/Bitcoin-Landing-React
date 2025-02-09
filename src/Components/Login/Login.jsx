@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   auth,
   db,
@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
 import InputField from "../Common/InputField";
-import { setToken } from "../../Helper/localStorage";
 const Login = () => {
   const navigator = useNavigate();
   const [formData, setFormData] = useState({
@@ -22,65 +21,62 @@ const Login = () => {
   });
   const [loading, setLoading] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   const handleGoogleSignIn = async () => {
     try {
-      // Sign in with Google
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      if (!user) {
-        throw new Error("Google Sign-In Failed");
-      }
-      // Reference to Firestore 'users' collection
+      if (!user) throw new Error("Google Sign-In Failed");
       const userRef = doc(db, "users", user.uid);
       const userSnap = await getDoc(userRef);
-      if (!userSnap.exists()) {
-        // If user doesn't exist, add them to Firestore
-        await setDoc(userRef, {
-          uid: user.uid, // Store UID
-          email: user.email, // Store Email
-          displayName: user.displayName, // Store Name
-          token: user.accessToken, // Store Token
-          createdAt: new Date(), // Store Timestamp
-          authProvider: "google", // Identify Provider
-        });
-        navigator("/dashboard/course");
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const courseId = userData.courseId || null;
+        navigator(courseId ? `/dashboard/course/${courseId}` : "/");
+        toast.success("Login Successful!");
       }
-      toast.success("Login Successful!");
-      navigator("/dashboard/course");
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          email: user.email,
+          name: user.displayName,
+          enrolledCourses: [],
+        });
+        navigator("/");
+        toast.success("Login Successful!");
+      }
     } catch (error) {
       console.error("Google Sign-In Error:", error);
       toast.error("Google Login Failed!");
     }
   };
-
   const HandleLogin = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      // Sign in user using email & password
       const userCredential = await signInWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
       const user = userCredential.user;
-      // Firestore Reference to Check User
       const userRef = doc(db, "users", user.uid);
       const userSnap = await getDoc(userRef);
+
       if (!userSnap.exists()) {
-        toast.error("User not found! plese go to registration...");
-        navigator("/signup"); // Redirect if not found in Firestore
-      } else {
-        toast.success("Login Successful!");
-        navigator("/"); // Redirect to dashboard
+        toast.error("User not found! Please register first.");
+        navigator("/signup");
+        return;
       }
+      const userData = userSnap.data();
+      const courseId = userData.courseId || null;
+      toast.success("Login Successful!");
+      navigator(courseId ? `/dashboard/course/${courseId}` : "/");
     } catch (error) {
       console.error("Login Error:", error);
-      toast.error("User Login Not Found! ");
+      toast.error("User Login Not Found!");
     } finally {
       setLoading(false);
     }

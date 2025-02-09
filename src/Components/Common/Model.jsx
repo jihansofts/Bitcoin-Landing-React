@@ -1,37 +1,114 @@
 import React, { useState } from "react";
-import { auth, db, provider, signInWithPopup } from "../firebase";
-import { useNavigate } from "react-router-dom";
+import {
+  auth,
+  db,
+  provider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+} from "../firebase"; // Ensure Firebase is correctly initialized
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
-import InputField from "../Common/InputField"; // Import reusable input component
+import InputField from "../Common/InputField";
 import { IoCloseSharp } from "react-icons/io5";
 
-const Model = ({ onClose }) => {
-  const navigator = useNavigate();
+const Model = ({ onClose, courses }) => {
+  const courseId = courses?.[0].id; // Get the first course ID
+  const navigate = useNavigate(); // Use the navigate function from useNavigate
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const [user, setUser] = useState(null);
   const [acceptTerms, setAcceptTerms] = useState(false);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      setUser(result.user);
-      toast.success("Login Successful!");
-      onClose(false);
-      navigator("/");
+      const user = result.user;
+      if (!user) throw new Error("Google Sign-In Failed");
+
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        // If user exists, check if they are enrolled in the course
+        if (!userSnap.data().enrolledCourses.includes(courseId)) {
+          await setDoc(
+            userRef,
+            {
+              enrolledCourses: [...userSnap.data().enrolledCourses, courseId],
+            },
+            { merge: true }
+          );
+        }
+        toast.success("Login Successful!");
+        navigate(`/dashboard/course/${courseId}`); // Redirect to the course dashboard
+      } else {
+        // If user does not exist, create a new user
+        await setDoc(userRef, {
+          email: user.email,
+          name: user.displayName,
+          enrolledCourses: [courseId], // Enroll the user in the course
+        });
+        toast.success("Login Successful!");
+        navigate(`/dashboard/course/${courseId}`); // Redirect to the course dashboard
+      }
     } catch (error) {
-      toast.error("Login Failed!", error.message);
+      console.error("Google Sign-In Error:", error);
+      toast.error("Google Login Failed!");
+    }
+  };
+
+  const handleEmailSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const { email, password } = formData;
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const user = result.user;
+      if (!user) throw new Error("Email Sign-In Failed");
+
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      if (!userSnap.exists()) {
+        // If user does not exist, create a new user
+        await setDoc(
+          userRef,
+          {
+            email: user.email,
+            name: user.displayName,
+            enrolledCourses: [courseId], // Enroll the user in the course
+          },
+          { merge: true }
+        );
+      } else {
+        // If user exists, check if they are enrolled in the course
+        if (!userSnap.data().enrolledCourses.includes(courseId)) {
+          await setDoc(
+            userRef,
+            {
+              enrolledCourses: [...userSnap.data().enrolledCourses, courseId],
+            },
+            { merge: true }
+          );
+        }
+      }
+
+      toast.success("Login Successful!");
+      navigate(`/dashboard/course/${courseId}`); // Redirect to the course dashboard
+    } catch (error) {
+      console.error("Email Sign-In Error:", error);
+      toast.error("Login Failed! Please check your credentials.");
     }
   };
   return (
-    <div className="fixed top-0 max-sm:top-[-12px]  left-0 max-sm:left-[-5px] w-full h-full flex items-center justify-center z-50 ">
+    <div className="fixed top-0 max-sm:top-[-12px] left-0 max-sm:left-[-5px] w-full h-full flex items-center justify-center z-50">
       <div className="relative bg-bgPrimary w-[90%] max-w-2xl md:max-w-4xl rounded-lg shadow-lg p-4 md:p-8 flex flex-col md:flex-row">
         {/* Close Button */}
         <button
@@ -70,9 +147,10 @@ const Model = ({ onClose }) => {
             </p>
             <div className="flex-1 h-px bg-gray-300"></div>
           </div>
-
           {/* Signup Form */}
-          <form className="space-y-3 max-sm:space-none">
+          <form
+            className="space-y-3 max-sm:space-none"
+            onSubmit={handleEmailSignIn}>
             <InputField
               label="Email"
               name="email"
@@ -113,11 +191,11 @@ const Model = ({ onClose }) => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="mt-3 max-sm:mt-1 bg-buttonColor w-full text-bgPrimary  max-md:text-[16px] py-2 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
+              className="mt-3 max-sm:mt-1 bg-buttonColor w-full text-bgPrimary max-md:text-[16px] py-2 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
               Login
             </button>
             {/* don't have an account */}
-            <p className="mt-3 max-sm:mt-1 text-white text-xs text-center ">
+            <p className="mt-3 max-sm:mt-1 text-white text-xs text-center">
               Don’t Have an Account?{" "}
               <Link
                 to="/signup"

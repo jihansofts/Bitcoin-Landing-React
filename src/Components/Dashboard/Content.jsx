@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { LuMoveRight } from "react-icons/lu";
 import { toast } from "react-toastify";
-
 const Content = ({
   lesson,
   completeLesson,
@@ -10,6 +9,7 @@ const Content = ({
   lessons,
   setSelectLesson,
   setActiveIndex,
+  logout,
 }) => {
   const [isCompleted, setIsCompleted] = useState(false);
   const [showUndo, setShowUndo] = useState(false);
@@ -50,7 +50,7 @@ const Content = ({
   };
   return (
     <div className="flex flex-col w-full h-[750px]">
-      <div className="bg-bgSecondary h-screen rounded-2xl p-5">
+      <div className="bg-bgSecondary h-screen max-h-auto rounded-2xl p-5">
         <h1 className="text-white font-Inter text-[32px] font-bold">
           {lesson ? lesson.question : "Select a Lesson"}
         </h1>
@@ -58,7 +58,6 @@ const Content = ({
           {lesson ? lesson.answer : "Please select a lesson from the sidebar."}
         </p>
       </div>
-
       {/* Buttons Section */}
       <div className="flex justify-between items-center mt-5">
         <div>
@@ -87,7 +86,9 @@ const Content = ({
             </>
           )}
         </div>
-
+        <button onClick={logout} className="text-buttonColor cursor-pointer">
+          Log Out
+        </button>
         {/* Next Button */}
         <button
           onClick={handleGoNext}

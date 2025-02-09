@@ -20,7 +20,6 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
   });
-  const [user, setUser] = useState(null);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   // Handle Google Sign-In
@@ -30,7 +29,6 @@ const Signup = () => {
   // Handle User Registration
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
@@ -45,7 +43,6 @@ const Signup = () => {
       toast.error("Password must be at least 6 characters!");
       return;
     }
-
     const emailExists = await fetchSignInMethodsForEmail(auth, formData.email);
     if (emailExists.length > 0) {
       toast.error("Email already exists!");
@@ -54,14 +51,12 @@ const Signup = () => {
 
     try {
       setLoading(true);
-
       // 🔥 Create user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
-      );
-
+      )
       const user = userCredential.user; // Get authenticated user
 
       // 🔥 Save user data to Firestore

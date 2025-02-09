@@ -6,8 +6,10 @@ import { collection, getDocs } from "firebase/firestore";
 import Card1 from "../../assets/img/Card1.png";
 import Model from "../Common/Model";
 import Card from "../Common/Card";
+import { useNavigate } from "react-router-dom";
 // Store courses
 const Course = () => {
+  const navigator = useNavigate();
   const [courses, setCourses] = useState([]);
   const [activeItem, setActiveItem] = useState("All Programs");
   const [loading, setLoading] = useState(true);
@@ -68,7 +70,7 @@ const Course = () => {
     <div className="w-full bg-bgPrimary py-10 overflow-hidden">
       {isOpen && (
         <div className="fixed bg-bgSecondary top-0 left-0 bg-opacity-30 w-full h-full max-sm:max-h-screen z-50">
-          <Model onClose={setIsOpen} />
+          <Model courses={courses} navigator={navigator} onClose={setIsOpen} />
         </div>
       )}
       <div className="container mx-auto px-4 text-center">
