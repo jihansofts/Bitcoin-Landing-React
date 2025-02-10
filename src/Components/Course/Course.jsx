@@ -4,16 +4,12 @@ import { LiaLongArrowAltLeftSolid, LiaArrowRightSolid } from "react-icons/lia";
 import { db } from "../../Components/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Card1 from "../../assets/img/Card1.png";
-import Model from "../Common/Model";
 import Card from "../Common/Card";
-import { useNavigate } from "react-router-dom";
 // Store courses
 const Course = () => {
-  const navigator = useNavigate();
   const [courses, setCourses] = useState([]);
   const [activeItem, setActiveItem] = useState("All Programs");
   const [loading, setLoading] = useState(true);
-  const [isOpen, setIsOpen] = useState(false); // Modal open/close state
   const tabItems = ["All Programs", "Advanced", "Intermediate", "Beginner"];
   useEffect(() => {
     const fetchCourses = async () => {
@@ -68,11 +64,6 @@ const Course = () => {
 
   return (
     <div className="w-full bg-bgPrimary py-10 overflow-hidden">
-      {isOpen && (
-        <div className="fixed bg-bgSecondary top-0 left-0 bg-opacity-30 w-full h-full max-sm:max-h-screen z-50">
-          <Model courses={courses} navigator={navigator} onClose={setIsOpen} />
-        </div>
-      )}
       <div className="container mx-auto px-4 text-center">
         <h2 className="text-[72px] max-sm:text-[42px] max-md:text-[40px] max-lg:text-[50px] max-xl:text-[60px]  font-Inter text-center font-bold leading-tight text-white">
           Enroll To Our <span className="text-buttonColor">Courses</span>
@@ -100,13 +91,7 @@ const Course = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}>
-            <Card
-              image={Card1}
-              loading={loading}
-              courses={courses}
-              onOpenModal={setIsOpen}
-              data={filteredCourses}
-            />
+            <Card image={Card1} loading={loading} courses={filteredCourses} />
           </motion.div>
         </AnimatePresence>
         <div className="flex items-center justify-center gap-4">

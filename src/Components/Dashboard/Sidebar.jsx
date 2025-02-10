@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaChevronDown, FaChevronUp, FaCheckCircle } from "react-icons/fa";
-import { useAuth } from "../../Context/AuthContext";
 const Sidebar = ({
   lessons,
   loading,

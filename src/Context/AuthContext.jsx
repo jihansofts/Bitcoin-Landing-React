@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { db, auth, onAuthStateChanged, signOut } from "../Components/firebase";
 import { doc, getDoc, collection, onSnapshot } from "firebase/firestore";
 import { setToken, removeToken } from "../Helper/localStorage";
-
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 

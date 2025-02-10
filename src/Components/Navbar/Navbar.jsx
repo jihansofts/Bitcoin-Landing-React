@@ -2,17 +2,14 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-scroll";
-import { toast } from "react-toastify";
-import { useNavigate, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
 import Logo from "../../assets/img/Logo.png";
 
 const Navbar = () => {
-  const navigate = useNavigate();
   const { user, courseId } = useAuth(); // Assuming `user` is in context
   const [activeItem, setActiveItem] = useState("Home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   const navItems = [
     { id: 1, name: "Home", target: "/" },
     { id: 2, name: "Course", target: "course" },
@@ -20,18 +17,6 @@ const Navbar = () => {
     { id: 4, name: "Testimonials", target: "testimonials" },
     { id: 5, name: "FAQ", target: "faq" },
   ];
-  // // Function to check if the user is logged in and has a courseId
-  // const handleDashboardClick = (selectedCourseId) => {
-  //   if (user) {
-  //     if (selectedCourseId) {
-  //       navigate(`/dashboard/course/${courseId}`); // 🔥 Go to dashboard if enrolled
-  //     } else {
-  //       toast.error("Please enroll in a course first!");
-  //     }
-  //   } else {
-  //     onOpenModal(true); // Show login modal
-  //   }
-  // };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -45,7 +30,6 @@ const Navbar = () => {
           <NavLink to="/" onClick={() => setActiveItem("Home")}>
             <img className="w-[120px]" src={Logo} alt="Logo" />
           </NavLink>
-
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center justify-between">
             <ul className="flex items-center space-x-16 max-xl:space-x-10">
@@ -164,10 +148,10 @@ const Navbar = () => {
 
               {/* Sign Up Button (Mobile) */}
               <NavLink
-                to="/signup"
+                to={user ? `/dashboard/course/${courseId}` : "/signup"}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="mt-4 cursor-pointer border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-full block text-center">
-                Sign Up
+                {user ? "Dashboard" : "Sign Up"}
               </NavLink>
             </motion.div>
           )}

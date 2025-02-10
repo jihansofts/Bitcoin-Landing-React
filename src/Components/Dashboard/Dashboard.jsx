@@ -12,7 +12,7 @@ import {
 import { useAuth } from "../../Context/AuthContext";
 import { toast } from "react-toastify";
 const Dashboard = () => {
-  const { logout, courseId, courseTitle, totalLessons } = useAuth();
+  const { courseId, courseTitle, totalLessons } = useAuth();
   const [selectLesson, setSelectLesson] = useState(null);
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -85,7 +85,6 @@ const Dashboard = () => {
   const handleUndo = async (lessonId) => {
     const user = auth.currentUser;
     if (!user) return alert("Please log in first!");
-
     try {
       const userCourseRef = doc(
         db,
@@ -96,12 +95,12 @@ const Dashboard = () => {
       );
       const userCourseSnap = await getDoc(userCourseRef);
 
-      if (!userCourseSnap.exists()) toast.error("Enroll in this course first!");
+      if (!userCourseSnap.exists()) return null;
       let { completedLessons = [], totalLessons = 0 } = userCourseSnap.data();
       completedLessons = completedLessons.filter((id) => id !== lessonId); // Remove lesson from completed list
       const progressPercentage = (completedLessons.length / totalLessons) * 100;
       await updateDoc(userCourseRef, { completedLessons, progressPercentage });
-      alert("Lesson marked as incomplete!");
+      toast.warn("Enroll in this course first!");
     } catch (error) {
       console.error("Error updating progress:", error);
     }
@@ -129,7 +128,6 @@ const Dashboard = () => {
               lesson={selectLesson}
               lessons={lessons}
               setSelectLesson={setSelectLesson}
-              onLogout={logout}
               userCourseData={userCourseData}
               completeLesson={handleMarkAsComplete}
               handleUndo={handleUndo}

@@ -1,22 +1,19 @@
 import React, { useState } from "react";
 import {
   auth,
-  db,
-  provider,
-  signInWithPopup,
   signInWithEmailAndPassword,
+  signInWithPopup,
+  provider,
 } from "../firebase"; // Ensure Firebase is correctly initialized
-import { doc, getDoc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
 import InputField from "../Common/InputField";
 import { IoCloseSharp } from "react-icons/io5";
-
-const Model = ({ onClose, courses }) => {
-  const courseId = courses?.[0].id; // Get the first course ID
-  const navigate = useNavigate(); // Use the navigate function from useNavigate
+import { useAuth } from "../../Context/AuthContext";
+const Model = ({ onClose, enrollCourse }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -27,38 +24,18 @@ const Model = ({ onClose, courses }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = async (courseId) => {
     try {
+      // Sign in with Google
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      if (!user) throw new Error("Google Sign-In Failed");
-
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (userSnap.exists()) {
-        // If user exists, check if they are enrolled in the course
-        if (!userSnap.data().enrolledCourses.includes(courseId)) {
-          await setDoc(
-            userRef,
-            {
-              enrolledCourses: [...userSnap.data().enrolledCourses, courseId],
-            },
-            { merge: true }
-          );
-        }
-        toast.success("Login Successful!");
-        navigate(`/dashboard/course/${courseId}`); // Redirect to the course dashboard
-      } else {
-        // If user does not exist, create a new user
-        await setDoc(userRef, {
-          email: user.email,
-          name: user.displayName,
-          enrolledCourses: [courseId], // Enroll the user in the course
-        });
-        toast.success("Login Successful!");
-        navigate(`/dashboard/course/${courseId}`); // Redirect to the course dashboard
+      if (!user) {
+        throw new Error("Google Sign-In Failed");
       }
+      // Call the enrollCourse function passed as a prop
+      enrollCourse(user.uid, courseId, 16); // Assuming `16` is the totalLessons for now, adjust as needed.
+      navigate(`/dashboard/course/${courseId}`);
+      toast.success("Google Sign-In successful!");
     } catch (error) {
       console.error("Google Sign-In Error:", error);
       toast.error("Google Login Failed!");
@@ -71,37 +48,12 @@ const Model = ({ onClose, courses }) => {
       const { email, password } = formData;
       const result = await signInWithEmailAndPassword(auth, email, password);
       const user = result.user;
-      if (!user) throw new Error("Email Sign-In Failed");
-
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (!userSnap.exists()) {
-        // If user does not exist, create a new user
-        await setDoc(
-          userRef,
-          {
-            email: user.email,
-            name: user.displayName,
-            enrolledCourses: [courseId], // Enroll the user in the course
-          },
-          { merge: true }
-        );
+      if (!user) {
+        navigate("/signup");
       } else {
-        // If user exists, check if they are enrolled in the course
-        if (!userSnap.data().enrolledCourses.includes(courseId)) {
-          await setDoc(
-            userRef,
-            {
-              enrolledCourses: [...userSnap.data().enrolledCourses, courseId],
-            },
-            { merge: true }
-          );
-        }
+        toast.success("Login Successful!");
+        navigate(`/dashboard/course/${courseId}`);
       }
-
-      toast.success("Login Successful!");
-      navigate(`/dashboard/course/${courseId}`); // Redirect to the course dashboard
     } catch (error) {
       console.error("Email Sign-In Error:", error);
       toast.error("Login Failed! Please check your credentials.");

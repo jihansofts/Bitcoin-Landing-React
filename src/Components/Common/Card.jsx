@@ -1,60 +1,118 @@
-import React from "react";
+import React, { useState } from "react";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../../Components/firebase";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
 import { toast } from "react-toastify";
 import { useAuth } from "../../Context/AuthContext";
+import Model from "./../Common/Model";
 import CardShape from "../../assets/img/CardShape.png";
-
-const Card = ({ image, onOpenModal, courses, loading }) => {
-  const { user, courseId, setCourseId } = useAuth(); // Get `courseId` from AuthContext
-  const navigator = useNavigate();
-
+const Card = ({ image, loading, courses }) => {
+  const [isOpen, setIsOpen] = useState(false); // Modal open/close state
+  const { user, setCourseId, courseId } = useAuth(); // Get `courseId` and `user` from AuthContext
+  const navigate = useNavigate(); // Use useNavigate for navigation
+  // Handle course click (for enrolled courses)
   const handleCourseClick = (selectedCourseId) => {
     if (user) {
       if (selectedCourseId) {
-        navigator(`/dashboard/course/${courseId}`); // 🔥 Go to dashboard if enrolled
+        navigate(`/dashboard/course/${selectedCourseId}`); // Redirect to dashboard if enrolled
       }
     } else {
-      onOpenModal(true); // Show login modal
+      setIsOpen(false); // Show login modal if user is not authenticated
     }
   };
+
   const enrollCourse = async (selectedCourseId, totalLessons) => {
+    // Check if the user is authenticated
     if (!user) {
-      setTimeout(() => {
-        onOpenModal(true);
-      }, 1000);
+      // If not authenticated, show the login modal
+      setIsOpen(true); // Opens modal for user to log in
       return;
     }
     try {
+      // Reference to the user's enrolled courses subcollection in Firestore
       const userCourseRef = doc(
         db,
-        "users",
-        user.uid,
-        "enrolledCourses",
-        selectedCourseId
+        "users", // Collection name
+        user.uid, // Document ID (user ID)
+        "enrolledCourses", // Subcollection name
+        selectedCourseId // Document ID within subcollection
       );
+      // Check if the user is already enrolled in this course
       const docSnap = await getDoc(userCourseRef);
       if (docSnap.exists()) {
-        setCourseId(selectedCourseId); // 🔥 Update Context with new courseId
-        navigator(`/dashboard/course/${selectedCourseId}`);
+        setCourseId(selectedCourseId);
+        navigate(`/dashboard/course/${selectedCourseId}`);
         return;
       }
+      // If not enrolled, enroll the user in the course
       await setDoc(userCourseRef, {
         progressPercentage: 0,
         completedLessons: [],
         totalLessons: totalLessons,
       });
       toast.success("Enrollment successful!");
-      setCourseId(selectedCourseId); // 🔥 Set new `courseId` in context
-      navigator(`/dashboard/course/${selectedCourseId}`);
+      setCourseId(selectedCourseId);
+      navigate(`/dashboard/course/${selectedCourseId}`);
     } catch (error) {
       console.error("Enrollment failed:", error);
+      toast.error("Enrollment failed. Please try again.");
     }
   };
 
+  // const enrollCourse = async (selectedCourseId, totalLessons) => {
+  //   // Check if the user is authenticated
+  //   const result = await signInWithPopup(auth, provider);
+  //   const user = result.user;
+  //   if (!user) {
+  //     // If the user is not authenticated, open the login modal
+  //     setIsOpen(true); // Pass the course ID to modal
+  //     return;
+  //   }
+  //   try {
+  //     if (selectedCourseId) {
+  //       const userCourseRef = setDoc(
+  //         db,
+  //         "users",
+  //         user.uid,
+  //         "enrolledCourses",
+  //         selectedCourseId
+  //       );
+  //       navigate(`/dashboard/course/${selectedCourseId}`);
+  //       return userCourseRef;
+  //     }
+  //     // Check if the user is already enrolled
+  //     const docSnap = await getDoc(userCourseRef);
+  //     if (docSnap.exists()) {
+  //       setCourseId(selectedCourseId);
+  //       navigate(`/dashboard/course/${selectedCourseId}`);
+  //       return;
+  //     }
+  //     // If not enrolled, enroll the user
+  //     await setDoc(userCourseRef, {
+  //       progressPercentage: 0,
+  //       completedLessons: [],
+  //       totalLessons: totalLessons,
+  //     });
+  //     setCourseId(selectedCourseId);
+  //     navigate(`/dashboard/course/${selectedCourseId}`);
+  //     return;
+  //   } catch (error) {
+  //     console.error("Enrollment failed:", error);
+  //     toast.error("Enrollment failed. Please try again.");
+  //   }
+  // };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-20">
+      {isOpen && (
+        <div className="fixed bg-bgSecondary top-0 left-0 bg-opacity-30 w-full h-full max-sm:max-h-screen z-50">
+          <Model
+            courseId={courseId}
+            enrollCourse={enrollCourse}
+            onClose={setIsOpen}
+          />
+        </div>
+      )}
       {loading ? (
         <div className="flex items-center justify-center col-span-3">
           <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-buttonColor"></div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { LuMoveRight } from "react-icons/lu";
 import { toast } from "react-toastify";
+import { useAuth } from "../../Context/AuthContext";
 const Content = ({
   lesson,
   completeLesson,
@@ -9,8 +10,8 @@ const Content = ({
   lessons,
   setSelectLesson,
   setActiveIndex,
-  logout,
 }) => {
+  const { logout } = useAuth();
   const [isCompleted, setIsCompleted] = useState(false);
   const [showUndo, setShowUndo] = useState(false);
 
