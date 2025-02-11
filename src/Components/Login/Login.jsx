@@ -12,8 +12,10 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
+import { useAuth } from "../../Context/AuthContext";
 import InputField from "../Common/InputField";
 const Login = () => {
+  const { user, courseId, enrolledCourses } = useAuth();
   const navigator = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -28,30 +30,53 @@ const Login = () => {
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      if (!user) throw new Error("Google Sign-In Failed");
-      const userRef = doc(db, "users", user.uid);
+      const users = result.user;
+      toast.info("Logging in... Please wait.");
+      // Fetch user data from Firestore
+      const userRef = doc(db, "users", users.uid);
       const userSnap = await getDoc(userRef);
-      if (userSnap.exists()) {
-        const userData = userSnap.data();
-        const courseId = userData.courseId || null;
-        navigator(courseId ? `/dashboard/course/${courseId}` : "/");
-        toast.success("Login Successful!");
-      }
       if (!userSnap.exists()) {
+        // New User: Create a Firestore document
         await setDoc(userRef, {
-          email: user.email,
-          name: user.displayName,
+          email: users.email,
+          name: users.displayName,
           enrolledCourses: [],
         });
-        navigator("/");
-        toast.success("Login Successful!");
       }
+      // ⏳ Delay navigation for 3 seconds
+      setTimeout(() => {
+        const userData = userSnap.exists();
+        navigator(userData ? `/dashboard/course/${courseId}` : "/");
+        toast.success("Login Successful!");
+      }, 2000);
     } catch (error) {
       console.error("Google Sign-In Error:", error);
       toast.error("Google Login Failed!");
     }
   };
+
+  // const handleGoogleSignIn = async () => {
+  //   try {
+  //     const result = await signInWithPopup(auth, provider);
+  //     const users = result.user;
+  //     toast.info("Please wait.....");
+  //     setTimeout(() => {}, 2000);
+  //     const userRef = doc(db, "users", users.uid);
+  //     const userSnap = await getDoc(userRef);
+  //     if (!userSnap.exists()) {
+  //       await setDoc(userRef, {
+  //         email: users.email,
+  //         name: users.displayName,
+  //         enrolledCourses: [],
+  //       });
+  //       navigator("/");
+  //       toast.success("Login Successful!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Google Sign-In Error:", error);
+  //     toast.error("Google Login Failed!");
+  //   }
+  // };
   const HandleLogin = async (e) => {
     e.preventDefault();
     try {

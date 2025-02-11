@@ -4,7 +4,9 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   provider,
+  db,
 } from "../firebase"; // Ensure Firebase is correctly initialized
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
@@ -13,6 +15,9 @@ import InputField from "../Common/InputField";
 import { IoCloseSharp } from "react-icons/io5";
 import { useAuth } from "../../Context/AuthContext";
 const Model = ({ onClose, enrollCourse }) => {
+  const { enrollData, setCourseId, setEnrolledCourses } = useAuth();
+  const courseId = enrollData?.[0].id;
+  console.log(courseId, "id");
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -23,8 +28,7 @@ const Model = ({ onClose, enrollCourse }) => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  const handleGoogleSignIn = async (courseId) => {
+  const handleGoogleSignIn = async () => {
     try {
       // Sign in with Google
       const result = await signInWithPopup(auth, provider);
@@ -32,16 +36,54 @@ const Model = ({ onClose, enrollCourse }) => {
       if (!user) {
         throw new Error("Google Sign-In Failed");
       }
-      // Call the enrollCourse function passed as a prop
-      enrollCourse(user.uid, courseId, 16); // Assuming `16` is the totalLessons for now, adjust as needed.
-      navigate(`/dashboard/course/${courseId}`);
-      toast.success("Google Sign-In successful!");
+      // Check if a course is selected
+      if (!courseId) {
+        toast.error("Course ID not found! Please select a course first.");
+        return;
+      }
+      // Fetch the course details to get totalLessons
+      const courseRef = doc(db, "course", courseId);
+      const courseSnap = await getDoc(courseRef);
+
+      if (!courseSnap.exists()) {
+        toast.error("Course not found!");
+        return;
+      }
+
+      const courseData = courseSnap.data();
+      const totalLessons = courseData.totalLessons || 0; // Default to 0 if not set
+
+      // Reference to the user's enrolled courses subcollection in Firestore
+      const userCourseRef = doc(
+        db,
+        "users", // Collection name
+        user.uid, // Document ID (user ID)
+        "enrolledCourses", // Subcollection name
+        courseId // Document ID within subcollection
+      );
+      setCourseId(courseId);
+      // Check if the user is already enrolled in this course
+      const userCourseSnap = await getDoc(userCourseRef);
+      if (userCourseSnap.exists()) {
+        toast.info("You are already enrolled in this course.");
+        navigate(`/dashboard/course/${courseId}`);
+        return;
+      } // If not enrolled, enroll the user in the course
+      await setDoc(userCourseRef, {
+        progressPercentage: 0,
+        completedLessons: [],
+        totalLessons: totalLessons, // Use the fetched totalLessons value
+      });
+      toast.success("Enrollment successful!"); // Wait 2 seconds before navigating
+      setTimeout(() => {
+        navigate(`/dashboard/course/${courseId}`);
+      }, 1000);
+      console.log(courseId, "courseId end");
     } catch (error) {
       console.error("Google Sign-In Error:", error);
       toast.error("Google Login Failed!");
     }
   };
-
   const handleEmailSignIn = async (e) => {
     e.preventDefault();
     try {
@@ -52,7 +94,7 @@ const Model = ({ onClose, enrollCourse }) => {
         navigate("/signup");
       } else {
         toast.success("Login Successful!");
-        navigate(`/dashboard/course/${courseId}`);
+        navigate(`/dashboard/course/${courseID}`);
       }
     } catch (error) {
       console.error("Email Sign-In Error:", error);

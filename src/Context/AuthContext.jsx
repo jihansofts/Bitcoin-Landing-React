@@ -1,17 +1,46 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { db, auth, onAuthStateChanged, signOut } from "../Components/firebase";
-import { doc, getDoc, collection, onSnapshot } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  onSnapshot,
+  getDocs,
+} from "firebase/firestore";
 import { setToken, removeToken } from "../Helper/localStorage";
+
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [courseId, setCourseId] = useState(null);
+  const [enrollData, setEnrollData] = useState([]);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [courseTitle, setCourseTitle] = useState("");
   const [totalLessons, setTotalLessons] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  // ✅ Move fetchEnroll outside of useEffect
+  const fetchEnroll = async () => {
+    setLoading(true); // Start loading
+    try {
+      const querySnapshot = await getDocs(collection(db, "course"));
+      if (querySnapshot.empty) {
+        console.log("No documents found");
+      }
+      const courseData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setEnrollData(courseData);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -33,6 +62,11 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
+  // ✅ Call fetchEnroll inside useEffect
+  useEffect(() => {
+    fetchEnroll();
+  }, []);
+
   // ✅ Fetch enrolled courses in real-time
   const fetchEnrolledCoursesRealtime = (userId) => {
     const userCoursesRef = collection(db, "users", userId, "enrolledCourses");
@@ -49,7 +83,6 @@ export const AuthProvider = ({ children }) => {
           })
         );
         setEnrolledCourses(courses);
-        setCourseId(courses.length > 0 ? courses[0].id : null); // Set courseId based on the first enrolled course
       } else {
         setEnrolledCourses([]);
         setCourseId(null);
@@ -87,7 +120,10 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         courseId,
+        enrollData,
+        fetchEnroll, // ✅ Now fetchEnroll is defined and accessible
         setCourseId,
+        setEnrolledCourses,
         enrolledCourses,
         courseTitle,
         totalLessons,

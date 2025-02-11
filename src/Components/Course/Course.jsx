@@ -5,42 +5,40 @@ import { db } from "../../Components/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Card1 from "../../assets/img/Card1.png";
 import Card from "../Common/Card";
+import { useAuth } from "../../Context/AuthContext";
 // Store courses
 const Course = () => {
+  const { enrollData, fetchEnroll } = useAuth();
+  console.log(enrollData, "EnrollData");
   const [courses, setCourses] = useState([]);
   const [activeItem, setActiveItem] = useState("All Programs");
   const [loading, setLoading] = useState(true);
   const tabItems = ["All Programs", "Advanced", "Intermediate", "Beginner"];
-  useEffect(() => {
-    const fetchCourses = async () => {
-      setLoading(true); // Start loading
-      try {
-        const querySnapshot = await getDocs(collection(db, "course"));
-        if (querySnapshot.empty) {
-          console.log("No documents found");
-        } else {
-          console.log(
-            "Fetched Documents:",
-            querySnapshot.docs.map((doc) => doc.data())
-          );
-        }
-        const courseData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setCourses(courseData);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      } finally {
-        setLoading(false); // Stop loading
-      }
-    };
+  // useEffect(() => {
+  //   const fetchCourses = async () => {
+  //     setLoading(true); // Start loading
+  //     try {
+  //       const querySnapshot = await getDocs(collection(db, "course"));
+  //       if (querySnapshot.empty) {
+  //         console.log("No documents found");
+  //       }
+  //       const courseData = querySnapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
+  //       setCourses(courseData);
+  //     } catch (error) {
+  //       console.error("Error fetching courses:", error);
+  //     } finally {
+  //       setLoading(false); // Stop loading
+  //     }
+  //   };
 
-    fetchCourses();
-  }, []);
+  //   fetchCourses();
+  // }, []);
 
   // **Filter & Sort Courses Based on Active Tab**
-  const filteredCourses = courses
+  const filteredCourses = enrollData
     .filter(
       (course) =>
         activeItem === "All Programs" || course.category === activeItem
@@ -91,7 +89,7 @@ const Course = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}>
-            <Card image={Card1} loading={loading} courses={filteredCourses} />
+            <Card image={Card1} loading={loading} />
           </motion.div>
         </AnimatePresence>
         <div className="flex items-center justify-center gap-4">

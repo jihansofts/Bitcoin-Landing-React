@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router";
+import { Routes, Route } from "react-router";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./Context/AuthContext";
@@ -57,7 +57,6 @@ function App() {
               <ToastContainer position="top-center" autoClose={2000} />
               <Navbar />
               <Dashboard /> {/* 🔹 Pass courseId inside Dashboard */}
-              <Footer />
             </ProtectedRoute>
           }
         />

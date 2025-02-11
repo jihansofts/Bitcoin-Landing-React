@@ -11,6 +11,7 @@ const Sidebar = ({
   userCourseData,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [isMobileSidebar, setIsMobileSidebarOpen] = useState(false);
   const handleLessonClick = (lesson, index) => {
     onLessonClick(lesson, index); // Pass the selected lesson and index to the parent
   };

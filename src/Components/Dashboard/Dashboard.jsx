@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import { useAuth } from "../../Context/AuthContext";
 import { toast } from "react-toastify";
+import SidebarMobile from "./SidebarMobile";
 const Dashboard = () => {
   const { courseId, courseTitle, totalLessons } = useAuth();
   const [selectLesson, setSelectLesson] = useState(null);
@@ -112,16 +113,30 @@ const Dashboard = () => {
         <div className="grid grid-cols-12 md:grid-cols-12 grid-rows-2 md:grid-rows-1 gap-6">
           {/* Sidebar */}
           <div className="row-span-1 col-span-4">
-            <Sidebar
-              courseTitle={courseTitle}
-              totalLessons={totalLessons}
-              loading={loading}
-              onLessonClick={handleLessonClick}
-              lessons={lessons}
-              activeIndex={activeIndex} // Pass activeIndex
-              setActiveIndex={setActiveIndex} // Pass setActiveIndex
-              userCourseData={userCourseData}
-            />
+            <div className="hidden lg:block">
+              <Sidebar
+                courseTitle={courseTitle}
+                totalLessons={totalLessons}
+                loading={loading}
+                onLessonClick={handleLessonClick}
+                lessons={lessons}
+                activeIndex={activeIndex} // Pass activeIndex
+                setActiveIndex={setActiveIndex} // Pass setActiveIndex
+                userCourseData={userCourseData}
+              />
+            </div>
+            <div className="lg:hidden z-50">
+              <SidebarMobile
+                courseTitle={courseTitle}
+                totalLessons={totalLessons}
+                loading={loading}
+                onLessonClick={handleLessonClick}
+                lessons={lessons}
+                activeIndex={activeIndex} // Pass activeIndex
+                setActiveIndex={setActiveIndex} // Pass setActiveIndex
+                userCourseData={userCourseData}
+              />
+            </div>
           </div>
           <div className="row-span-1 col-span-8">
             <Course
