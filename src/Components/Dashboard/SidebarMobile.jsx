@@ -4,8 +4,8 @@ import {
   FaChevronDown,
   FaChevronUp,
   FaCheckCircle,
-  FaBars,
   FaTimes,
+  FaChevronRight,
 } from "react-icons/fa";
 
 const SidebarMobile = ({
@@ -29,9 +29,9 @@ const SidebarMobile = ({
     <>
       {/* Mobile Sidebar Toggle Button */}
       <button
-        className="lg:hidden cursor-pointer top-10 left-5 text-white text-2xl z-50"
+        className="lg:hidden cursor-pointer top-5 left-5 text-buttonColor  z-50"
         onClick={() => setIsMobileSidebarOpen(true)}>
-        <FaBars />
+        <FaChevronRight size={25} />
       </button>
       {/* Overlay when Sidebar is open */}
       {isMobileSidebarOpen && (
@@ -49,7 +49,7 @@ const SidebarMobile = ({
         className={`fixed left-0 top-0 w-[300px] h-full bg-bgSecondary rounded-r-2xl p-5 flex flex-col text-white shadow-lg z-50 lg:relative lg:w-full lg:h-[750px]`}>
         {/* Close Button (Mobile) */}
         <button
-          className="lg:hidden cursor-pointer absolute top-5 right-5 text-white text-2xl"
+          className="lg:hidden cursor-pointer absolute top-5 right-5 text-buttonColor text-2xl"
           onClick={() => setIsMobileSidebarOpen(false)}>
           <FaTimes />
         </button>

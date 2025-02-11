@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LiaLongArrowAltLeftSolid, LiaArrowRightSolid } from "react-icons/lia";
-import Card1 from "../../assets/img/Card1.png";
 import Card from "../Common/Card";
 import { useAuth } from "../../Context/AuthContext";
 // Store courses
 const Course = () => {
-  const { enrollData, fetchEnroll } = useAuth();
+  const { enrollData } = useAuth();
   const [activeItem, setActiveItem] = useState("All Programs");
-  const [loading, setLoading] = useState(true);
   const tabItems = ["All Programs", "Advanced", "Intermediate", "Beginner"];
 
   const filteredData = enrollData
@@ -17,7 +15,7 @@ const Course = () => {
         activeItem === "All Programs" || course.category === activeItem
     )
     .sort((a, b) => {
-      const order = ["Advanced", , "Intermediate", "Beginner"];
+      const order = [, "Beginner", "Intermediate", "Advanced"];
       return order.indexOf(a.category) - order.indexOf(b.category);
     });
 

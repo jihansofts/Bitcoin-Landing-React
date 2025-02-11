@@ -10,7 +10,13 @@ const FAQ = React.lazy(() => import("../FAQ/Faq"));
 const LandingPages = () => {
   return (
     <main>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center col-span-3">
+            <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-buttonColor"></div>
+            <span className="ml-2 text-buttonColor">Loading...</span>
+          </div>
+        }>
         <section id="/">
           <Home />
         </section>

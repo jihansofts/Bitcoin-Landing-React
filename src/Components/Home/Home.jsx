@@ -4,6 +4,12 @@ import Shaperight from "../../assets/img/shaperight.png";
 import Bitcoin from "../../assets/img/Bitcoin.png";
 
 const Home = () => {
+  const scrollToCourse = () => {
+    const courseSection = document.getElementById("course");
+    if (courseSection) {
+      courseSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   return (
     <div className="relative w-full bg-bgPrimary py-16 overflow-hidden">
       {/* Background Left Shape */}
@@ -29,8 +35,10 @@ const Home = () => {
                 overcomplicating it. No fluff, no jargon—just the essential
                 facts.
               </p>
-              <div className="mt-6">
-                <button className="bg-buttonColor text-bgPrimary py-3 px-6 sm:px-8 rounded-3xl font-semibold hover:bg-opacity-90 transition-all">
+              <div className="mt-6 z-10">
+                <button
+                  onClick={scrollToCourse}
+                  className="bg-buttonColor cursor-pointer text-bgPrimary py-3 px-6 sm:px-8 rounded-3xl font-semibold hover:bg-opacity-90 transition-all">
                   Ready To Dive In?
                 </button>
               </div>
