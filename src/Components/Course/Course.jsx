@@ -1,50 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LiaLongArrowAltLeftSolid, LiaArrowRightSolid } from "react-icons/lia";
-import { db } from "../../Components/firebase";
-import { collection, getDocs } from "firebase/firestore";
 import Card1 from "../../assets/img/Card1.png";
 import Card from "../Common/Card";
 import { useAuth } from "../../Context/AuthContext";
 // Store courses
 const Course = () => {
   const { enrollData, fetchEnroll } = useAuth();
-  console.log(enrollData, "EnrollData");
-  const [courses, setCourses] = useState([]);
   const [activeItem, setActiveItem] = useState("All Programs");
   const [loading, setLoading] = useState(true);
   const tabItems = ["All Programs", "Advanced", "Intermediate", "Beginner"];
-  // useEffect(() => {
-  //   const fetchCourses = async () => {
-  //     setLoading(true); // Start loading
-  //     try {
-  //       const querySnapshot = await getDocs(collection(db, "course"));
-  //       if (querySnapshot.empty) {
-  //         console.log("No documents found");
-  //       }
-  //       const courseData = querySnapshot.docs.map((doc) => ({
-  //         id: doc.id,
-  //         ...doc.data(),
-  //       }));
-  //       setCourses(courseData);
-  //     } catch (error) {
-  //       console.error("Error fetching courses:", error);
-  //     } finally {
-  //       setLoading(false); // Stop loading
-  //     }
-  //   };
 
-  //   fetchCourses();
-  // }, []);
-
-  // **Filter & Sort Courses Based on Active Tab**
-  const filteredCourses = enrollData
+  const filteredData = enrollData
     .filter(
       (course) =>
         activeItem === "All Programs" || course.category === activeItem
     )
     .sort((a, b) => {
-      const order = ["Beginner", "Intermediate", "Advanced"];
+      const order = ["Advanced", , "Intermediate", "Beginner"];
       return order.indexOf(a.category) - order.indexOf(b.category);
     });
 
@@ -59,7 +32,6 @@ const Course = () => {
     }
     setActiveItem(tabItems[newIndex]);
   };
-
   return (
     <div className="w-full bg-bgPrimary py-10 overflow-hidden">
       <div className="container mx-auto px-4 text-center">
@@ -88,8 +60,11 @@ const Course = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}>
-            <Card image={Card1} loading={loading} />
+            exit={{ opacity: 0 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+            {filteredData.map((course, index) => (
+              <Card key={index} course={course} />
+            ))}
           </motion.div>
         </AnimatePresence>
         <div className="flex items-center justify-center gap-4">

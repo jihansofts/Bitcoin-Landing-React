@@ -6,8 +6,9 @@ import {
   collection,
   onSnapshot,
   getDocs,
+  getCountFromServer,
 } from "firebase/firestore";
-import { setToken, removeToken } from "../Helper/localStorage";
+import { setToken, removeToken, removeCourseId } from "../Helper/localStorage";
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
@@ -89,7 +90,17 @@ export const AuthProvider = ({ children }) => {
       }
     });
   };
-
+  const getTotalUsers = async () => {
+    const usersCollection = collection(db, "users"); // Reference to the "users" collection
+    try {
+      const snapshot = await getCountFromServer(usersCollection); // Get the count of documents
+      const totalUsers = snapshot.data().count; // Extract the count from the snapshot
+      return totalUsers; // Return the total number of users
+    } catch (error) {
+      console.error("Error getting total users:", error);
+      return 0; // Return 0 in case of an error
+    }
+  };
   useEffect(() => {
     if (!courseId) return;
     const fetchCourseDetails = async () => {
@@ -113,6 +124,8 @@ export const AuthProvider = ({ children }) => {
     setCourseId(null);
     setCourseTitle("");
     setTotalLessons(0);
+    removeToken.removeToken();
+    removeCourseId.removeCourseId();
   };
 
   return (
@@ -121,6 +134,7 @@ export const AuthProvider = ({ children }) => {
         user,
         courseId,
         enrollData,
+        getTotalUsers,
         fetchEnroll, // ✅ Now fetchEnroll is defined and accessible
         setCourseId,
         setEnrolledCourses,

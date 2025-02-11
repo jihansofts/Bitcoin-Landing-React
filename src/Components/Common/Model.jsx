@@ -13,6 +13,7 @@ import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
 import InputField from "../Common/InputField";
 import { IoCloseSharp } from "react-icons/io5";
+import { setCourseIds, getCourseId } from "../../Helper/localStorage";
 import { useAuth } from "../../Context/AuthContext";
 const Model = ({ onClose, enrollCourse }) => {
   const { enrollData, setCourseId, setEnrolledCourses } = useAuth();
@@ -62,11 +63,12 @@ const Model = ({ onClose, enrollCourse }) => {
         courseId // Document ID within subcollection
       );
       setCourseId(courseId);
+      setCourseIds.setCourseId(courseId);
       // Check if the user is already enrolled in this course
       const userCourseSnap = await getDoc(userCourseRef);
       if (userCourseSnap.exists()) {
         toast.info("You are already enrolled in this course.");
-        navigate(`/dashboard/course/${courseId}`);
+        navigate(`/dashboard/course/${getCourseId.getCourseId()}`);
         return;
       } // If not enrolled, enroll the user in the course
       await setDoc(userCourseRef, {
@@ -76,7 +78,7 @@ const Model = ({ onClose, enrollCourse }) => {
       });
       toast.success("Enrollment successful!"); // Wait 2 seconds before navigating
       setTimeout(() => {
-        navigate(`/dashboard/course/${courseId}`);
+        navigate(`/dashboard/course/${getCourseId.getCourseId()}`);
       }, 1000);
       console.log(courseId, "courseId end");
     } catch (error) {
@@ -94,7 +96,7 @@ const Model = ({ onClose, enrollCourse }) => {
         navigate("/signup");
       } else {
         toast.success("Login Successful!");
-        navigate(`/dashboard/course/${courseID}`);
+        navigate(`/dashboard/course/${getCourseId.getCourseId()}`);
       }
     } catch (error) {
       console.error("Email Sign-In Error:", error);
@@ -143,7 +145,7 @@ const Model = ({ onClose, enrollCourse }) => {
           </div>
           {/* Signup Form */}
           <form
-            className="space-y-3 max-sm:space-none"
+            className="space-y-3 max-sm:space-none text-left"
             onSubmit={handleEmailSignIn}>
             <InputField
               label="Email"

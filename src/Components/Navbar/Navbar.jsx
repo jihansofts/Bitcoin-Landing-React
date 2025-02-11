@@ -4,6 +4,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-scroll";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
+import { getCourseId } from "../../Helper/localStorage";
 import Logo from "../../assets/img/Logo.png";
 
 const Navbar = () => {
@@ -81,7 +82,11 @@ const Navbar = () => {
 
           {/* Sign Up / Dashboard Button */}
           <NavLink
-            to={user ? `/dashboard/course/${courseId}` : "/signup"}
+            to={
+              user
+                ? `/dashboard/course/${getCourseId.getCourseId()}`
+                : "/signup"
+            }
             className="hidden cursor-pointer lg:block border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2">
             {user ? "Dashboard" : "Sign Up"}
           </NavLink>
@@ -148,7 +153,11 @@ const Navbar = () => {
 
               {/* Sign Up Button (Mobile) */}
               <NavLink
-                to={user ? `/dashboard/course/${courseId}` : "/signup"}
+                to={
+                  user
+                    ? `/dashboard/course/${getCourseId.getCourseId()}`
+                    : "/signup"
+                }
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="mt-4 cursor-pointer border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-full block text-center">
                 {user ? "Dashboard" : "Sign Up"}

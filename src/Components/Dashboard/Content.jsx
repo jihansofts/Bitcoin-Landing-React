@@ -50,8 +50,8 @@ const Content = ({
     }
   };
   return (
-    <div className="flex flex-col w-full h-[750px]">
-      <div className="bg-bgSecondary h-screen max-h-auto rounded-2xl p-5">
+    <div className="flex flex-col w-full h-auto max-md:h-auto">
+      <div className="bg-bgSecondary  h-auto  rounded-2xl p-5">
         <h1 className="text-white font-Inter text-[32px] font-bold">
           {lesson ? lesson.question : "Select a Lesson"}
         </h1>
@@ -66,13 +66,13 @@ const Content = ({
           {!isCompleted ? (
             <button
               onClick={handleMarkAsComplete}
-              className="cursor-pointer border-2 border-buttonColor text-buttonColor py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
-              Mark As Complete
+              className="cursor-pointer border-2 border-buttonColor text-buttonColor py-3 px-6 max-sm:px-4 text-[16px] max-sm:text-[12px] rounded-3xl font-Inter font-semibold">
+              Mark As Completed
             </button>
           ) : (
             <>
               {/* Show "Completed" button when lesson is completed */}
-              <button className="cursor-pointer bg-buttonColor text-bgPrimary py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
+              <button className="cursor-pointer bg-buttonColor text-bgPrimary py-3 text-[16px] max-sm:text-[12px] px-6 max-sm:px-4 rounded-3xl font-Inter font-semibold">
                 Completed
               </button>
 
@@ -87,13 +87,15 @@ const Content = ({
             </>
           )}
         </div>
-        <button onClick={logout} className="text-buttonColor cursor-pointer">
+        <button
+          onClick={logout}
+          className="text-buttonColor text-[16px] font-semibold max-sm:text-[12px] cursor-pointer">
           Log Out
         </button>
         {/* Next Button */}
         <button
           onClick={handleGoNext}
-          className="flex justify-center items-center cursor-pointer text-buttonColor py-3 px-6 sm:px-8 rounded-3xl font-Inter font-semibold">
+          className="flex justify-center text-[16px] max-sm:text-[12px] items-center cursor-pointer text-buttonColor py-3 px-6 max-sm:px-4 rounded-3xl font-Inter font-semibold">
           Go Next <LuMoveRight className="ml-2 mt-[1px]" size={30} />
         </button>
       </div>

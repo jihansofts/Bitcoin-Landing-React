@@ -55,7 +55,6 @@ const Login = () => {
     }
   };
 
-  // const handleGoogleSignIn = async () => {
   //   try {
   //     const result = await signInWithPopup(auth, provider);
   //     const users = result.user;
@@ -182,8 +181,8 @@ const Login = () => {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="mt-6 bg-buttonColor w-[50%] text-bgPrimary text-[18px] max-md:text-[16px] py-3 px-7 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
-                    Login
+                    className="mt-6 cursor-pointer bg-buttonColor w-[50%] text-bgPrimary text-[18px] max-md:text-[16px] py-3 px-7 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
+                    {loading ? "Loading..." : "Login"}
                   </button>
                   {/* Already have an account? */}
                   <p className="mt-4 text-[#FFFFFF] text-[15px]">

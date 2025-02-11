@@ -29,22 +29,22 @@ const SidebarMobile = ({
     <>
       {/* Mobile Sidebar Toggle Button */}
       <button
-        className="lg:hidden top-40 left-5 text-white text-2xl z-50"
-        onClick={() => setIsMobileSidebarOpen(false)}>
+        className="lg:hidden cursor-pointer top-10 left-5 text-white text-2xl z-50"
+        onClick={() => setIsMobileSidebarOpen(true)}>
         <FaBars />
       </button>
-
       {/* Overlay when Sidebar is open */}
       {isMobileSidebarOpen && (
         <div
-          className=" bg-black bg-opacity-50 z-50"
-          onClick={() => setIsMobileSidebarOpen(true)}
+          className="fixed inset-0 bg-bgPrimary opacity-50 z-40"
+          onClick={() => setIsMobileSidebarOpen(false)}
         />
       )}
+
       {/* Sidebar */}
       <motion.div
         initial={{ x: "-100%" }}
-        animate={{ x: isMobileSidebarOpen ? "0%" : isOpen ? "0%" : "-100%" }}
+        animate={{ x: isMobileSidebarOpen ? "0%" : "-100%" }}
         transition={{ duration: 0.3 }}
         className={`fixed left-0 top-0 w-[300px] h-full bg-bgSecondary rounded-r-2xl p-5 flex flex-col text-white shadow-lg z-50 lg:relative lg:w-full lg:h-[750px]`}>
         {/* Close Button (Mobile) */}

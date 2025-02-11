@@ -108,23 +108,28 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="bg-bgPrimary py-16 min-h-screen">
+    <div className="bg-bgPrimary py-16 overflow-hidden h-auto">
       <div className="container mx-auto px-4 max-md:px-4">
-        <div className="grid grid-cols-12 md:grid-cols-12 grid-rows-2 md:grid-rows-1 gap-6">
+        <div className="grid grid-cols-12 max-lg:grid-cols-12 max-lg:grid-rows-2 max-md:grid-rows-1 gap-6">
           {/* Sidebar */}
-          <div className="row-span-1 col-span-4">
-            <div className="hidden lg:block">
+          <div className="row-span-1 col-span-4 max-lg:hidden max-xl:col-span-4 max-2xl:col-span-4 max-lg:col-span-4">
+            {/* Sidebar for larger screens */}
+            <div className="">
               <Sidebar
                 courseTitle={courseTitle}
                 totalLessons={totalLessons}
                 loading={loading}
                 onLessonClick={handleLessonClick}
                 lessons={lessons}
-                activeIndex={activeIndex} // Pass activeIndex
-                setActiveIndex={setActiveIndex} // Pass setActiveIndex
+                activeIndex={activeIndex}
+                setActiveIndex={setActiveIndex}
                 userCourseData={userCourseData}
               />
             </div>
+            {/* Sidebar for smaller screens */}
+          </div>
+          {/* Content Area */}
+          <div className="row-span-1 col-span-8 max-xl:col-span-8 max-2xl:col-span-8 max-lg:col-span-full">
             <div className="lg:hidden z-50">
               <SidebarMobile
                 courseTitle={courseTitle}
@@ -132,13 +137,11 @@ const Dashboard = () => {
                 loading={loading}
                 onLessonClick={handleLessonClick}
                 lessons={lessons}
-                activeIndex={activeIndex} // Pass activeIndex
-                setActiveIndex={setActiveIndex} // Pass setActiveIndex
+                activeIndex={activeIndex}
+                setActiveIndex={setActiveIndex}
                 userCourseData={userCourseData}
               />
             </div>
-          </div>
-          <div className="row-span-1 col-span-8">
             <Course
               lesson={selectLesson}
               lessons={lessons}
@@ -146,7 +149,7 @@ const Dashboard = () => {
               userCourseData={userCourseData}
               completeLesson={handleMarkAsComplete}
               handleUndo={handleUndo}
-              setActiveIndex={setActiveIndex} // Pass setActiveIndex
+              setActiveIndex={setActiveIndex}
             />
           </div>
         </div>
