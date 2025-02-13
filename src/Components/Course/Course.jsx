@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { LiaLongArrowAltLeftSolid, LiaArrowRightSolid } from "react-icons/lia";
 import Card from "../Common/Card";
 import { useAuth } from "../../Context/AuthContext";
 // Store courses
@@ -19,17 +18,6 @@ const Course = () => {
       return order.indexOf(a.category) - order.indexOf(b.category);
     });
 
-  const handleSlide = (direction) => {
-    const currentIndex = tabItems.indexOf(activeItem);
-    let newIndex = currentIndex;
-
-    if (direction === "left") {
-      newIndex = currentIndex === 0 ? tabItems.length - 1 : currentIndex - 1;
-    } else {
-      newIndex = currentIndex === tabItems.length - 1 ? 0 : currentIndex + 1;
-    }
-    setActiveItem(tabItems[newIndex]);
-  };
   return (
     <div className="w-full bg-bgPrimary py-10 overflow-hidden">
       <div className="container mx-auto px-4 text-center">
@@ -65,18 +53,6 @@ const Course = () => {
             ))}
           </motion.div>
         </AnimatePresence>
-        <div className="flex items-center justify-center gap-4">
-          <button
-            onClick={() => handleSlide("left")}
-            className="text-[16px] bg-buttonColor cursor-pointer flex justify-center items-center w-16 h-16 rounded-full font-Inter font-semibold text-bgPrimary mt-10">
-            <LiaLongArrowAltLeftSolid size={35} />
-          </button>
-          <button
-            onClick={() => handleSlide("right")}
-            className="text-[16px] border-2 cursor-pointer border-[#707070] flex justify-center items-center w-16 h-16 rounded-full font-Inter font-semibold text-white mt-10">
-            <LiaArrowRightSolid size={35} />
-          </button>
-        </div>
       </div>
     </div>
   );

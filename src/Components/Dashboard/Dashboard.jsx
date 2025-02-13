@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import { getCourseId } from "../../Helper/localStorage";
 import SidebarMobile from "./SidebarMobile";
 const Dashboard = () => {
-  const { courseId, courseTitle, totalLessons } = useAuth();
+  const { courseId, enrolledCourses } = useAuth();
   const [selectLesson, setSelectLesson] = useState(null);
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,8 +25,7 @@ const Dashboard = () => {
   // Fetch all lessons for a given course
   useEffect(() => {
     const courseId = getCourseId.getCourseId();
-    if (!courseId) return;
-
+       if (!courseId) return;
     const lessonsRef = collection(db, "course", courseId, "lessons");
 
     const unsubscribe = onSnapshot(lessonsRef, (snapshot) => {
@@ -34,7 +33,6 @@ const Dashboard = () => {
         id: doc.id,
         ...doc.data(),
       }));
-
       // Sort lessons by the numeric part of the title
       const sortedData = lessonsData.sort((a, b) => {
         const aNumber = parseInt(a.question.match(/\d+/)?.[0] || Infinity, 10); // Default to Infinity if no number is found
@@ -42,7 +40,6 @@ const Dashboard = () => {
         return aNumber - bNumber;
       });
       setLessons(sortedData);
-      console.log(sortedData, "sorted data");
       setLoading(false);
     });
 
@@ -64,11 +61,12 @@ const Dashboard = () => {
     // 🔹 Real-time listener for enrolled course data
     const unsubscribe = onSnapshot(userCourseRef, (docSnap) => {
       if (docSnap.exists()) {
+        console.log(docSnap.data(),"data");
         setUserCourseData(docSnap.data()); // ✅ Update state in real-time
       }
     });
     return () => unsubscribe(); // Cleanup listener when component unmounts
-  }, [courseId]);
+  }, [getCourseId.getCourseId()]);
   const handleLessonClick = (lesson, index) => {
     setSelectLesson(lesson);
     setActiveIndex(index);
@@ -77,7 +75,6 @@ const Dashboard = () => {
     const courseId = getCourseId.getCourseId();
     const user = auth.currentUser;
     if (!user) return toast.error("Please log in first!");
-    console.log(courseId, "courseId");
     try {
       const userCourseRef = doc(
         db,
@@ -86,8 +83,8 @@ const Dashboard = () => {
         "enrolledCourses",
         courseId
       );
-
       const userCourseSnap = await getDoc(userCourseRef);
+
       if (!userCourseSnap.exists()) toast.error("Enroll in this course first!");
       let { completedLessons = [], totalLessons = 0 } = userCourseSnap.data();
       if (!completedLessons.includes(lessonId)) {
@@ -104,6 +101,7 @@ const Dashboard = () => {
   const handleUndo = async (lessonId) => {
     const user = auth.currentUser;
     if (!user) return alert("Please log in first!");
+
     try {
       const userCourseRef = doc(
         db,
@@ -113,20 +111,26 @@ const Dashboard = () => {
         courseId
       );
       const userCourseSnap = await getDoc(userCourseRef);
-
+      
       if (!userCourseSnap.exists()) return null;
+
       let { completedLessons = [], totalLessons = 0 } = userCourseSnap.data();
-      completedLessons = completedLessons.filter((id) => id !== lessonId); // Remove lesson from completed list
-      const progressPercentage = (completedLessons.length / totalLessons) * 100;
+      // Remove the lesson from completed list
+      completedLessons = completedLessons.filter((id) => id !== lessonId);
+      // ✅ Round the percentage value to the nearest integer
+      const progressPercentage = Math.round(
+        (completedLessons.length / totalLessons) * 100
+      );
+      // ✅ Update Firestore with rounded percentage
       await updateDoc(userCourseRef, { completedLessons, progressPercentage });
-      toast.warn("Enroll in this course first!");
+      toast.warn(`Progress updated: ${progressPercentage}%`);
     } catch (error) {
       console.error("Error updating progress:", error);
     }
   };
 
   return (
-    <div className="relative w-full bg-bgPrimary py-16 overflow-hidden h-auto">
+    <div className="relative w-full bg-bgPrimary py-16 max-md:py-14 max-sm:py-8 overflow-hidden h-auto">
       <div className="absolute w-[330px] max-md:w-[200px] max-lg:w-[300px] top-[-40px] left-0">
         <img className="w-full" src={Shape} alt="Left Shape" />
       </div>
@@ -137,8 +141,7 @@ const Dashboard = () => {
             {/* Sidebar for larger screens */}
             <div className="">
               <Sidebar
-                courseTitle={courseTitle}
-                totalLessons={totalLessons}
+                data={enrolledCourses}
                 loading={loading}
                 onLessonClick={handleLessonClick}
                 lessons={lessons}
@@ -153,8 +156,7 @@ const Dashboard = () => {
           <div className="row-span-1 relative col-span-8 max-xl:col-span-8 max-2xl:col-span-8 max-lg:col-span-full">
             <div className="lg:hidden z-50">
               <SidebarMobile
-                courseTitle={courseTitle}
-                totalLessons={totalLessons}
+                data={enrolledCourses}
                 loading={loading}
                 onLessonClick={handleLessonClick}
                 lessons={lessons}
@@ -175,7 +177,10 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div className="absolute w-[330px] max-md:w-[200px] max-lg:w-[300px] bottom-[0px] left-0">
+      <div className="absolute w-[330px] max-md:w-[200px] max-lg:w-[300px] right-0 bottom-[200px]">
+        <img className="w-full" src={Shaperight} alt="Left Shape" />
+      </div>
+      <div className="absolute w-[330px] max-md:w-[200px] max-lg:w-[300px] bottom-[-200px] left-0">
         <img className="w-full" src={Shape} alt="Left Shape" />
       </div>
     </div>

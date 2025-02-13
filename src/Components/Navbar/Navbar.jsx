@@ -8,7 +8,7 @@ import { getCourseId } from "../../Helper/localStorage";
 import Logo from "../../assets/img/Logo.png";
 
 const Navbar = () => {
-  const { user, courseId } = useAuth(); // Assuming `user` is in context
+  const { user, courseId, logout } = useAuth(); // Assuming `user` is in context
   const [activeItem, setActiveItem] = useState("Home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navItems = [
@@ -90,6 +90,13 @@ const Navbar = () => {
             className="hidden cursor-pointer lg:block border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2">
             {user ? "Dashboard" : "Sign Up"}
           </NavLink>
+          {user && (
+            <button
+              className="mt-4  cursor-pointer border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-44 block text-center"
+              onClick={logout}>
+              Log Out
+            </button>
+          )}
         </div>
 
         {/* Mobile Menu */}

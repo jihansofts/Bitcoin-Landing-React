@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaChevronDown, FaChevronUp, FaCheckCircle } from "react-icons/fa";
 const Sidebar = ({
+  data,
   lessons,
   loading,
   onLessonClick,
   activeIndex,
-  courseTitle,
-  totalLessons,
   userCourseData,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -19,7 +18,7 @@ const Sidebar = ({
     <div className="w-full bg-bgSecondary h-[750px] rounded-2xl p-5 flex flex-col text-white shadow-lg">
       {/* Title */}
       <h2 className="text-lg font-semibold">
-        {courseTitle || "Course dashboard"}
+        {data?.[0]?.title || "Course dashboard"}
       </h2>
       {/* Progress Bar */}
       <div className="relative w-full h-1 bg-bgPrimary rounded-full mt-3">
@@ -48,7 +47,8 @@ const Sidebar = ({
           <h4 className="text-white font-semibold">Course 01</h4>
           <p className="text-xs text-gray-300">
             <span className="font-bold">
-              {userCourseData?.completedLessons.length || 0}/{totalLessons || 0}
+              {userCourseData?.completedLessons.length || 0}/
+              {data?.[0]?.totalLessons || 0}
             </span>
           </p>
         </div>

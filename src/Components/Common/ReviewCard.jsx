@@ -6,7 +6,7 @@ const ReviewCard = ({ data }) => {
     <div>
       <div
         key={data.id}
-        className="bg-bgPrimary p-8 rounded-2xl w-[450px] h-[250px]">
+        className="bg-bgPrimary p-8 max-sm:p-6 rounded-2xl w-[450px] h-[250px] max-sm:w-full max-sm:h-full">
         <div className="flex items-center gap-5">
           <img className="w-12 h-12" src={data.image} alt="" />
           <div>

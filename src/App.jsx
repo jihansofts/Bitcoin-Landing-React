@@ -26,7 +26,7 @@ function App() {
             </>
           }
         />
-        <Route
+        {/* <Route
           path="/login"
           element={
             <>
@@ -47,7 +47,7 @@ function App() {
               <Footer />
             </>
           }
-        />
+        /> */}
 
         {/* 🔐 Protected Route (Only accessible if logged in) */}
         <Route

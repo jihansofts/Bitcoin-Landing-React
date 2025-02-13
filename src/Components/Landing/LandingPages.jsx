@@ -1,5 +1,4 @@
 import React, { Suspense } from "react";
-
 // Lazy load components
 const Home = React.lazy(() => import("../Home/Home"));
 const About = React.lazy(() => import("../About/About"));

@@ -8,7 +8,12 @@ import {
   getDocs,
   getCountFromServer,
 } from "firebase/firestore";
-import { setToken, removeToken, removeCourseId } from "../Helper/localStorage";
+import {
+  setToken,
+  removeToken,
+  removeCourseId,
+  setCourseIds,
+} from "../Helper/localStorage";
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
@@ -18,8 +23,6 @@ export const AuthProvider = ({ children }) => {
   const [courseId, setCourseId] = useState(null);
   const [enrollData, setEnrollData] = useState([]);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
-  const [courseTitle, setCourseTitle] = useState("");
-  const [totalLessons, setTotalLessons] = useState(0);
   const [loading, setLoading] = useState(true);
 
   // ✅ Move fetchEnroll outside of useEffect
@@ -34,6 +37,7 @@ export const AuthProvider = ({ children }) => {
         id: doc.id,
         ...doc.data(),
       }));
+      setCourseIds.setCourseId(courseData?.[0].id);
       setEnrollData(courseData);
       setLoading(false);
     } catch (error) {
@@ -53,8 +57,6 @@ export const AuthProvider = ({ children }) => {
         removeToken.removeToken();
         setEnrolledCourses([]);
         setCourseId(null);
-        setCourseTitle("");
-        setTotalLessons(0);
       }
       setUser(user);
       setLoading(false);
@@ -83,6 +85,7 @@ export const AuthProvider = ({ children }) => {
               : { id: courseId, title: "Unknown Course", totalLessons: 0 };
           })
         );
+        console.log("Enrolled Courses:", courses);
         setEnrolledCourses(courses);
       } else {
         setEnrolledCourses([]);
@@ -101,29 +104,11 @@ export const AuthProvider = ({ children }) => {
       return 0; // Return 0 in case of an error
     }
   };
-  useEffect(() => {
-    if (!courseId) return;
-    const fetchCourseDetails = async () => {
-      try {
-        const courseDocRef = doc(db, "course", courseId);
-        const courseDoc = await getDoc(courseDocRef);
-        if (courseDoc.exists()) {
-          setCourseTitle(courseDoc.data().title || "Untitled Course");
-          setTotalLessons(courseDoc.data().totalLessons || 0);
-        }
-      } catch (error) {
-        console.error("Error fetching course details:", error);
-      }
-    };
-    fetchCourseDetails();
-  }, [courseId]);
 
   const logout = async () => {
     await signOut(auth);
     setEnrolledCourses([]);
     setCourseId(null);
-    setCourseTitle("");
-    setTotalLessons(0);
     removeToken.removeToken();
     removeCourseId.removeCourseId();
   };
@@ -139,8 +124,6 @@ export const AuthProvider = ({ children }) => {
         setCourseId,
         setEnrolledCourses,
         enrolledCourses,
-        courseTitle,
-        totalLessons,
         logout,
       }}>
       {!loading && children}

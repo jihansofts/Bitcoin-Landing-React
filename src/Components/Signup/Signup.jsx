@@ -48,7 +48,6 @@ const Signup = () => {
       toast.error("Email already exists!");
       return;
     }
-
     try {
       setLoading(true);
       // 🔥 Create user in Firebase Authentication

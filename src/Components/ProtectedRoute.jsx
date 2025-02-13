@@ -15,7 +15,6 @@ const ProtectedRoute = ({ children }) => {
   if (enrolledCourses.length === 0 && !courseId) {
     return <Navigate to="/" replace />;
   }
-
   // If everything is fine, render the children (protected content)
   return children;
 };

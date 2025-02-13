@@ -9,16 +9,15 @@ import {
 } from "react-icons/fa";
 
 const SidebarMobile = ({
+  data,
   lessons,
   loading,
   onLessonClick,
   activeIndex,
-  courseTitle,
-  totalLessons,
   userCourseData,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(true);
 
   const handleLessonClick = (lesson, index) => {
     onLessonClick(lesson, index);
@@ -56,7 +55,7 @@ const SidebarMobile = ({
 
         {/* Title */}
         <h2 className="text-lg font-semibold">
-          {courseTitle || "Course dashboard"}
+          {data?.[0]?.title || "Course dashboard"}
         </h2>
 
         {/* Progress Bar */}
@@ -88,7 +87,7 @@ const SidebarMobile = ({
             <p className="text-xs text-gray-300">
               <span className="font-bold">
                 {userCourseData?.completedLessons.length || 0}/
-                {totalLessons || 0}
+                {data?.[0]?.totalLessons || 0}
               </span>
             </p>
           </div>
