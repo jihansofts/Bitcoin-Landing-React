@@ -29,14 +29,14 @@ const Card = ({ course }) => {
     }
   };
   const enrollCourse = async (selectedCourseId) => {
-    setCourseId(selectedCourseId);
-    // Check if the user is authenticated
-    if (!user) {
-      setIsOpen(true); // Show login modal if user is not authenticated
-      return;
-    }
-
     try {
+      setCourseId(selectedCourseId);
+      // Check if the user is authenticated
+      if (!user) {
+        setIsOpen(true); // Show login modal if user is not authenticated
+        return;
+      }
+
       // Fetch the course details to get totalLessons
       const courseRef = doc(db, "course", selectedCourseId);
       const courseSnap = await getDoc(courseRef);
