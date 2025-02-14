@@ -13,10 +13,7 @@ import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
 import InputField from "../Common/InputField";
 import { IoCloseSharp } from "react-icons/io5";
-import { setCourseIds, getCourseId } from "../../Helper/localStorage";
-import { useAuth } from "../../Context/AuthContext";
-const Model = ({ onClose, enrollCourse, selectedCourseId }) => {
-  const { enrollData, setCourseId, setEnrolledCourses } = useAuth();
+const Model = ({ onClose, selectedCourseId }) => {
   const courseId = selectedCourseId;
   console.log(courseId, "id 69");
   const navigate = useNavigate();
@@ -42,37 +39,37 @@ const Model = ({ onClose, enrollCourse, selectedCourseId }) => {
         toast.error("Course ID not found! Please select a course first.");
         return;
       }
+
       // Fetch the course details to get totalLessons
       const courseRef = doc(db, "course", courseId);
       const courseSnap = await getDoc(courseRef);
-
       if (!courseSnap.exists()) {
         toast.error("Course not found!");
         return;
       }
-
       const courseData = courseSnap.data();
       const totalLessons = courseData.totalLessons || 0; // Default to 0 if not set
 
       // Reference to the user's enrolled courses subcollection in Firestore
-      const userCourseRef = doc(
+      const enrolledCoursesRef = doc(
         db,
-        "users", // Collection name
-        user.uid, // Document ID (user ID)
-        "enrolledCourses", // Subcollection name
-        courseId // Document ID within subcollection
+        "users",
+        user.uid,
+        "enrolledCourses",
+        courseId
       );
-      setCourseId(courseId);
-      setCourseIds.setCourseId(courseId);
+
       // Check if the user is already enrolled in this course
-      const userCourseSnap = await getDoc(userCourseRef);
-      if (userCourseSnap.exists()) {
-        toast.info("You are already enrolled in this course.");
-        navigate(`/dashboard/course/${getCourseId.getCourseId()}`);
+      const enrolledCoursesSnap = await getDoc(enrolledCoursesRef);
+      if (enrolledCoursesSnap.exists()) {
+        toast.error("You are already enrolled in this course!");
         return;
-      } // If not enrolled, enroll the user in the course
-      await setDoc(userCourseRef, {
-        progressPercentage: 0,
+      }
+
+      // Add the user to the enrolled courses subcollection
+      await setDoc(enrolledCoursesRef, {
+        courseId: courseId,
+        totalLessons: totalLessons,
         completedLessons: [],
         totalLessons: totalLessons, // Use the fetched totalLessons value
       });
@@ -103,10 +100,10 @@ const Model = ({ onClose, enrollCourse, selectedCourseId }) => {
       const result = await signInWithEmailAndPassword(auth, email, password);
       const user = result.user;
       if (!user) {
-        navigate("/signup");
+        navigate("/");
       } else {
         toast.success("Login Successful!");
-        navigate(`/dashboard/course/${getCourseId.getCourseId()}`);
+        navigate(`/dashboard/course/${courseId}`);
       }
     } catch (error) {
       console.error("Email Sign-In Error:", error);
