@@ -110,11 +110,7 @@ const Card = ({ course }) => {
     <div className="grid grid-cols-12 max-xl:grid-cols-1 max-md:grid-cols-1 max-lg:grid-cols-12 max-sm:grid-cols-1 gap-8 mt-20">
       {isOpen && (
         <div className="fixed bg-bgSecondary top-0 left-0 bg-opacity-30 w-full h-full max-sm:max-h-screen z-50">
-          <Model
-            selectedCourseId={courseId}
-            enrollCourse={enrollCourse}
-            onClose={setIsOpen}
-          />
+          <Model selectedCourseId={courseId} onClose={setIsOpen} />
         </div>
       )}
       <div
