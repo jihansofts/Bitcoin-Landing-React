@@ -8,7 +8,14 @@ import Model from "./../Common/Model";
 import { setCourseIds, getCourseId } from "../../Helper/localStorage";
 import CardShape from "../../assets/img/CardShape.png";
 const Card = ({ course }) => {
-  const { courseId, getTotalUsers, user, setCourseId, logout } = useAuth();
+  const {
+    courseId,
+    getTotalUsers,
+    user,
+    setCourseId,
+    logout,
+    enrolledCourses,
+  } = useAuth();
   const navigate = useNavigate(); // Use useNavigate for navigation
   const [isOpen, setIsOpen] = useState(false); // Modal open/close state
   const [UserCount, setUserCount] = useState(0);
@@ -98,6 +105,7 @@ const Card = ({ course }) => {
       toast.error("Enrollment failed. Please try again.");
     }
   };
+
   return (
     <div className="grid grid-cols-12 max-xl:grid-cols-1 max-md:grid-cols-1 max-lg:grid-cols-12 max-sm:grid-cols-1 gap-8 mt-20">
       {isOpen && (
@@ -142,7 +150,10 @@ const Card = ({ course }) => {
               </span>
               <span className="text-[14px] font-bold text-white">Free</span>
             </div>
-            {user && getCourseId.getCourseId() === course.id ? (
+            {user &&
+            enrolledCourses.some(
+              (enrolledCourse) => enrolledCourse.id === course.id
+            ) ? (
               <button
                 onClick={handleCourseClick}
                 className="text-[14px] sm:text-[16px] md:text-[18px] mt-6 sm:mt-8 cursor-pointer w-full bg-buttonColor py-2 sm:py-3 px-5 sm:px-7 rounded-3xl font-Inter font-bold text-bgPrimary hover:bg-opacity-90 transition-all">
