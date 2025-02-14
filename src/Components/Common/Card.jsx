@@ -8,7 +8,7 @@ import Model from "./../Common/Model";
 import { setCourseIds, getCourseId } from "../../Helper/localStorage";
 import CardShape from "../../assets/img/CardShape.png";
 const Card = ({ course }) => {
-  const { getTotalUsers, user, setCourseId, logout,courseId } = useAuth();
+  const { getTotalUsers, user, setCourseId, logout } = useAuth();
   const navigate = useNavigate(); // Use useNavigate for navigation
   const [isOpen, setIsOpen] = useState(false); // Modal open/close state
   const [selectId , setSelectId] = useState(null);
@@ -24,19 +24,19 @@ const Card = ({ course }) => {
     fetchUsers();
   }, []);
   const handleCourseClick = () => {
-    if (courseId) {
-      navigate(`/dashboard/course/${courseId}`); // Redirect to dashboard if enrolled
+    if (getCourseId.getCourseId()) {
+      navigate(`/dashboard/course/${getCourseId.getCourseId()}`); // Redirect to dashboard if enrolled
     } else {
       toast.error("Enroll in a course first!");
     }
   };
+
   const enrollCourse = async (selectedCourseId) => {
     setSelectId(selectedCourseId)
     try {
       setCourseId(selectedCourseId);
       // Check if the user is authenticated
       if (!user) {
-        console.log("user is lost");
         setIsOpen(true); // Show login modal if user is not authenticated
         return;
       }
@@ -56,8 +56,6 @@ const Card = ({ course }) => {
 
       const isExists = userCourseSnapBeforeEnrollAttempt.exists();
 
-      console.log(isExists, "isExists");
-
       if (!isExists) {
         await logout();
         setCourseId(selectedCourseId)
@@ -65,8 +63,9 @@ const Card = ({ course }) => {
         setIsOpen(true); // Show login modal if user is not authenticated
         return;
       }
-      setCourseIds.setCourseId(selectedCourseId)
+
       console.log("existing enrollment found, continue.");
+
       // Fetch the course details to get totalLessons
       const courseRef = doc(db, "course", selectedCourseId);
       console.log(courseRef, "courseRef");
@@ -99,11 +98,12 @@ const Card = ({ course }) => {
       toast.error("Enrollment failed. Please try again.");
     }
   };
+
   return (
     <div className="grid grid-cols-12 max-xl:grid-cols-1 max-md:grid-cols-1 max-lg:grid-cols-12 max-sm:grid-cols-1 gap-8 mt-20">
       {isOpen && (
         <div className="fixed bg-bgSecondary top-0 left-0 bg-opacity-30 w-full h-full max-sm:max-h-screen z-50">
-          <Model enrollCourse={enrollCourse} onClose={setIsOpen} />
+          <Model selectedCourseId={courseId} onClose={setIsOpen} />
         </div>
       )}
       <div
@@ -139,9 +139,9 @@ const Card = ({ course }) => {
               </span>
               <span className="text-[14px] font-bold text-white">Free</span>
             </div>
-            {user && courseId === selectId ? (
+            {user && getCourseId.getCourseId() === course.id ? (
               <button
-                onClick={handleCourseClick}
+                onClick={handleCourseClick(course.id)}
                 className="text-[14px] sm:text-[16px] md:text-[18px] mt-6 sm:mt-8 cursor-pointer w-full bg-buttonColor py-2 sm:py-3 px-5 sm:px-7 rounded-3xl font-Inter font-bold text-bgPrimary hover:bg-opacity-90 transition-all">
                 Go to Dashboard
               </button>
@@ -149,7 +149,7 @@ const Card = ({ course }) => {
               <button
                 onClick={() => enrollCourse(course.id)}
                 className="text-[14px] sm:text-[16px] md:text-[18px] mt-6 sm:mt-8 cursor-pointer w-full bg-buttonColor py-2 sm:py-3 px-5 sm:px-7 rounded-3xl font-Inter font-bold text-bgPrimary hover:bg-opacity-90 transition-all">
-                Take Course
+                Take Course {course.id}
               </button>
             )}
           </div>

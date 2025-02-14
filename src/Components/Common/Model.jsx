@@ -15,8 +15,8 @@ import InputField from "../Common/InputField";
 import { IoCloseSharp } from "react-icons/io5";
 import { setCourseIds, getCourseId } from "../../Helper/localStorage";
 import { useAuth } from "../../Context/AuthContext";
-const Model = ({ onClose, enrollCourse,}) => {
-  const { enrollData, setEnrolledCourses,courseId } = useAuth();
+const Model = ({ onClose, enrollCourse, courseId }) => {
+  const { enrollData, setCourseId, setEnrolledCourses } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -66,7 +66,7 @@ const Model = ({ onClose, enrollCourse,}) => {
       // Check if the user is already enrolled in this course
       const enrolledCoursesSnap = await getDoc(enrolledCoursesRef);
       if (enrolledCoursesSnap.exists()) {
-        navigate(`/dashboard/course/${courseId}`);
+        toast.error("You are already enrolled in this course!");
         return;
       }
 
@@ -78,7 +78,7 @@ const Model = ({ onClose, enrollCourse,}) => {
         totalLessons: totalLessons, // Use the fetched totalLessons value
       });
 
-      const userCourseSnapVerify = await getDoc(enrolledCoursesRef, {
+      const userCourseSnapVerify = await getDoc(userCourseRef, {
         source: "server",
       });
 

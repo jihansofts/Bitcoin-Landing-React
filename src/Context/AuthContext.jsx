@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
         id: doc.id,
         ...doc.data(),
       }));
-      // setCourseIds.setCourseId(courseData?.[0].id);
+      setCourseIds.setCourseId(courseData?.[0].id);
       setEnrollData(courseData);
       setLoading(false);
     } catch (error) {
@@ -55,8 +55,6 @@ export const AuthProvider = ({ children }) => {
         fetchEnrolledCoursesRealtime(user.uid); // 🔥 Listen for real-time updates
       } else {
         removeToken.removeToken();
-        setEnrolledCourses([]);
-        setCourseId(null);
       }
       setUser(user);
       setLoading(false);
@@ -88,8 +86,7 @@ export const AuthProvider = ({ children }) => {
         console.log("Enrolled Courses:", courses);
         setEnrolledCourses(courses);
       } else {
-        setEnrolledCourses([]);
-        setCourseId(null);
+        console.log("No enrolled courses found");
       }
     });
   };
@@ -107,10 +104,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     await signOut(auth);
-    setEnrolledCourses([]);
-    setCourseId(null);
     removeToken.removeToken();
-    removeCourseId.removeCourseId();
   };
 
   return (
