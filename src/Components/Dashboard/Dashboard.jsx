@@ -13,10 +13,10 @@ import {
 } from "firebase/firestore";
 import { useAuth } from "../../Context/AuthContext";
 import { toast } from "react-toastify";
-import { getCourseId } from "../../Helper/localStorage";
 import SidebarMobile from "./SidebarMobile";
 const Dashboard = () => {
-  const { courseId, enrolledCourses } = useAuth();
+  const { enrolledCourses } = useAuth();
+  const courseId = enrolledCourses?.[0].id
   const [selectLesson, setSelectLesson] = useState(null);
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +24,7 @@ const Dashboard = () => {
   const [userCourseData, setUserCourseData] = useState(null);
   // Fetch all lessons for a given course
   useEffect(() => {
-    const courseId = getCourseId.getCourseId();
+    setLoading(true);
     if (!courseId) return;
     const lessonsRef = collection(db, "course", courseId, "lessons");
 
@@ -44,10 +44,9 @@ const Dashboard = () => {
     });
 
     return () => unsubscribe();
-  }, [getCourseId.getCourseId()]);
+  }, [courseId]);
 
   useEffect(() => {
-    const courseId = getCourseId.getCourseId();
     if (!courseId) return;
     const user = auth.currentUser;
     if (!user) return;
@@ -61,18 +60,16 @@ const Dashboard = () => {
     // 🔹 Real-time listener for enrolled course data
     const unsubscribe = onSnapshot(userCourseRef, (docSnap) => {
       if (docSnap.exists()) {
-        console.log(docSnap.data(), "data");
         setUserCourseData(docSnap.data()); // ✅ Update state in real-time
       }
     });
     return () => unsubscribe(); // Cleanup listener when component unmounts
-  }, [getCourseId.getCourseId()]);
+  }, [courseId]);
   const handleLessonClick = (lesson, index) => {
     setSelectLesson(lesson);
     setActiveIndex(index);
   };
   const handleMarkAsComplete = async (lessonId) => {
-    const courseId = getCourseId.getCourseId();
     const user = auth.currentUser;
     if (!user) return toast.error("Please log in first!");
     try {
@@ -84,6 +81,7 @@ const Dashboard = () => {
         courseId
       );
       const userCourseSnap = await getDoc(userCourseRef);
+      console.log(userCourseSnap.data(),"data");
 
       if (!userCourseSnap.exists()) toast.error("Enroll in this course first!");
       let { completedLessons = [], totalLessons = 0 } = userCourseSnap.data();

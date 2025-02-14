@@ -49,7 +49,7 @@ function App() {
 
         {/* 🔐 Protected Route (Only accessible if logged in) */}
         <Route
-          path="/dashboard/course/:courseId"
+          path="/dashboard/course/:id"
           element={
             <ProtectedRoute>
               <ToastContainer position="top-center" autoClose={2000} />

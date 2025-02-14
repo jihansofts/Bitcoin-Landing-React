@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../../Components/firebase";
-import { useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
+import { useNavigate,useParams } from "react-router-dom"; // Use useNavigate instead of useHistory
 import { toast } from "react-toastify";
 import { useAuth } from "../../Context/AuthContext";
 import Model from "./../Common/Model";
@@ -9,7 +9,6 @@ import { setCourseIds, getCourseId } from "../../Helper/localStorage";
 import CardShape from "../../assets/img/CardShape.png";
 const Card = ({ course }) => {
   const {
-    courseId,
     getTotalUsers,
     user,
     setCourseId,
@@ -19,6 +18,8 @@ const Card = ({ course }) => {
   const navigate = useNavigate(); // Use useNavigate for navigation
   const [isOpen, setIsOpen] = useState(false); // Modal open/close state
   const [UserCount, setUserCount] = useState(0);
+  const [selectedCourseId, setSelectedCourseId] = useState(null);
+  const { id } = useParams();
   // Handle course click (for enrolled courses)
   useEffect(() => {
     const fetchUsers = async () => {
@@ -34,6 +35,7 @@ const Card = ({ course }) => {
   };
 
   const enrollCourse = async (selectedCourseId) => {
+    setSelectedCourseId(selectedCourseId);
     try {
       setCourseId(selectedCourseId);
       // Check if the user is authenticated
@@ -74,14 +76,12 @@ const Card = ({ course }) => {
       }
       const courseData = courseSnap.data();
       const totalLessons = courseData.totalLessons || 0; // Default to 0 if not set
-
-      setCourseIds.setCourseId(selectedCourseId);
       // Check if the user is already enrolled in this course
       const userCourseSnap = await getDoc(userCourseRef);
       if (userCourseSnap.exists()) {
         toast.info("You are already enrolled in this course.");
-        console.log(getCourseId.getCourseId(), "id");
-        navigate(`/dashboard/course/${getCourseId.getCourseId()}`);
+        console.log(id, "id");
+        navigate(`/dashboard/course/${id}`);
         return;
       }
       // If not enrolled, enroll the user in the course
@@ -91,7 +91,7 @@ const Card = ({ course }) => {
         totalLessons: totalLessons, // Use the fetched totalLessons value
       });
       toast.success("Enrollment successful!");
-      navigate(`/dashboard/course/${getCourseId.getCourseId()}`);
+      navigate(`/dashboard/course/${id}`);
     } catch (error) {
       console.error("Enrollment failed:", error);
       toast.error("Enrollment failed. Please try again.");
@@ -102,7 +102,7 @@ const Card = ({ course }) => {
     <div className="grid grid-cols-12 max-xl:grid-cols-1 max-md:grid-cols-1 max-lg:grid-cols-12 max-sm:grid-cols-1 gap-8 mt-20">
       {isOpen && (
         <div className="fixed bg-bgSecondary top-0 left-0 bg-opacity-30 w-full h-full max-sm:max-h-screen z-50">
-          <Model selectedCourseId={courseId} onClose={setIsOpen} />
+          <Model selectedCourseId={selectedCourseId} onClose={setIsOpen} />
         </div>
       )}
       <div

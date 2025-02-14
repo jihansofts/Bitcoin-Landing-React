@@ -37,8 +37,7 @@ export const AuthProvider = ({ children }) => {
         id: doc.id,
         ...doc.data(),
       }));
-
-      setCourseIds.setCourseId(courseData?.[0].id);
+      console.log("Course Data:", courseData);
       setEnrollData(courseData);
       setLoading(false);
     } catch (error) {
@@ -79,9 +78,12 @@ export const AuthProvider = ({ children }) => {
             const courseId = docSnap.id;
             const courseRef = doc(db, "course", courseId);
             const courseDoc = await getDoc(courseRef);
-            return courseDoc.exists()
-              ? { id: courseId, ...courseDoc.data() }
-              : { id: courseId, title: "Unknown Course", totalLessons: 0 };
+            if (courseDoc.exists()) {
+              return { id: docSnap.id, ...courseDoc.data() };
+            } else {
+              console.log("Course not found for ID:", courseId);
+              return null; // Return null for missing course data
+            }
           })
         );
         console.log("Enrolled Courses:", courses);

@@ -3,7 +3,6 @@ import { LuMoveLeft, LuMoveRight } from "react-icons/lu";
 import { toast } from "react-toastify";
 import { useAuth } from "../../Context/AuthContext";
 const Content = ({
-  data,
   lesson,
   completeLesson,
   handleUndo,
