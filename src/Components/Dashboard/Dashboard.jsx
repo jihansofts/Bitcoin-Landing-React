@@ -14,9 +14,11 @@ import {
 import { useAuth } from "../../Context/AuthContext";
 import { toast } from "react-toastify";
 import SidebarMobile from "./SidebarMobile";
+import { useParams } from "react-router-dom";
 const Dashboard = () => {
   const { enrolledCourses } = useAuth();
-  const courseId = enrolledCourses?.[0].id
+  const { id } = useParams();
+  const courseId = id;
   const [selectLesson, setSelectLesson] = useState(null);
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +28,9 @@ const Dashboard = () => {
   useEffect(() => {
     setLoading(true);
     if (!courseId) return;
+
+    console.log("Course ID:", courseId);
+
     const lessonsRef = collection(db, "course", courseId, "lessons");
 
     const unsubscribe = onSnapshot(lessonsRef, (snapshot) => {
@@ -65,10 +70,12 @@ const Dashboard = () => {
     });
     return () => unsubscribe(); // Cleanup listener when component unmounts
   }, [courseId]);
+
   const handleLessonClick = (lesson, index) => {
     setSelectLesson(lesson);
     setActiveIndex(index);
   };
+
   const handleMarkAsComplete = async (lessonId) => {
     const user = auth.currentUser;
     if (!user) return toast.error("Please log in first!");
@@ -81,7 +88,7 @@ const Dashboard = () => {
         courseId
       );
       const userCourseSnap = await getDoc(userCourseRef);
-      console.log(userCourseSnap.data(),"data");
+      console.log(userCourseSnap.data(), "data");
 
       if (!userCourseSnap.exists()) toast.error("Enroll in this course first!");
       let { completedLessons = [], totalLessons = 0 } = userCourseSnap.data();

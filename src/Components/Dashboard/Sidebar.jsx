@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaChevronDown, FaChevronUp, FaCheckCircle } from "react-icons/fa";
+import { useParams } from "react-router-dom";
 const Sidebar = ({
   data,
   lessons,
@@ -14,11 +15,16 @@ const Sidebar = ({
   const handleLessonClick = (lesson, index) => {
     onLessonClick(lesson, index); // Pass the selected lesson and index to the parent
   };
+
+  const { id } = useParams();
+
+  const selectedCourseData = data?.find((course) => course.id === id);
+
   return (
     <div className="w-full bg-bgSecondary h-[750px] rounded-2xl p-5 flex flex-col text-white shadow-lg">
       {/* Title */}
       <h2 className="text-lg font-semibold">
-        {data?.[0]?.title || "Course dashboard"}
+        {selectedCourseData?.title || "Course dashboard"}
       </h2>
       {/* Progress Bar */}
       <div className="relative w-full h-1 bg-bgPrimary rounded-full mt-3">
@@ -48,7 +54,7 @@ const Sidebar = ({
           <p className="text-xs text-gray-300">
             <span className="font-bold">
               {userCourseData?.completedLessons.length || 0}/
-              {data?.[0]?.totalLessons || 0}
+              {selectedCourseData.totalLessons || 0}
             </span>
           </p>
         </div>
