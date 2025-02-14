@@ -54,7 +54,7 @@ const Sidebar = ({
           <p className="text-xs text-gray-300">
             <span className="font-bold">
               {userCourseData?.completedLessons.length || 0}/
-              {selectedCourseData.totalLessons || 0}
+              {selectedCourseData?.totalLessons || 0}
             </span>
           </p>
         </div>
