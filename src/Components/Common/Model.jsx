@@ -72,12 +72,23 @@ const Model = ({ onClose, enrollCourse, courseId }) => {
         courseId: courseId,
         totalLessons: totalLessons,
         completedLessons: [],
+        totalLessons: totalLessons, // Use the fetched totalLessons value
       });
-      // Store the selected course ID in local storage
-      enrollCourse(courseId);
-      setCourseId(courseId);
-      toast.success("Login Successful!");
-      navigate(`/dashboard/course/${courseId}`);
+
+      const userCourseSnapVerify = await getDoc(userCourseRef, {
+        source: "server",
+      });
+
+      console.log(
+        userCourseSnapVerify.exists(),
+        "userCourseSnapVerify.exists()"
+      );
+
+      toast.success("Enrollment successful!"); // Wait 2 seconds before navigating
+      setTimeout(() => {
+        navigate(`/dashboard/course/${getCourseId.getCourseId()}`);
+      }, 1000);
+      console.log(courseId, "courseId end");
     } catch (error) {
       console.error("Google Sign-In Error:", error);
       toast.error("Google Login Failed!");
