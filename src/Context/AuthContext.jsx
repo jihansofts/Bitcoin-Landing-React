@@ -8,12 +8,6 @@ import {
   getDocs,
   getCountFromServer,
 } from "firebase/firestore";
-import {
-  setToken,
-  removeToken,
-  removeCourseId,
-  setCourseIds,
-} from "../Helper/localStorage";
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
@@ -37,7 +31,6 @@ export const AuthProvider = ({ children }) => {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log("Course Data:", courseData);
       setEnrollData(courseData);
       setLoading(false);
     } catch (error) {
@@ -50,11 +43,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const token = await user.getIdToken();
-        setToken.setToken(token);
         fetchEnrolledCoursesRealtime(user.uid); // 🔥 Listen for real-time updates
       } else {
-        removeToken.removeToken();
       }
       setUser(user);
       setLoading(false);
@@ -81,12 +71,10 @@ export const AuthProvider = ({ children }) => {
             if (courseDoc.exists()) {
               return { id: docSnap.id, ...courseDoc.data() };
             } else {
-              console.log("Course not found for ID:", courseId);
               return null; // Return null for missing course data
             }
           })
         );
-        console.log("Enrolled Courses:", courses);
         setEnrolledCourses(courses);
       } else {
         console.log("No enrolled courses found");
@@ -107,7 +95,6 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     await signOut(auth);
-    removeToken.removeToken();
   };
 
   return (

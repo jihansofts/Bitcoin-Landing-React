@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import {
   auth,
-  signInWithEmailAndPassword,
+  signInAnonymously,
   signInWithPopup,
   provider,
   db,
 } from "../firebase"; // Ensure Firebase is correctly initialized
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
 import InputField from "../Common/InputField";
@@ -19,9 +19,8 @@ const Model = ({ onClose, selectedCourseId }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
-    password: "",
+    name: "",
   });
-  const [acceptTerms, setAcceptTerms] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -63,9 +62,7 @@ const Model = ({ onClose, selectedCourseId }) => {
       const enrolledCoursesSnap = await getDoc(enrolledCoursesRef);
       if (enrolledCoursesSnap.exists()) {
         toast.info("You are already enrolled in this course.");
-        setTimeout(() => {
-          navigate(`/dashboard/course/${courseId}`);
-        }, 1000);
+        navigate(`/dashboard/course/${courseId}`);
         return;
       }
 
@@ -78,10 +75,7 @@ const Model = ({ onClose, selectedCourseId }) => {
       });
 
       toast.success("Enrollment successful!"); // Wait 2 seconds before navigating
-      setTimeout(() => {
-        navigate(`/dashboard/course/${courseId}`);
-      }, 1000);
-      console.log(courseId, "courseId end");
+      navigate(`/dashboard/course/${courseId}`);
     } catch (error) {
       console.error("Google Sign-In Error:", error);
       toast.error("Google Login Failed!");
@@ -90,15 +84,53 @@ const Model = ({ onClose, selectedCourseId }) => {
   const handleEmailSignIn = async (e) => {
     e.preventDefault();
     try {
-      const { email, password } = formData;
-      const result = await signInWithEmailAndPassword(auth, email, password);
+      const {name ,email } = formData;
+      const result = await signInAnonymously(auth,name ,email);
       const user = result.user;
       if (!user) {
         navigate("/");
-      } else {
-        toast.success("Login Successful!");
-        navigate(`/dashboard/course/${courseId}`);
       }
+      if(!courseId){
+        toast.error("Course ID not found! Please select a course first.");
+        return;
+      }
+      const courseRef = doc(db, "course", courseId);
+      const courseSnap = await getDoc(courseRef);
+      if (!courseSnap.exists()) {
+        toast.error("Course not found!");
+        return;
+      }
+      const courseData = courseSnap.data();
+      const totalLessons = courseData.totalLessons || 0; // Default to 0 if not set
+
+      // Reference to the user's enrolled courses subcollection in Firestore
+      const enrolledCoursesRef = doc(
+        db,
+        "users",
+        user.uid,
+        "enrolledCourses",
+        courseId
+      );
+
+      // Check if the user is already enrolled in this course
+      const enrolledCoursesSnap = await getDoc(enrolledCoursesRef);
+      if (enrolledCoursesSnap.exists()) {
+        toast.info("You are already enrolled in this course.");
+       navigate(`/dashboard/course/${courseId}`);
+        return;
+      }
+
+      // Add the user to the enrolled courses subcollection
+      await setDoc(enrolledCoursesRef, {
+        courseId: courseId,
+        totalLessons: totalLessons,
+        completedLessons: [],
+        totalLessons: totalLessons, // Use the fetched totalLessons value
+      });
+
+      toast.success("Enrollment successful!"); // Wait 2 seconds before navigating
+      navigate(`/dashboard/course/${courseId}`);
+      console.log(courseId, "courseId end");
     } catch (error) {
       console.error("Email Sign-In Error:", error);
       toast.error("Login Failed! Please check your credentials.");
@@ -149,6 +181,14 @@ const Model = ({ onClose, selectedCourseId }) => {
             className="space-y-3 max-sm:space-none text-left"
             onSubmit={handleEmailSignIn}>
             <InputField
+              label="Name"
+              name="name"
+              type="text"
+              placeholder="Enter your Name"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            <InputField
               label="Email"
               name="email"
               type="email"
@@ -156,50 +196,14 @@ const Model = ({ onClose, selectedCourseId }) => {
               value={formData.email}
               onChange={handleChange}
             />
-            <InputField
-              label="Password"
-              name="password"
-              type="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-            {/* Accept Terms Checkbox */}
-            <div className="mt-4 flex items-center justify-between">
-              <div>
-                <input
-                  type="checkbox"
-                  checked={acceptTerms}
-                  onChange={() => setAcceptTerms(!acceptTerms)}
-                  className="w-4 h-4 accent-buttonColor border-gray-300 rounded"
-                />
-                <label className="ml-2 text-sm text-buttonColor">
-                  Remember Me
-                </label>
-              </div>
-              <div>
-                <Link
-                  to="/forgot-password"
-                  className="ml-2 text-sm text-buttonColor hover:underline">
-                  Forgot Password?
-                </Link>
-              </div>
-            </div>
+           
             {/* Submit Button */}
             <button
               type="submit"
               className="mt-3 max-sm:mt-1 bg-buttonColor w-full text-bgPrimary max-md:text-[16px] py-2 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
-              Login
+              Get Started
             </button>
-            {/* don't have an account */}
-            <p className="mt-3 max-sm:mt-1 text-white text-xs text-center">
-              Don’t Have an Account?{" "}
-              <Link
-                to="/signup"
-                className="text-green-600 font-semibold hover:underline">
-                Sign Up
-              </Link>
-            </p>
+          
           </form>
         </div>
         {/* Right Column (Image) */}

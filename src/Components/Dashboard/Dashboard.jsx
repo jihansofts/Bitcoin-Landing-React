@@ -29,8 +29,6 @@ const Dashboard = () => {
     setLoading(true);
     if (!courseId) return;
 
-    console.log("Course ID:", courseId);
-
     const lessonsRef = collection(db, "course", courseId, "lessons");
 
     const unsubscribe = onSnapshot(lessonsRef, (snapshot) => {
@@ -88,7 +86,6 @@ const Dashboard = () => {
         courseId
       );
       const userCourseSnap = await getDoc(userCourseRef);
-      console.log(userCourseSnap.data(), "data");
 
       if (!userCourseSnap.exists()) toast.error("Enroll in this course first!");
       let { completedLessons = [], totalLessons = 0 } = userCourseSnap.data();

@@ -5,7 +5,6 @@ import { useNavigate,useParams } from "react-router-dom"; // Use useNavigate ins
 import { toast } from "react-toastify";
 import { useAuth } from "../../Context/AuthContext";
 import Model from "./../Common/Model";
-import { setCourseIds, getCourseId } from "../../Helper/localStorage";
 import CardShape from "../../assets/img/CardShape.png";
 const Card = ({ course }) => {
   const {
@@ -151,7 +150,7 @@ const Card = ({ course }) => {
               <button
                 onClick={() => enrollCourse(course.id)}
                 className="text-[14px] sm:text-[16px] md:text-[18px] mt-6 sm:mt-8 cursor-pointer w-full bg-buttonColor py-2 sm:py-3 px-5 sm:px-7 rounded-3xl font-Inter font-bold text-bgPrimary hover:bg-opacity-90 transition-all">
-                Take Course {course.id}
+                Take Course
               </button>
             )}
           </div>

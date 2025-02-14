@@ -7,7 +7,7 @@ import {
   FaTimes,
   FaChevronRight,
 } from "react-icons/fa";
-
+import { useParams } from "react-router-dom";
 const SidebarMobile = ({
   data,
   lessons,
@@ -23,7 +23,8 @@ const SidebarMobile = ({
     onLessonClick(lesson, index);
     setIsMobileSidebarOpen(false); // Close on mobile after clicking
   };
-
+ const { id } = useParams();
+ const selectedCourseData = data?.find((course) => course.id === id);
   return (
     <>
       {/* Mobile Sidebar Toggle Button */}
@@ -55,7 +56,7 @@ const SidebarMobile = ({
 
         {/* Title */}
         <h2 className="text-lg font-semibold">
-          {data?.[0]?.title || "Course dashboard"}
+          {selectedCourseData?.title || "Course dashboard"}
         </h2>
 
         {/* Progress Bar */}
@@ -87,7 +88,7 @@ const SidebarMobile = ({
             <p className="text-xs text-gray-300">
               <span className="font-bold">
                 {userCourseData?.completedLessons.length || 0}/
-                {data?.[0]?.totalLessons || 0}
+                {selectedCourseData?.totalLessons || 0}
               </span>
             </p>
           </div>

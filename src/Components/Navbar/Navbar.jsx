@@ -4,7 +4,6 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-scroll";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../Context/AuthContext";
-import { getCourseId } from "../../Helper/localStorage";
 import Logo from "../../assets/img/Logo.png";
 
 const Navbar = () => {
@@ -18,6 +17,12 @@ const Navbar = () => {
     { id: 4, name: "Testimonials", target: "testimonials" },
     { id: 5, name: "FAQ", target: "faq" },
   ];
+    const scrollToCourse = () => {
+    const courseSection = document.getElementById("course");
+    if (courseSection) {
+      courseSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -81,22 +86,19 @@ const Navbar = () => {
           </button>
 
           {/* Sign Up / Dashboard Button */}
-          <NavLink
-            to={
-              user
-                ? `/dashboard/course/${getCourseId.getCourseId()}`
-                : "/signup"
-            }
+          <button
+            onClick={scrollToCourse}
             className="hidden cursor-pointer lg:block border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2">
-            {user ? "Dashboard" : "Sign Up"}
-          </NavLink>
-          {user && (
+           Get
+            Started
+          </button>
+          {/* {user && (
             <button
               className="mt-4  cursor-pointer border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-44 block text-center"
               onClick={logout}>
               Log Out
             </button>
-          )}
+          )} */}
         </div>
 
         {/* Mobile Menu */}
@@ -162,7 +164,7 @@ const Navbar = () => {
               <NavLink
                 to={
                   user
-                    ? `/dashboard/course/${getCourseId.getCourseId()}`
+                    ? `/dashboard/course/${courseId}`
                     : "/signup"
                 }
                 onClick={() => setIsMobileMenuOpen(false)}
