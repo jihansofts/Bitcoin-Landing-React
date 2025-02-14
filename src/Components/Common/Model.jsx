@@ -15,8 +15,8 @@ import InputField from "../Common/InputField";
 import { IoCloseSharp } from "react-icons/io5";
 import { setCourseIds, getCourseId } from "../../Helper/localStorage";
 import { useAuth } from "../../Context/AuthContext";
-const Model = ({ onClose, enrollCourse, courseId }) => {
-  const { enrollData, setCourseId, setEnrolledCourses } = useAuth();
+const Model = ({ onClose, enrollCourse,}) => {
+  const { enrollData, setEnrolledCourses,courseId } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -28,6 +28,7 @@ const Model = ({ onClose, enrollCourse, courseId }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const handleGoogleSignIn = async () => {
+    console.log(courseId, "courseId");
     try {
       // Sign in with Google
       const result = await signInWithPopup(auth, provider);
@@ -35,8 +36,10 @@ const Model = ({ onClose, enrollCourse, courseId }) => {
       if (!user) {
         throw new Error("Google Sign-In Failed");
       }
+
       // Check if a course is selected
       if (!courseId) {
+         console.log("Course not found!");
         toast.error("Course ID not found! Please select a course first.");
         return;
       }
@@ -63,7 +66,7 @@ const Model = ({ onClose, enrollCourse, courseId }) => {
       // Check if the user is already enrolled in this course
       const enrolledCoursesSnap = await getDoc(enrolledCoursesRef);
       if (enrolledCoursesSnap.exists()) {
-        toast.error("You are already enrolled in this course!");
+        navigate(`/dashboard/course/${courseId}`);
         return;
       }
 
@@ -75,7 +78,7 @@ const Model = ({ onClose, enrollCourse, courseId }) => {
         totalLessons: totalLessons, // Use the fetched totalLessons value
       });
 
-      const userCourseSnapVerify = await getDoc(userCourseRef, {
+      const userCourseSnapVerify = await getDoc(enrolledCoursesRef, {
         source: "server",
       });
 
@@ -85,9 +88,10 @@ const Model = ({ onClose, enrollCourse, courseId }) => {
       );
 
       toast.success("Enrollment successful!"); // Wait 2 seconds before navigating
-      setTimeout(() => {
-        navigate(`/dashboard/course/${getCourseId.getCourseId()}`);
-      }, 1000);
+      navigate(`/dashboard/course/${courseId}`);
+      // setTimeout(() => {
+        
+      // }, 1000);
       console.log(courseId, "courseId end");
     } catch (error) {
       console.error("Google Sign-In Error:", error);

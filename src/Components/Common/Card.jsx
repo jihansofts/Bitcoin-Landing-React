@@ -8,9 +8,11 @@ import Model from "./../Common/Model";
 import { setCourseIds, getCourseId } from "../../Helper/localStorage";
 import CardShape from "../../assets/img/CardShape.png";
 const Card = ({ course }) => {
-  const { getTotalUsers, user, setCourseId, logout } = useAuth();
+  const { getTotalUsers, user, setCourseId, logout,courseId } = useAuth();
   const navigate = useNavigate(); // Use useNavigate for navigation
   const [isOpen, setIsOpen] = useState(false); // Modal open/close state
+  const [selectId , setSelectId] = useState(null);
+  console.log(selectId,"selectId");
   const [UserCount, setUserCount] = useState(0);
   // Handle course click (for enrolled courses)
   useEffect(() => {
@@ -22,17 +24,17 @@ const Card = ({ course }) => {
     fetchUsers();
   }, []);
   const handleCourseClick = () => {
-    if (getCourseId.getCourseId()) {
-      navigate(`/dashboard/course/${getCourseId.getCourseId()}`); // Redirect to dashboard if enrolled
+    if (courseId) {
+      navigate(`/dashboard/course/${courseId}`); // Redirect to dashboard if enrolled
     } else {
       toast.error("Enroll in a course first!");
     }
   };
   const enrollCourse = async (selectedCourseId) => {
+    setSelectId(selectedCourseId)
     try {
       setCourseId(selectedCourseId);
       // Check if the user is authenticated
-
       if (!user) {
         console.log("user is lost");
         setIsOpen(true); // Show login modal if user is not authenticated
@@ -58,15 +60,16 @@ const Card = ({ course }) => {
 
       if (!isExists) {
         await logout();
+        setCourseId(selectedCourseId)
+        setCourseIds.setCourseId(selectedCourseId)
         setIsOpen(true); // Show login modal if user is not authenticated
-        console.log("gojover", selectedCourseId);
         return;
       }
-
+      setCourseIds.setCourseId(selectedCourseId)
       console.log("existing enrollment found, continue.");
-
       // Fetch the course details to get totalLessons
       const courseRef = doc(db, "course", selectedCourseId);
+      console.log(courseRef, "courseRef");
       const courseSnap = await getDoc(courseRef);
 
       if (!courseSnap.exists()) {
@@ -75,13 +78,10 @@ const Card = ({ course }) => {
       }
       const courseData = courseSnap.data();
       const totalLessons = courseData.totalLessons || 0; // Default to 0 if not set
-
-      setCourseIds.setCourseId(selectedCourseId);
       // Check if the user is already enrolled in this course
       const userCourseSnap = await getDoc(userCourseRef);
       if (userCourseSnap.exists()) {
         toast.info("You are already enrolled in this course.");
-        console.log(getCourseId.getCourseId(), "id");
         navigate(`/dashboard/course/${getCourseId.getCourseId()}`);
         return;
       }
@@ -89,6 +89,7 @@ const Card = ({ course }) => {
       await setDoc(userCourseRef, {
         progressPercentage: 0,
         completedLessons: [],
+        courseId: selectedCourseId,
         totalLessons: totalLessons, // Use the fetched totalLessons value
       });
       toast.success("Enrollment successful!");
@@ -138,7 +139,7 @@ const Card = ({ course }) => {
               </span>
               <span className="text-[14px] font-bold text-white">Free</span>
             </div>
-            {user && getCourseId.getCourseId() === course.id ? (
+            {user && courseId === selectId ? (
               <button
                 onClick={handleCourseClick}
                 className="text-[14px] sm:text-[16px] md:text-[18px] mt-6 sm:mt-8 cursor-pointer w-full bg-buttonColor py-2 sm:py-3 px-5 sm:px-7 rounded-3xl font-Inter font-bold text-bgPrimary hover:bg-opacity-90 transition-all">

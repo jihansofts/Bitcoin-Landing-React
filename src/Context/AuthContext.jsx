@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
         id: doc.id,
         ...doc.data(),
       }));
-      setCourseIds.setCourseId(courseData?.[0].id);
+      // setCourseIds.setCourseId(courseData?.[0].id);
       setEnrollData(courseData);
       setLoading(false);
     } catch (error) {
