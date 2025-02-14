@@ -15,10 +15,10 @@ import InputField from "../Common/InputField";
 import { IoCloseSharp } from "react-icons/io5";
 import { setCourseIds, getCourseId } from "../../Helper/localStorage";
 import { useAuth } from "../../Context/AuthContext";
-const Model = ({ onClose, enrollCourse }) => {
+const Model = ({ onClose, enrollCourse, selectedCourseId }) => {
   const { enrollData, setCourseId, setEnrolledCourses } = useAuth();
-  const courseId = enrollData?.[0].id;
-  console.log(courseId, "id");
+  const courseId = selectedCourseId;
+  console.log(courseId, "id 69");
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",

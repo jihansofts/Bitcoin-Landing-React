@@ -8,7 +8,7 @@ import Model from "./../Common/Model";
 import { setCourseIds, getCourseId } from "../../Helper/localStorage";
 import CardShape from "../../assets/img/CardShape.png";
 const Card = ({ course }) => {
-  const { getTotalUsers, user, setCourseId, logout } = useAuth();
+  const { courseId, getTotalUsers, user, setCourseId, logout } = useAuth();
   const navigate = useNavigate(); // Use useNavigate for navigation
   const [isOpen, setIsOpen] = useState(false); // Modal open/close state
   const [UserCount, setUserCount] = useState(0);
@@ -102,7 +102,11 @@ const Card = ({ course }) => {
     <div className="grid grid-cols-12 max-xl:grid-cols-1 max-md:grid-cols-1 max-lg:grid-cols-12 max-sm:grid-cols-1 gap-8 mt-20">
       {isOpen && (
         <div className="fixed bg-bgSecondary top-0 left-0 bg-opacity-30 w-full h-full max-sm:max-h-screen z-50">
-          <Model enrollCourse={enrollCourse} onClose={setIsOpen} />
+          <Model
+            selectedCourseId={courseId}
+            enrollCourse={enrollCourse}
+            onClose={setIsOpen}
+          />
         </div>
       )}
       <div
@@ -148,7 +152,7 @@ const Card = ({ course }) => {
               <button
                 onClick={() => enrollCourse(course.id)}
                 className="text-[14px] sm:text-[16px] md:text-[18px] mt-6 sm:mt-8 cursor-pointer w-full bg-buttonColor py-2 sm:py-3 px-5 sm:px-7 rounded-3xl font-Inter font-bold text-bgPrimary hover:bg-opacity-90 transition-all">
-                Take Course
+                Take Course {course.id}
               </button>
             )}
           </div>
