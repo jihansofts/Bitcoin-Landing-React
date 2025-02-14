@@ -16,7 +16,6 @@ import { IoCloseSharp } from "react-icons/io5";
 import { getCourseId } from "../../Helper/localStorage";
 const Model = ({ onClose, selectedCourseId }) => {
   const courseId = selectedCourseId;
-  console.log(courseId, "id 69");
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",

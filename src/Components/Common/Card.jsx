@@ -30,7 +30,6 @@ const Card = ({ course }) => {
   }, []);
 
   const handleCourseClick = (clickedCourseId) => () => {
-    console.log(clickedCourseId, "clickedCourseId");
     navigate(`/dashboard/course/${clickedCourseId}`);
   };
 
@@ -40,7 +39,6 @@ const Card = ({ course }) => {
       // Check if the user is authenticated
 
       if (!user) {
-        console.log("user is lost");
         setIsOpen(true); // Show login modal if user is not authenticated
         return;
       }
@@ -60,16 +58,11 @@ const Card = ({ course }) => {
 
       const isExists = userCourseSnapBeforeEnrollAttempt.exists();
 
-      console.log(isExists, "isExists");
-
       if (!isExists) {
         await logout();
         setIsOpen(true); // Show login modal if user is not authenticated
-        console.log("gojover", selectedCourseId);
         return;
       }
-
-      console.log("existing enrollment found, continue.");
 
       // Fetch the course details to get totalLessons
       const courseRef = doc(db, "course", selectedCourseId);
