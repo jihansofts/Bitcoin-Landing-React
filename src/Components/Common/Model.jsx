@@ -13,6 +13,7 @@ import Bitcoin from "../../assets/img/Bitcoin.png";
 import Google from "../../assets/img/google.png";
 import InputField from "../Common/InputField";
 import { IoCloseSharp } from "react-icons/io5";
+import { getCourseId } from "../../Helper/localStorage";
 const Model = ({ onClose, selectedCourseId }) => {
   const courseId = selectedCourseId;
   console.log(courseId, "id 69");
@@ -62,7 +63,10 @@ const Model = ({ onClose, selectedCourseId }) => {
       // Check if the user is already enrolled in this course
       const enrolledCoursesSnap = await getDoc(enrolledCoursesRef);
       if (enrolledCoursesSnap.exists()) {
-        toast.error("You are already enrolled in this course!");
+        toast.info("You are already enrolled in this course.");
+        setTimeout(() => {
+          navigate(`/dashboard/course/${getCourseId.getCourseId()}`);
+        }, 1000);
         return;
       }
 
@@ -73,15 +77,6 @@ const Model = ({ onClose, selectedCourseId }) => {
         completedLessons: [],
         totalLessons: totalLessons, // Use the fetched totalLessons value
       });
-
-      const userCourseSnapVerify = await getDoc(userCourseRef, {
-        source: "server",
-      });
-
-      console.log(
-        userCourseSnapVerify.exists(),
-        "userCourseSnapVerify.exists()"
-      );
 
       toast.success("Enrollment successful!"); // Wait 2 seconds before navigating
       setTimeout(() => {

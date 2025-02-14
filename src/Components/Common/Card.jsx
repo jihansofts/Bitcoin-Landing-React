@@ -28,13 +28,12 @@ const Card = ({ course }) => {
 
     fetchUsers();
   }, []);
-  const handleCourseClick = () => {
-    if (getCourseId.getCourseId()) {
-      navigate(`/dashboard/course/${getCourseId.getCourseId()}`); // Redirect to dashboard if enrolled
-    } else {
-      toast.error("Enroll in a course first!");
-    }
+
+  const handleCourseClick = (clickedCourseId) => () => {
+    console.log(clickedCourseId, "clickedCourseId");
+    navigate(`/dashboard/course/${clickedCourseId}`);
   };
+
   const enrollCourse = async (selectedCourseId) => {
     try {
       setCourseId(selectedCourseId);
@@ -151,7 +150,7 @@ const Card = ({ course }) => {
               (enrolledCourse) => enrolledCourse.id === course.id
             ) ? (
               <button
-                onClick={handleCourseClick}
+                onClick={handleCourseClick(course.id)}
                 className="text-[14px] sm:text-[16px] md:text-[18px] mt-6 sm:mt-8 cursor-pointer w-full bg-buttonColor py-2 sm:py-3 px-5 sm:px-7 rounded-3xl font-Inter font-bold text-bgPrimary hover:bg-opacity-90 transition-all">
                 Go to Dashboard
               </button>
