@@ -76,6 +76,16 @@ const Model = ({ onClose, enrollCourse }) => {
         completedLessons: [],
         totalLessons: totalLessons, // Use the fetched totalLessons value
       });
+
+      const userCourseSnapVerify = await getDoc(userCourseRef, {
+        source: "server",
+      });
+
+      console.log(
+        userCourseSnapVerify.exists(),
+        "userCourseSnapVerify.exists()"
+      );
+
       toast.success("Enrollment successful!"); // Wait 2 seconds before navigating
       setTimeout(() => {
         navigate(`/dashboard/course/${getCourseId.getCourseId()}`);
