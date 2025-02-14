@@ -8,7 +8,7 @@ import Model from "./../Common/Model";
 import { setCourseIds, getCourseId } from "../../Helper/localStorage";
 import CardShape from "../../assets/img/CardShape.png";
 const Card = ({ course }) => {
-  const { getTotalUsers, user, setCourseId } = useAuth();
+  const { getTotalUsers, user, setCourseId, logout } = useAuth();
   const navigate = useNavigate(); // Use useNavigate for navigation
   const [isOpen, setIsOpen] = useState(false); // Modal open/close state
   const [UserCount, setUserCount] = useState(0);
@@ -29,14 +29,42 @@ const Card = ({ course }) => {
     }
   };
   const enrollCourse = async (selectedCourseId) => {
-    setCourseId(selectedCourseId);
-    // Check if the user is authenticated
-    if (!user) {
-      setIsOpen(true); // Show login modal if user is not authenticated
-      return;
-    }
-
     try {
+      setCourseId(selectedCourseId);
+      // Check if the user is authenticated
+
+      if (!user) {
+        console.log("user is lost");
+        setIsOpen(true); // Show login modal if user is not authenticated
+        return;
+      }
+
+      // Reference to the user's enrolled courses subcollection in Firestore
+      const userCourseRef = doc(
+        db,
+        "users", // Collection name
+        user.uid, // Document ID (user ID)
+        "enrolledCourses", // Subcollection name
+        selectedCourseId // Document ID within subcollection
+      );
+
+      const userCourseSnapBeforeEnrollAttempt = await getDoc(userCourseRef, {
+        source: "server",
+      });
+
+      const isExists = userCourseSnapBeforeEnrollAttempt.exists();
+
+      console.log(isExists, "isExists");
+
+      if (!isExists) {
+        await logout();
+        setIsOpen(true); // Show login modal if user is not authenticated
+        console.log("gojover", selectedCourseId);
+        return;
+      }
+
+      console.log("existing enrollment found, continue.");
+
       // Fetch the course details to get totalLessons
       const courseRef = doc(db, "course", selectedCourseId);
       const courseSnap = await getDoc(courseRef);
@@ -47,14 +75,7 @@ const Card = ({ course }) => {
       }
       const courseData = courseSnap.data();
       const totalLessons = courseData.totalLessons || 0; // Default to 0 if not set
-      // Reference to the user's enrolled courses subcollection in Firestore
-      const userCourseRef = doc(
-        db,
-        "users", // Collection name
-        user.uid, // Document ID (user ID)
-        "enrolledCourses", // Subcollection name
-        selectedCourseId // Document ID within subcollection
-      );
+
       setCourseIds.setCourseId(selectedCourseId);
       // Check if the user is already enrolled in this course
       const userCourseSnap = await getDoc(userCourseRef);

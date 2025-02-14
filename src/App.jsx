@@ -6,8 +6,6 @@ import ProtectedRoute from "./Components/ProtectedRoute";
 import Navbar from "./Components/Navbar/Navbar";
 import LandingPages from "./Components/Landing/LandingPages";
 import Footer from "./Components/Footer/Footer";
-import Login from "./Components/Login/Login";
-import Signup from "./Components/Signup/Signup";
 import Dashboard from "./Components/Dashboard/Dashboard"; // Dashboard Page
 
 function App() {

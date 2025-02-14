@@ -25,7 +25,7 @@ const Dashboard = () => {
   // Fetch all lessons for a given course
   useEffect(() => {
     const courseId = getCourseId.getCourseId();
-       if (!courseId) return;
+    if (!courseId) return;
     const lessonsRef = collection(db, "course", courseId, "lessons");
 
     const unsubscribe = onSnapshot(lessonsRef, (snapshot) => {
@@ -61,7 +61,7 @@ const Dashboard = () => {
     // 🔹 Real-time listener for enrolled course data
     const unsubscribe = onSnapshot(userCourseRef, (docSnap) => {
       if (docSnap.exists()) {
-        console.log(docSnap.data(),"data");
+        console.log(docSnap.data(), "data");
         setUserCourseData(docSnap.data()); // ✅ Update state in real-time
       }
     });
@@ -111,7 +111,7 @@ const Dashboard = () => {
         courseId
       );
       const userCourseSnap = await getDoc(userCourseRef);
-      
+
       if (!userCourseSnap.exists()) return null;
 
       let { completedLessons = [], totalLessons = 0 } = userCourseSnap.data();

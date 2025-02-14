@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Eye, EyeOff } from "react-feather";
 
 const InputField = ({ label, type, placeholder, value, onChange, name }) => {
   return (
