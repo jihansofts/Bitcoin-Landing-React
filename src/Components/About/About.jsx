@@ -3,11 +3,17 @@ import Shaperight from "../../assets/img/shaperight.png";
 import AboutImg from "../../assets/img/About.png";
 
 const About = () => {
+    const scrollToCourse = () => {
+    const courseSection = document.getElementById("course");
+    if (courseSection) {
+      courseSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   return (
     <div className="relative w-full bg-bgPrimary py-16 overflow-hidden">
       {/* Content */}
       <div className="container mx-auto px-4 max-md:px-4">
-        <div className="grid grid-cols-12 max-md:grid-cols-1 gap-8 max-md:gap-6 items-center">
+        <div className="grid grid-cols-12 max-md:grid-cols-1 gap-8 max-md:gap-6 max-lg:justify-center flex-c items-center">
           {/* Left Column (Text) */}
           <div className="col-span-10 lg:col-span-7 max-md:col-span-1 text-center lg:text-left">
             <div className="w-full mx-auto max-md:w-full">
@@ -32,7 +38,7 @@ const About = () => {
                 today!
               </p>
               <div className="mt-6">
-                <button className="bg-buttonColor text-bgPrimary py-3 px-6 sm:px-8 rounded-3xl font-semibold hover:bg-opacity-90 transition-all">
+                <button onClick={scrollToCourse} className="bg-buttonColor cursor-pointer text-bgPrimary py-3 px-6 sm:px-8 rounded-3xl font-semibold hover:bg-opacity-90 transition-all">
                   Get Started
                 </button>
               </div>

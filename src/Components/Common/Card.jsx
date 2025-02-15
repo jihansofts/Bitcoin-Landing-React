@@ -108,7 +108,7 @@ const Card = ({ course }) => {
         className="w-full relative flex flex-col" // Add flex and flex-col here
       >
         <img
-          className="w-full h-80 max-xl-h-64 max-sm:h-64 max-md:h-80 max-lg:w-full max-lg:h-96  rounded-t-2xl"
+          className="w-full h-80 max-xl-h-64  max-sm:h-64 max-md:h-80 max-lg:w-full max-lg:h-80  rounded-t-2xl"
           src={course.image}
           alt="Course"
         />

@@ -92,13 +92,6 @@ const Navbar = () => {
            Get
             Started
           </button>
-          {user && (
-            <button
-              className="mt-4  cursor-pointer border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-44 block text-center"
-              onClick={logout}>
-              Log Out
-            </button>
-          )}
         </div>
 
         {/* Mobile Menu */}
@@ -159,18 +152,6 @@ const Navbar = () => {
                   </li>
                 ))}
               </ul>
-
-              {/* Sign Up Button (Mobile) */}
-              <NavLink
-                to={
-                  user
-                    ? `/dashboard/course/${courseId}`
-                    : "/signup"
-                }
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="mt-4 cursor-pointer border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-full block text-center">
-                {user ? "Dashboard" : "Sign Up"}
-              </NavLink>
             </motion.div>
           )}
         </AnimatePresence>
