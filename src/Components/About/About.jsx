@@ -11,7 +11,7 @@ const About = () => {
           {/* Left Column (Text) */}
           <div className="col-span-10 lg:col-span-7 max-md:col-span-1 text-center lg:text-left">
             <div className="w-full mx-auto max-md:w-full">
-              <h3 className="text-[24px] font-Inter text-buttonColor font-bold">
+              <h3 className="text-[20px] font-Inter text-buttonColor font-bold">
                 About Us
               </h3>
               <h2 className="relative text-[60px] max-lg:text-[50px] max-md:text-[40px] max-sm:text-[32px] font-Inter text-white font-bold">
@@ -22,7 +22,7 @@ const About = () => {
                 </span>
               </h2>
 
-              <p className="text-[14px] sm:text-[16px] text-white mt-4 sm:mt-5 leading-relaxed">
+              <p className="text-[20px] font-bold sm:text-[16px] text-white mt-4 sm:mt-5 leading-relaxed">
                 Whether you're a beginner looking to understand the basics or an
                 enthusiast eager to explore advanced concepts, we provide clear,
                 reliable, and up-to-date information to help you make informed

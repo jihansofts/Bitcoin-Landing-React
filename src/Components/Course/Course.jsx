@@ -30,7 +30,7 @@ const Course = () => {
             {tabItems.map((item, index) => (
               <li
                 key={index}
-                className={`cursor-pointer max-sm:text-[12px] ${
+                className={`cursor-pointer max-sm:text-[16px] ${
                   activeItem === item
                     ? "text-buttonColor font-bold"
                     : "text-[#689D30]"
@@ -47,7 +47,7 @@ const Course = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+            className="grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 max-sm:grid-cols-1 gap-x-5  mt-0 max-sm:mt-0">
             {filteredData.map((course, index) => (
               <Card key={index} course={course} />
             ))}

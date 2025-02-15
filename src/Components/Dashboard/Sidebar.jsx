@@ -21,7 +21,7 @@ const Sidebar = ({
   const selectedCourseData = data?.find((course) => course.id === id);
 
   return (
-    <div className="w-full bg-bgSecondary h-[750px] rounded-2xl p-5 flex flex-col text-white shadow-lg">
+    <div className="w-full z-50 bg-bgSecondary h-[750px] rounded-2xl p-5 flex flex-col text-white shadow-lg">
       {/* Title */}
       <h2 className="text-lg font-semibold">
         {selectedCourseData?.title || "Course dashboard"}

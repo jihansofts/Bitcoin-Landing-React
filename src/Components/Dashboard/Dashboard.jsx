@@ -25,29 +25,63 @@ const Dashboard = () => {
   const [activeIndex, setActiveIndex] = useState(null); // Track the active lesson index
   const [userCourseData, setUserCourseData] = useState(null);
   // Fetch all lessons for a given course
+
   useEffect(() => {
-    setLoading(true);
-    if (!courseId) return;
+  setLoading(true);
+  if (!courseId) return;
 
-    const lessonsRef = collection(db, "course", courseId, "lessons");
+  const lessonsRef = collection(db, "course", courseId, "lessons");
 
-    const unsubscribe = onSnapshot(lessonsRef, (snapshot) => {
-      const lessonsData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      // Sort lessons by the numeric part of the title
-      const sortedData = lessonsData.sort((a, b) => {
-        const aNumber = parseInt(a.question.match(/\d+/)?.[0] || Infinity, 10); // Default to Infinity if no number is found
-        const bNumber = parseInt(b.question.match(/\d+/)?.[0] || Infinity, 10); // Default to Infinity if no number is found
-        return aNumber - bNumber;
-      });
-      setLessons(sortedData);
-      setLoading(false);
+  const unsubscribe = onSnapshot(lessonsRef, (snapshot) => {
+    const lessonsData = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    // Sort lessons numerically by the number in the question
+    const sortedData = lessonsData.sort((a, b) => {
+      const aNumber = parseInt(a.question.match(/\d+/)?.[0] || Infinity, 10);
+      const bNumber = parseInt(b.question.match(/\d+/)?.[0] || Infinity, 10);
+      return aNumber - bNumber;
     });
 
-    return () => unsubscribe();
-  }, [courseId]);
+    setLessons(sortedData);
+    
+    // ✅ Automatically select the first lesson when loaded
+    if (sortedData.length > 0) {
+      setSelectLesson(sortedData[0]); // Set first lesson
+      setActiveIndex(0); // Set first lesson index
+    }
+    setLoading(false);
+  });
+
+  return () => unsubscribe();
+}, [courseId]);
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   if (!courseId) return;
+
+  //   const lessonsRef = collection(db, "course", courseId, "lessons");
+
+  //   const unsubscribe = onSnapshot(lessonsRef, (snapshot) => {
+  //     const lessonsData = snapshot.docs.map((doc) => ({
+  //       id: doc.id,
+  //       ...doc.data(),
+  //     }));
+  //     // Sort lessons by the numeric part of the title
+  //     const sortedData = lessonsData.sort((a, b) => {
+  //       const aNumber = parseInt(a.question.match(/\d+/)?.[0] || Infinity, 10); // Default to Infinity if no number is found
+  //       const bNumber = parseInt(b.question.match(/\d+/)?.[0] || Infinity, 10); // Default to Infinity if no number is found
+  //       return aNumber - bNumber;
+  //     });
+  //     setLessons(sortedData);
+  //     setActiveIndex(0);
+  //     setLoading(false);
+  //   });
+
+  //   return () => unsubscribe();
+  // }, [courseId]);
 
   useEffect(() => {
     if (!courseId) return;
@@ -132,14 +166,14 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="relative w-full bg-bgPrimary py-16 max-md:py-14 max-sm:py-8 overflow-hidden h-auto">
-      <div className="absolute w-[330px] max-md:w-[200px] max-lg:w-[300px] top-[-40px] left-0">
-        <img className="w-full" src={Shape} alt="Left Shape" />
+    <div className="relative w-full z-0 bg-bgPrimary py-16 max-md:py-14 max-sm:py-8 overflow-hidden h-auto">
+      <div className="absolute z-10 w-[330px] max-md:w-[200px] max-lg:w-[300px] top-[-40px] left-0">
+        <img className="w-full z-0" src={Shape} alt="Left Shape" />
       </div>
-      <div className="container mx-auto px-4 max-md:px-4">
-        <div className="grid grid-cols-12 max-lg:grid-cols-12 max-lg:grid-rows-2 max-md:grid-rows-1 gap-6">
+      <div className="container  mx-auto px-4 max-md:px-4">
+        <div className="grid grid-cols-12  max-lg:grid-cols-12 max-lg:grid-rows-2 max-md:grid-rows-1 gap-6">
           {/* Sidebar */}
-          <div className="row-span-1 col-span-4 max-lg:hidden max-xl:col-span-4 max-2xl:col-span-4 max-lg:col-span-4">
+          <div className="row-span-1 z-50 col-span-4 max-lg:hidden max-xl:col-span-4 max-2xl:col-span-4 max-lg:col-span-4">
             {/* Sidebar for larger screens */}
             <div className="">
               <Sidebar
@@ -155,7 +189,7 @@ const Dashboard = () => {
             {/* Sidebar for smaller screens */}
           </div>
           {/* Content Area */}
-          <div className="row-span-1 relative col-span-8 max-xl:col-span-8 max-2xl:col-span-8 max-lg:col-span-full">
+          <div className="row-span-1 z-50 relative col-span-8 max-xl:col-span-8 max-2xl:col-span-8 max-lg:col-span-full">
             <div className="lg:hidden z-50">
               <SidebarMobile
                 data={enrolledCourses}
@@ -179,10 +213,10 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div className="absolute w-[330px] max-md:w-[200px] max-lg:w-[300px] right-0 bottom-[200px]">
+      <div className="absolute z-10 w-[330px] max-md:w-[200px] max-lg:w-[300px] right-0 bottom-[200px]">
         <img className="w-full" src={Shaperight} alt="Left Shape" />
       </div>
-      <div className="absolute w-[330px] max-md:w-[200px] max-lg:w-[300px] bottom-[-200px] left-0">
+      <div className="absolute z-10 w-[330px] max-md:w-[200px] max-lg:w-[300px] bottom-[-200px] left-0">
         <img className="w-full" src={Shape} alt="Left Shape" />
       </div>
     </div>

@@ -13,10 +13,10 @@ const Faq = () => {
 
   return (
     <div className="w-full relative overflow-hidden bg-bgPrimary py-20">
-      <div className="absolute w-100 h-100 top-[50px] left-0">
-        <img className="w-full" src={Shape} alt="" />
-      </div>
-      <div className="container mx-auto px-4">
+     <div className="absolute top-0 left-0 w-100 h-auto z-0">
+    <img className="w-full h-full object-cover " src={Shape} alt="Background Shape" />
+  </div>
+      <div className="container relative z-10 mx-auto px-4">
         <div className="text-center">
           <h4 className="text-[24px] font-Inter text-buttonColor font-bold">
             FAQ
@@ -31,18 +31,18 @@ const Faq = () => {
         </div>
 
         {/* FAQ List */}
-        <div className="w-full mt-5 space-y-5">
+        <div className="w-full mt-5  space-y-5">
           {faqs.map((faq, index) => (
             <div
               key={faq.id}
-              className={`p-6 rounded-2xl transition-all ${
+              className={`p-6 rounded-2xl z-50  transition-all ${
                 openIndex === index
-                  ? "bg-bgSecondary h-[200px] max-md:h-[500px]"
+                  ? "bg-bgSecondary z-50 h-[200px] max-md:h-auto"
                   : "border-2 border-bgSecondary"
               }`}>
               {/* Question Section */}
               <div
-                className="flex items-center justify-between cursor-pointer"
+                className="flex z-50 items-center justify-between cursor-pointer"
                 onClick={() => toggleFaq(index)}>
                 <h5 className="text-[24px] max-sm:text-[20px] text-white font-Inter font-semibold">
                   {faq.question}
@@ -66,7 +66,7 @@ const Faq = () => {
                 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="overflow-hidden w-[80%] ml-4">
-                <p className="text-[16px] lg:text-[18px] font-Inter font-light text-white mt-3 lg:mt-5 leading-8">
+                <p className="text-[20px] lg:text-[18px] font-Inter font-bold text-white mt-3 lg:mt-5 leading-8">
                   {faq.answer}
                 </p>
               </motion.div>

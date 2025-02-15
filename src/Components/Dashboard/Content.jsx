@@ -11,7 +11,7 @@ const Content = ({
   setSelectLesson,
   setActiveIndex,
 }) => {
-  const { logout } = useAuth();
+ 
   const [isCompleted, setIsCompleted] = useState(false);
   const [showUndo, setShowUndo] = useState(false);
 
@@ -65,10 +65,10 @@ const Content = ({
     <div className="flex flex-col w-full mt-5 h-auto max-md:h-auto">
       <div className="bg-bgSecondary  h-auto  rounded-2xl p-5">
         <h1 className="text-white font-Inter text-[32px] font-bold">
-          {lesson ? lesson.question : "Select a Lesson"}
+          {lesson ? lesson.question : "Loading..."}
         </h1>
         <p className="text-white font-Inter text-[20px] font-medium leading-9 mt-5">
-          {lesson ? lesson.answer : "Please select a lesson from the sidebar."}
+          {lesson ? lesson.answer : "Loading..."}
         </p>
       </div>
       {/* Buttons Section */}
@@ -105,11 +105,12 @@ const Content = ({
           Log Out
         </button> */}
         {/* Next Button */}
-        <div className="flex max-md:flex-col">
+        <div className="flex  max-md:flex-col">
           <button
             className="flex justify-center text-[16px] max-sm:text-[14px] items-center cursor-pointer text-buttonColor py-3 px-6 max-sm:px-4 rounded-3xl font-Inter font-semibold"
             onClick={handleGoPrev}>
-            Go Prev <LuMoveLeft className="ml-2 mt-[1px]" size={30} />
+            <LuMoveLeft className="mr-2 mt-[1px]" size={30} />
+            Go Prev 
           </button>
           <button
             onClick={handleGoNext}

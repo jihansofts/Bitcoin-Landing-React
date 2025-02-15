@@ -20,14 +20,14 @@ const Card = ({ course }) => {
   const [selectedCourseId, setSelectedCourseId] = useState(null);
   const { id } = useParams();
   // Handle course click (for enrolled courses)
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const count = await getTotalUsers();
-      setUserCount(count);
-    };
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     const count = await getTotalUsers();
+  //     setUserCount(count);
+  //   };
 
-    fetchUsers();
-  }, []);
+  //   fetchUsers();
+  // }, []);
 
   const handleCourseClick = (clickedCourseId) => () => {
     navigate(`/dashboard/course/${clickedCourseId}`);
@@ -97,7 +97,7 @@ const Card = ({ course }) => {
   };
 
   return (
-    <div className="grid grid-cols-12 max-xl:grid-cols-1 max-md:grid-cols-1 max-lg:grid-cols-12 max-sm:grid-cols-1 gap-8 mt-20">
+    <div className="flex mt-16">
       {isOpen && (
         <div className="fixed bg-bgSecondary top-0 left-0 bg-opacity-30 w-full h-full max-sm:max-h-screen z-50">
           <Model selectedCourseId={selectedCourseId} onClose={setIsOpen} />
@@ -105,10 +105,10 @@ const Card = ({ course }) => {
       )}
       <div
         key={course.id}
-        className="col-span-12 max-xl:col-span-12 max-lg:col-span-12 max-md:col-span-12 max-sm:col-span-1 relative flex flex-col" // Add flex and flex-col here
+        className="w-full relative flex flex-col" // Add flex and flex-col here
       >
         <img
-          className="w-full h-56 sm:h-64 md:h-72 lg:h-80 object-cover rounded-t-2xl"
+          className="w-full h-80 max-xl-h-64 max-sm:h-64 max-md:h-80 max-lg:w-full max-lg:h-96  rounded-t-2xl"
           src={course.image}
           alt="Course"
         />
@@ -116,25 +116,24 @@ const Card = ({ course }) => {
           {" "}
           {/* Add flex-grow here */}
           <img
-            className="absolute bottom-0 left-0 w-full h-auto z-0"
+            className="absolute max-xl:object-cover bottom-0 left-0 w-full h-auto z-0"
             src={CardShape}
             alt="Card Background"
           />
           <div className="relative z-10 flex flex-col h-full">
             {" "}
             {/* Add flex and h-full here */}
-            <h3 className="text-white text-[26px]">{course.title}</h3>
-            <p className="text-[16px] font-light text-white mt-4 flex-grow">
+            <h3 className="text-white text-[32px] font-semibold">{course.title}</h3>
+            <p className="text-[18px] font-semibold text-white mt-4 flex-grow">
               {" "}
               {/* Add flex-grow here */}
               {course.description}
             </p>
             <div className="flex items-center justify-between w-full mt-4">
-              <span className="text-[14px] flex gap-x-2 font-bold text-white">
-                {UserCount}
-                <h5>Participants</h5>
-              </span>
-              <span className="text-[14px] font-bold text-white">Free</span>
+              {/* <span className="text-[14px] flex gap-x-2 font-bold text-white">
+                
+              </span> */}
+              <span className="text-[18px] font-bold text-white"><span className=""></span>Free</span>
             </div>
             {user &&
             enrolledCourses.some(
