@@ -7,10 +7,12 @@ import {
   onAuthStateChanged,
   signInWithPopup,
   signOut,
+  signInWithCredential,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   fetchSignInMethodsForEmail,
   signInAnonymously,
+  linkWithCredential, EmailAuthProvider,
   updateProfile
 } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -41,8 +43,10 @@ export {
   signOut,
   onAuthStateChanged,
   signInAnonymously,
+  linkWithCredential, EmailAuthProvider,
   signInWithPopup,
   updateProfile,
+  signInWithCredential,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   fetchSignInMethodsForEmail,

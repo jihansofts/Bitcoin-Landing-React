@@ -92,13 +92,13 @@ const Navbar = () => {
            Get
             Started
           </button>
-          {/* {user && (
+          {user && (
             <button
               className="mt-4  cursor-pointer border-2 border-bgSecondary font-Inter text-[16px] font-bold text-bgSecondary rounded-4xl px-10 py-2 w-44 block text-center"
               onClick={logout}>
               Log Out
             </button>
-          )} */}
+          )}
         </div>
 
         {/* Mobile Menu */}

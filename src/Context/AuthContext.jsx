@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        localStorage.setItem("uid", user.uid); // Save user ID in local storage
         fetchEnrolledCoursesRealtime(user.uid); // 🔥 Listen for real-time updates
       } else {
       }

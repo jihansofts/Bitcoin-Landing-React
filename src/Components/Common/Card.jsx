@@ -38,7 +38,6 @@ const Card = ({ course }) => {
     try {
       setCourseId(selectedCourseId);
       // Check if the user is authenticated
-
       if (!user) {
         setIsOpen(true); // Show login modal if user is not authenticated
         return;
