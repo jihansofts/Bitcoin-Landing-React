@@ -1,7 +1,6 @@
 import React from "react";
 import Shaperight from "../../assets/img/shaperight.png";
 import AboutImg from "../../assets/img/About.png";
-
 const About = () => {
     const scrollToCourse = () => {
     const courseSection = document.getElementById("course");

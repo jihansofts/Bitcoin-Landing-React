@@ -6,9 +6,7 @@ import {
   collection,
   onSnapshot,
   getDocs,
-  getCountFromServer,
 } from "firebase/firestore";
-
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
@@ -82,17 +80,17 @@ export const AuthProvider = ({ children }) => {
       }
     });
   };
-  const getTotalUsers = async () => {
-    const usersCollection = collection(db, "users"); // Reference to the "users" collection
-    try {
-      const snapshot = await getCountFromServer(usersCollection); // Get the count of documents
-      const totalUsers = snapshot.data().count; // Extract the count from the snapshot
-      return totalUsers; // Return the total number of users
-    } catch (error) {
-      console.error("Error getting total users:", error);
-      return 0; // Return 0 in case of an error
-    }
-  };
+  // const getTotalUsers = async () => {
+  //   const usersCollection = collection(db, "users"); // Reference to the "users" collection
+  //   try {
+  //     const snapshot = await getCountFromServer(usersCollection); // Get the count of documents
+  //     const totalUsers = snapshot.data().count; // Extract the count from the snapshot
+  //     return totalUsers; // Return the total number of users
+  //   } catch (error) {
+  //     console.error("Error getting total users:", error);
+  //     return 0; // Return 0 in case of an error
+  //   }
+  // };
 
   const logout = async () => {
     await signOut(auth);
@@ -104,7 +102,6 @@ export const AuthProvider = ({ children }) => {
         user,
         courseId,
         enrollData,
-        getTotalUsers,
         fetchEnroll, // ✅ Now fetchEnroll is defined and accessible
         setCourseId,
         setEnrolledCourses,

@@ -8,7 +8,6 @@ import Model from "./../Common/Model";
 import CardShape from "../../assets/img/CardShape.png";
 const Card = ({ course }) => {
   const {
-    getTotalUsers,
     user,
     setCourseId,
     logout,
@@ -16,7 +15,7 @@ const Card = ({ course }) => {
   } = useAuth();
   const navigate = useNavigate(); // Use useNavigate for navigation
   const [isOpen, setIsOpen] = useState(false); // Modal open/close state
-  const [UserCount, setUserCount] = useState(0);
+  // const [UserCount, setUserCount] = useState(0);
   const [selectedCourseId, setSelectedCourseId] = useState(null);
   const { id } = useParams();
   // Handle course click (for enrolled courses)
@@ -78,7 +77,6 @@ const Card = ({ course }) => {
       const userCourseSnap = await getDoc(userCourseRef);
       if (userCourseSnap.exists()) {
         toast.info("You are already enrolled in this course.");
-        console.log(id, "id");
         navigate(`/dashboard/course/${id}`);
         return;
       }

@@ -13,12 +13,11 @@ const Home = () => {
   return (
     <div className="relative w-full bg-bgPrimary py-16 overflow-hidden">
       {/* Background Left Shape */}
-      <div className="absolute  w-[400px] max-md:w-[200px] max-lg:w-[300px] top-0 left-0">
+      <div className="absolute z-0 w-[400px] max-md:w-[200px] max-lg:w-[300px] top-0 left-0">
         <img className="w-full" src={Shape} alt="Left Shape" />
       </div>
-
       {/* Content */}
-      <div className="container mx-auto px-4 max-md:px-4">
+      <div className="container relative z-40 mx-auto px-4 max-md:px-4">
         <div className="grid grid-cols-12 max-md:grid-cols-1 gap-8 max-md:gap-6 items-center">
           {/* Left Column (Text) */}
           <div className="col-span-12 lg:col-span-7 max-md:col-span-1 text-center lg:text-left">

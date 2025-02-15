@@ -3,11 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { Link } from "react-scroll";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../Context/AuthContext";
 import Logo from "../../assets/img/Logo.png";
-
 const Navbar = () => {
-  const { user, courseId, logout } = useAuth(); // Assuming `user` is in context
   const [activeItem, setActiveItem] = useState("Home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navItems = [

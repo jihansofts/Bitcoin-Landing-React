@@ -26,7 +26,7 @@ const Model = ({ onClose, selectedCourseId }) => {
     name: "",
   });
   const handleUserLoginAlready = () => {
-    toast.warning("please wait...");
+    toast.success("Please wait...");
     setTimeout(() => {
     setTextDynamic(true);
      onClose(true)
@@ -98,6 +98,7 @@ const Model = ({ onClose, selectedCourseId }) => {
   };
 const handleEmailSignIn = async (e) => {
   e.preventDefault();
+  setLoading(true);
   try {
     const { name, email } = formData;
     let user = auth.currentUser;
@@ -118,7 +119,7 @@ const handleEmailSignIn = async (e) => {
 
         if (!querySnapshot.empty) {
           // 🔹 Email already exists, sign in instead of linking
-          console.log("User with email exists. Signing in...");
+          // console.log("User with email exists. Signing in...");
           const credential = EmailAuthProvider.credential(email, "defaultPassword");
           const signInResult = await signInWithCredential(auth, credential);
           user = signInResult.user;
@@ -129,11 +130,12 @@ const handleEmailSignIn = async (e) => {
           // console.log("Anonymous account upgraded with email:", email);
         }
       } catch (signInError) {
+        setLoading(false);
         // console.error("Error signing in or upgrading anonymous account:", signInError);
         throw signInError;
       }
     }
-
+    setLoading(false);
     // 🔹 Step 3: Save user details in Firestore
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
@@ -146,39 +148,39 @@ const handleEmailSignIn = async (e) => {
         createdAt: new Date(),
       });
     }
-
     // 🔹 Step 4: Check & Enroll in Course
     if (!courseId) {
       toast.error("Course ID not found! Please select a course first.");
       return;
     }
-
+    setLoading(true);
     const courseRef = doc(db, "course", courseId);
     const courseSnap = await getDoc(courseRef);
     if (!courseSnap.exists()) {
       toast.error("Course not found!");
       return;
     }
-
     const enrolledCoursesRef = doc(db, "users", user.uid, "enrolledCourses", courseId);
     const enrolledCoursesSnap = await getDoc(enrolledCoursesRef);
-
     if (enrolledCoursesSnap.exists()) {
       toast.info("You are already enrolled in this course.");
       navigate(`/dashboard/course/${courseId}`);
+      setLoading(false);
       return;
     }
-
     await setDoc(enrolledCoursesRef, {
       userId: user.uid,
       courseId: courseId,
       totalLessons: courseSnap.data().totalLessons || 0,
       completedLessons: [],
     });
-
     toast.success("Enrollment successful!");
-    navigate(`/dashboard/course/${courseId}`);
+    setTimeout(() => {
+      navigate(`/dashboard/course/${courseId}`);
+    },1000)
+    setLoading(false);
   } catch (error) {
+    setLoading(false);
     console.error("Sign-In Error:", error);
     if (error.code === "auth/email-already-in-use") {
       toast.error("This email is already registered. Please sign in instead.");
@@ -379,20 +381,12 @@ const handleEmailSignIn = async (e) => {
             <button
               type="submit"
               className="mt-3 cursor-pointer  max-sm:mt-1 bg-buttonColor w-full text-bgPrimary max-md:text-[16px] py-2 rounded-sm font-semibold hover:bg-opacity-90 transition-all">
-              Get Started
+              {loading ? "Loading..." : "Get Started"}
             </button>
           </form>
           <div>
-          <p className="text-white text-center text-[14px] max-sm:text-[14px] mt-2">
-  {textDyamic ? (
-    "Login To Account"
-  ) : (
-    <>
-      Already have an account?{" "}
-      <button
-        onClick={handleUserLoginAlready}
-        className="cursor-pointer text-buttonColor"
-      >
+          <p className="text-white text-center text-[14px] max-sm:text-[14px] mt-2">{textDyamic ? ("Login To Account") : (<> Already have an account?{" "}<button onClick={handleUserLoginAlready}
+        className="cursor-pointer text-buttonColor">
         Login
       </button>
     </>
