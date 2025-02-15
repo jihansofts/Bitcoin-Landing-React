@@ -12,7 +12,7 @@ const About = () => {
   return (
     <div className="relative w-full bg-bgPrimary py-16 overflow-hidden">
       {/* Content */}
-      <div className="container mx-auto px-4 max-md:px-4">
+      <div className="container relative z-50 mx-auto px-4 max-md:px-4">
         <div className="grid grid-cols-12 max-md:grid-cols-1 gap-8 max-md:gap-6 max-lg:justify-center flex-c items-center">
           {/* Left Column (Text) */}
           <div className="col-span-10 lg:col-span-7 max-md:col-span-1 text-center lg:text-left">
@@ -52,7 +52,7 @@ const About = () => {
         </div>
       </div>
       {/* Background Right Shape */}
-      <div className="absolute w-[400px] bottom-0 right-0">
+      <div className="absolute z-0 w-[400px] bottom-0 right-0">
         <img className="w-full" src={Shaperight} alt="Right Shape" />
       </div>
     </div>
