@@ -102,6 +102,7 @@ const handleEmailSignIn = async (e) => {
         const usersRef = collection(db, "users");
         const q = query(usersRef, where("email", "==", email));
         const querySnapshot = await getDocs(q);
+
         if (!querySnapshot.empty) {
           // 🔹 Email already exists, sign in instead of linking
           // console.log("User with email exists. Signing in...");
@@ -133,6 +134,7 @@ const handleEmailSignIn = async (e) => {
     }
     // 🔹 Step 4: Check & Enroll in Course
     if (!courseId) {
+    
       return;
     }
     const courseRef = doc(db, "course", courseId);
@@ -153,7 +155,9 @@ const handleEmailSignIn = async (e) => {
       totalLessons: courseSnap.data().totalLessons || 0,
       completedLessons: [],
     });
-    navigate(`/dashboard/course/${courseId}`);
+    setTimeout(() => {
+      navigate(`/dashboard/course/${courseId}`);
+    },300)
     setLoading(false);
   } catch (error) {
     setLoading(false);
