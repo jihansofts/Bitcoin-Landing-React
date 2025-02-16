@@ -40,7 +40,6 @@ const Card = ({ course }) => {
         setIsOpen(true); // Show login modal if user is not authenticated
         return;
       }
-
       // Reference to the user's enrolled courses subcollection in Firestore
       const userCourseRef = doc(
         db,
@@ -53,15 +52,12 @@ const Card = ({ course }) => {
       const userCourseSnapBeforeEnrollAttempt = await getDoc(userCourseRef, {
         source: "server",
       });
-
       const isExists = userCourseSnapBeforeEnrollAttempt.exists();
-
       if (!isExists) {
         await logout();
         setIsOpen(true); // Show login modal if user is not authenticated
         return;
       }
-
       // Fetch the course details to get totalLessons
       const courseRef = doc(db, "course", selectedCourseId);
       const courseSnap = await getDoc(courseRef);

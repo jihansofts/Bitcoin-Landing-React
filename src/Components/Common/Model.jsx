@@ -89,7 +89,6 @@ const handleEmailSignIn = async (e) => {
   try {
     const { name, email } = formData;
     let user = auth.currentUser;
-
     // 🔹 Step 1: Check if user is already signed in
     if (!user) {
       // console.log("No existing user, signing in anonymously...");
@@ -103,7 +102,6 @@ const handleEmailSignIn = async (e) => {
         const usersRef = collection(db, "users");
         const q = query(usersRef, where("email", "==", email));
         const querySnapshot = await getDocs(q);
-
         if (!querySnapshot.empty) {
           // 🔹 Email already exists, sign in instead of linking
           // console.log("User with email exists. Signing in...");
@@ -135,7 +133,6 @@ const handleEmailSignIn = async (e) => {
     }
     // 🔹 Step 4: Check & Enroll in Course
     if (!courseId) {
-    
       return;
     }
     const courseRef = doc(db, "course", courseId);
@@ -156,9 +153,7 @@ const handleEmailSignIn = async (e) => {
       totalLessons: courseSnap.data().totalLessons || 0,
       completedLessons: [],
     });
-    setTimeout(() => {
-      navigate(`/dashboard/course/${courseId}`);
-    },1000)
+    navigate(`/dashboard/course/${courseId}`);
     setLoading(false);
   } catch (error) {
     setLoading(false);
