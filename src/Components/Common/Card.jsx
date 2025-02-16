@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../../Components/firebase";
 import { useNavigate,useParams } from "react-router-dom"; // Use useNavigate instead of useHistory
-import { toast } from "react-toastify";
 import { useAuth } from "../../Context/AuthContext";
 import Model from "./../Common/Model";
 import CardShape from "../../assets/img/CardShape.png";
@@ -68,7 +67,6 @@ const Card = ({ course }) => {
       const courseSnap = await getDoc(courseRef);
 
       if (!courseSnap.exists()) {
-        toast.error("Course not found!");
         return;
       }
       const courseData = courseSnap.data();
@@ -88,7 +86,6 @@ const Card = ({ course }) => {
       navigate(`/dashboard/course/${id}`);
     } catch (error) {
       console.error("Enrollment failed:", error);
-      toast.error("Enrollment failed. Please try again.");
     }
   };
 

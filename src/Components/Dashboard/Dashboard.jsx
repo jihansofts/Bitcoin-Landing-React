@@ -169,7 +169,7 @@ const Dashboard = () => {
       <div className="absolute z-10 w-[330px] max-md:w-[200px] max-lg:w-[300px] top-[-40px] left-0">
         <img className="w-full z-0" src={Shape} alt="Left Shape" />
       </div>
-      <div className="container  mx-auto px-4 max-md:px-4">
+      <div className="container mx-auto px-4 max-md:px-4">
         <div className="grid grid-cols-12  max-lg:grid-cols-12 max-lg:grid-rows-2 max-md:grid-rows-1 gap-6">
           {/* Sidebar */}
           <div className="row-span-1 z-50 col-span-4 max-lg:hidden max-xl:col-span-4 max-2xl:col-span-4 max-lg:col-span-4">

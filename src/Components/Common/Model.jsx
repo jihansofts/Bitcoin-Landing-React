@@ -2,17 +2,13 @@ import React, { useState } from "react";
 import {
   auth,
   signInAnonymously,
-  signInWithPopup,
  linkWithCredential, EmailAuthProvider,
  signInWithCredential,
-  provider,
   db,
 } from "../firebase"; // Ensure Firebase is correctly initialized
 import { doc, setDoc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
-import { toast } from "react-toastify";
 import {  useNavigate } from "react-router-dom";
 import Bitcoin from "../../assets/img/Bitcoin.png";
-import Google from "../../assets/img/google.png";
 import InputField from "../Common/InputField";
 import { IoCloseSharp } from "react-icons/io5";
 
@@ -141,14 +137,13 @@ const handleEmailSignIn = async (e) => {
     }
     // 🔹 Step 4: Check & Enroll in Course
     if (!courseId) {
-      toast.error("Course ID not found! Please select a course first.");
+    
       return;
     }
     setLoading(true);
     const courseRef = doc(db, "course", courseId);
     const courseSnap = await getDoc(courseRef);
     if (!courseSnap.exists()) {
-      toast.error("Course not found!");
       return;
     }
     const enrolledCoursesRef = doc(db, "users", user.uid, "enrolledCourses", courseId);
@@ -172,9 +167,9 @@ const handleEmailSignIn = async (e) => {
     setLoading(false);
     console.error("Sign-In Error:", error);
     if (error.code === "auth/email-already-in-use") {
-      toast.error("This email is already registered. Please sign in instead.");
+      navigate(`/dashboard/course/${courseId}`);
     } else {
-      toast.error("Login Failed!");
+      return null
     }
   }
 };

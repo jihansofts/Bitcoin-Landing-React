@@ -56,8 +56,8 @@ const Content = ({
     }
   };
   return (
-    <div className="flex flex-col w-full mt-5 h-auto max-md:h-auto">
-      <div className="bg-bgSecondary  h-auto  rounded-2xl p-5">
+    <div className="flex flex-col w-full mt-5 max-lg:mt-2 h-auto max-md:h-auto">
+      <div className="bg-bgSecondary max-lg:bg-transparent h-auto rounded-2xl p-5 max-lg:p-0">
         <h1 className="text-white font-Inter text-[32px] font-bold">
           {lesson ? lesson.question : "Loading..."}
         </h1>
