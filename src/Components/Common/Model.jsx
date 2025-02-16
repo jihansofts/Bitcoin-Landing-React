@@ -117,12 +117,10 @@ const handleEmailSignIn = async (e) => {
           // console.log("Anonymous account upgraded with email:", email);
         }
       } catch (signInError) {
-        setLoading(false);
         // console.error("Error signing in or upgrading anonymous account:", signInError);
         throw signInError;
       }
     }
-    setLoading(false);
     // 🔹 Step 3: Save user details in Firestore
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
@@ -140,7 +138,6 @@ const handleEmailSignIn = async (e) => {
     
       return;
     }
-    setLoading(true);
     const courseRef = doc(db, "course", courseId);
     const courseSnap = await getDoc(courseRef);
     if (!courseSnap.exists()) {

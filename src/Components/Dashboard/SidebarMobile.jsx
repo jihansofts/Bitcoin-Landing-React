@@ -84,7 +84,7 @@ const SidebarMobile = ({
           className="bg-bgPrimary flex items-center justify-between px-4 py-3 mt-5 rounded-xl cursor-pointer"
           onClick={() => setIsOpen(!isOpen)}>
           <div>
-            <h4 className="text-white font-semibold">Course 01</h4>
+            <h4 className="text-white font-semibold">{selectedCourseData?.course}</h4>
             <p className="text-xs text-gray-300">
               <span className="font-bold">
                 {userCourseData?.completedLessons.length || 0}/
