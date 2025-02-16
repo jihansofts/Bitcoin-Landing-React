@@ -20,82 +20,73 @@ const Model = ({ onClose, selectedCourseId }) => {
   const courseId = selectedCourseId;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [textDyamic, setTextDynamic] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     name: "",
   });
-  const handleUserLoginAlready = () => {
-    toast.success("Please wait...");
-    setTimeout(() => {
-    setTextDynamic(true);
-     onClose(true)
-    }, 1000);
-  }
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const handleGoogleSignIn = async () => {
-    try {
-      setLoading(true);
-      // Sign in with Google
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      if (!user) {
-        throw new Error("Google Sign-In Failed");
-      }
-      // Check if a course is selected
-      if (!courseId) {
-        toast.error("Course ID not found! Please select a course first.");
-        setLoading(false);
-        return;
-      }
+  // const handleGoogleSignIn = async () => {
+  //   try {
+  //     setLoading(true);
+  //     // Sign in with Google
+  //     const result = await signInWithPopup(auth, provider);
+  //     const user = result.user;
+  //     if (!user) {
+  //       throw new Error("Google Sign-In Failed");
+  //     }
+  //     // Check if a course is selected
+  //     if (!courseId) {
+  //       toast.error("Course ID not found! Please select a course first.");
+  //       setLoading(false);
+  //       return;
+  //     }
 
-      // Fetch the course details to get totalLessons
-      const courseRef = doc(db, "course", courseId);
-      const courseSnap = await getDoc(courseRef);
-      if (!courseSnap.exists()) {
-        toast.error("Course not found!");
-        setLoading(false);
-        return;
-      }
-      const courseData = courseSnap.data();
-      const totalLessons = courseData.totalLessons || 0; // Default to 0 if not set
+  //     // Fetch the course details to get totalLessons
+  //     const courseRef = doc(db, "course", courseId);
+  //     const courseSnap = await getDoc(courseRef);
+  //     if (!courseSnap.exists()) {
+  //       toast.error("Course not found!");
+  //       setLoading(false);
+  //       return;
+  //     }
+  //     const courseData = courseSnap.data();
+  //     const totalLessons = courseData.totalLessons || 0; // Default to 0 if not set
 
-      // Reference to the user's enrolled courses subcollection in Firestore
-      const enrolledCoursesRef = doc(
-        db,
-        "users",
-        user.uid,
-        "enrolledCourses",
-        courseId
-      );
-      // Check if the user is already enrolled in this course
-      const enrolledCoursesSnap = await getDoc(enrolledCoursesRef);
-      if (enrolledCoursesSnap.exists()) {
-        toast.info("You are already enrolled in this course.");
-        navigate(`/dashboard/course/${courseId}`);
-        setLoading(false);
-        return;
-      }
+  //     // Reference to the user's enrolled courses subcollection in Firestore
+  //     const enrolledCoursesRef = doc(
+  //       db,
+  //       "users",
+  //       user.uid,
+  //       "enrolledCourses",
+  //       courseId
+  //     );
+  //     // Check if the user is already enrolled in this course
+  //     const enrolledCoursesSnap = await getDoc(enrolledCoursesRef);
+  //     if (enrolledCoursesSnap.exists()) {
+  //       navigate(`/dashboard/course/${courseId}`);
+  //       setLoading(false);
+  //       return;
+  //     }
 
-      // Add the user to the enrolled courses subcollection
-      await setDoc(enrolledCoursesRef, {
-        courseId: courseId,
-        totalLessons: totalLessons,
-        completedLessons: [],
-        totalLessons: totalLessons, // Use the fetched totalLessons value
-      });
+  //     // Add the user to the enrolled courses subcollection
+  //     await setDoc(enrolledCoursesRef, {
+  //       courseId: courseId,
+  //       totalLessons: totalLessons,
+  //       completedLessons: [],
+  //       totalLessons: totalLessons, // Use the fetched totalLessons value
+  //     });
 
-      toast.success("Enrollment successful!"); // Wait 2 seconds before navigating
-      navigate(`/dashboard/course/${courseId}`);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error("Google Sign-In Error:", error);
-      toast.error("Google Login Failed!");
-    }
-  };
+  //     navigate(`/dashboard/course/${courseId}`);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.error("Google Sign-In Error:", error);
+  //     toast.error("Google Login Failed!");
+  //   }
+  // };
+
 const handleEmailSignIn = async (e) => {
   e.preventDefault();
   setLoading(true);
@@ -163,7 +154,6 @@ const handleEmailSignIn = async (e) => {
     const enrolledCoursesRef = doc(db, "users", user.uid, "enrolledCourses", courseId);
     const enrolledCoursesSnap = await getDoc(enrolledCoursesRef);
     if (enrolledCoursesSnap.exists()) {
-      toast.info("You are already enrolled in this course.");
       navigate(`/dashboard/course/${courseId}`);
       setLoading(false);
       return;
@@ -174,7 +164,6 @@ const handleEmailSignIn = async (e) => {
       totalLessons: courseSnap.data().totalLessons || 0,
       completedLessons: [],
     });
-    toast.success("Enrollment successful!");
     setTimeout(() => {
       navigate(`/dashboard/course/${courseId}`);
     },1000)
@@ -191,131 +180,6 @@ const handleEmailSignIn = async (e) => {
 };
 
 
-
-// const handleEmailSignIn = async (e) => {
-//   e.preventDefault();
-//   try {
-//     const { name, email } = formData;
-//     let user = auth.currentUser;
-
-//     // 🔹 Step 1: Check if user is already signed in
-//     if (!user) {
-//       const result = await signInAnonymously(auth);
-//       user = result.user;
-//     }
-//     // 🔹 Step 2: Upgrade Anonymous User to Email/Password User
-//     if (email && user.isAnonymous) {
-//       const credential = EmailAuthProvider.credential(email,name); // Set a default password
-//       await linkWithCredential(user, credential);
-//       console.log("Anonymous account upgraded with email:", email);
-//     }
-
-//     // 🔹 Step 3: Save user details in Firestore
-//     const userRef = doc(db, "users", user.uid);
-//     const userSnap = await getDoc(userRef);
-//     if (!userSnap.exists()) {
-//       await setDoc(userRef, {
-//         uid: user.uid,
-//         email: email || "",
-//         isAnonymous: false,
-//       });
-//     }
-   
-//     // 🔹 Step 4: Check & Enroll in Course
-//     if (!courseId) {
-//       toast.error("Course ID not found! Please select a course first.");
-//       return;
-//     }
-
-//     const courseRef = doc(db, "course", courseId);
-//     const courseSnap = await getDoc(courseRef);
-//     if (!courseSnap.exists()) {
-//       toast.error("Course not found!");
-//       return;
-//     }
-//     const courseData = courseSnap.data();
-//     const totalLessons = courseData.totalLessons || 0;
-    
-//     const enrolledCoursesRef = doc(db, "users", user.uid, "enrolledCourses", courseId);
-//     const enrolledCoursesSnap = await getDoc(enrolledCoursesRef);
-
-//     if (enrolledCoursesSnap.exists()) {
-//       toast.info("You are already enrolled in this course.");
-//       navigate(`/dashboard/course/${courseId}`);
-//       return;
-//     }
-//     await setDoc(enrolledCoursesRef, {
-//       userId: user.uid,
-//       courseId: courseId,
-//       totalLessons: totalLessons,
-//       completedLessons: [],
-//     });
-
-//     toast.success("Enrollment successful!");
-//     navigate(`/dashboard/course/${courseId}`);
-//   } catch (error) {
-//     console.error("Sign-In Error:", error);
-//     toast.error("Login Failed!");
-//   }
-// };
-
-
-  // const handleEmailSignIn = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const {name ,email } = formData;
-  //     const result = await signInAnonymously(auth,name ,email);
-  //     const user = result.user;
-  //     if (!user) {
-  //       navigate("/");
-  //     }
-  //     if(!courseId){
-  //       toast.error("Course ID not found! Please select a course first.");
-  //       return;
-  //     }
-
-  //     const courseRef = doc(db, "course", courseId);
-  //     const courseSnap = await getDoc(courseRef);
-  //     if (!courseSnap.exists()) {
-  //       toast.error("Course not found!");
-  //       return;
-  //     }
-  //     const courseData = courseSnap.data();
-  //     const totalLessons = courseData.totalLessons || 0; // Default to 0 if not set
-  //     // Reference to the user's enrolled courses subcollection in Firestore
-  //     const enrolledCoursesRef = doc(
-  //       db,
-  //       "users",
-  //       user.uid,
-  //       "enrolledCourses",
-  //       courseId
-  //     );
-
-  //     // Check if the user is already enrolled in this course
-  //     const enrolledCoursesSnap = await getDoc(enrolledCoursesRef);
-  //     if (enrolledCoursesSnap.exists()) {
-  //       toast.info("You are already enrolled in this course.");
-  //      navigate(`/dashboard/course/${courseId}`);
-  //       return;
-  //     }
-  //     // Add the user to the enrolled courses subcollection
-  //     await setDoc(enrolledCoursesRef, {
-  //       isAnonymous: true,
-  //       userId: user.uid,
-  //       courseId: courseId,
-  //       totalLessons: totalLessons,
-  //       completedLessons: [],
-  //       totalLessons: totalLessons, // Use the fetched totalLessons value
-  //     });
-
-  //     toast.success("Enrollment successful!"); // Wait 2 seconds before navigating
-  //     navigate(`/dashboard/course/${courseId}`);
-  //     console.log(courseId, "courseId end");
-  //   } catch (error) {
-  //     console.error("Email Sign-In Error:", error);
-  //     toast.error("Login Failed! Please check your credentials.");
-  //   }
-  // };
   return (
     <div className="fixed top-0 max-sm:top-[-12px] left-[-12px] max-xl:left-[-5px] max-sm:left-[-5px] w-full h-full flex items-center justify-center z-50">
       <div className="relative bg-bgPrimary w-[80%] max-w-2xl md:max-w-4xl rounded-lg shadow-lg p-4 md:p-8 flex flex-col md:flex-row">
@@ -328,7 +192,7 @@ const handleEmailSignIn = async (e) => {
         {/* Left Column (Form) */}
         <div className="w-full flex flex-col justify-center px-2 md:px-6">
           <h1 className="text-[40px] text-left max-sm:text-[24px] font-bold text-white">
-            {textDyamic ? "Login To Account" : "Create Account"}
+           Enroll To Course
           </h1>
           <p className="text-white text-left mt-2 text-[20px] font-bold max-sm:text-[16px]">
             Welcome! Fill up the form below and sign up to enroll in your
@@ -337,7 +201,7 @@ const handleEmailSignIn = async (e) => {
           </p>
 
           {/* Google Sign Up Button */}
-          <button
+          {/* <button
             onClick={handleGoogleSignIn}
             className="bg-white border cursor-pointer w-full text-[14px] max-sm:text-[12px] flex items-center justify-center gap-x-2 text-[#002E337D] py-2 px-3 rounded-lg font-semibold hover:bg-gray-100 transition-all mt-10 max-sm:mt-5">
             Continue with{" "}
@@ -346,16 +210,8 @@ const handleEmailSignIn = async (e) => {
               src={Google}
               alt="Google"
             />
-          </button>
+          </button> */}
 
-          {/* Divider */}
-          <div className="w-full flex mt-8 items-center my-3 max-sm:my-5">
-            <div className="flex-1 h-px bg-[#809299]"></div>
-            <p className="text-gray-500 text-[12px] px-2">
-              Or Continue with Email
-            </p>
-            <div className="flex-1 h-px bg-[#809299]"></div>
-          </div>
           {/* Signup Form */}
           <form
             className="space-y-3 mt-4 max-sm:mt-0 max-sm:space-none text-left"
@@ -384,16 +240,6 @@ const handleEmailSignIn = async (e) => {
               {loading ? "Loading..." : "Get Started"}
             </button>
           </form>
-          <div>
-          <p className="text-white text-center text-[14px] max-sm:text-[14px] mt-2">{textDyamic ? ("Login To Account") : (<> Already have an account?{" "}<button onClick={handleUserLoginAlready}
-        className="cursor-pointer text-buttonColor">
-        Login
-      </button>
-    </>
-  )}
-</p>
-
-          </div>
         </div>
         {/* Right Column (Image) */}
         <div className="hidden md:flex md:w-1/2 items-center justify-center">

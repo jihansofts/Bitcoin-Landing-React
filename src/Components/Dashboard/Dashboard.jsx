@@ -12,7 +12,6 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useAuth } from "../../Context/AuthContext";
-import { toast } from "react-toastify";
 import SidebarMobile from "./SidebarMobile";
 import { useParams } from "react-router-dom";
 const Dashboard = () => {
@@ -110,7 +109,7 @@ const Dashboard = () => {
 
   const handleMarkAsComplete = async (lessonId) => {
     const user = auth.currentUser;
-    if (!user) return toast.error("Please log in first!");
+    if (!user) return
     try {
       const userCourseRef = doc(
         db,
@@ -121,14 +120,14 @@ const Dashboard = () => {
       );
       const userCourseSnap = await getDoc(userCourseRef);
 
-      if (!userCourseSnap.exists()) toast.error("Enroll in this course first!");
+      if (!userCourseSnap.exists()) return null;
       let { completedLessons = [], totalLessons = 0 } = userCourseSnap.data();
       if (!completedLessons.includes(lessonId)) {
         completedLessons.push(lessonId);
       }
       const progressPercentage = (completedLessons.length / totalLessons) * 100;
       await updateDoc(userCourseRef, { completedLessons, progressPercentage });
-      toast.success("Lesson marked as complete!");
+      // toast.success("Lesson marked as complete!");
     } catch (error) {
       console.error("Error updating progress:", error);
     }
@@ -136,7 +135,7 @@ const Dashboard = () => {
 
   const handleUndo = async (lessonId) => {
     const user = auth.currentUser;
-    if (!user) return alert("Please log in first!");
+    if (!user) return null
 
     try {
       const userCourseRef = doc(
@@ -159,7 +158,7 @@ const Dashboard = () => {
       );
       // ✅ Update Firestore with rounded percentage
       await updateDoc(userCourseRef, { completedLessons, progressPercentage });
-      toast.warn(`Progress updated: ${progressPercentage}%`);
+      // toast.warn(`Progress updated: ${progressPercentage}%`);
     } catch (error) {
       console.error("Error updating progress:", error);
     }

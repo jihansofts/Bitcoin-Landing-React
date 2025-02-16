@@ -76,7 +76,6 @@ const Card = ({ course }) => {
       // Check if the user is already enrolled in this course
       const userCourseSnap = await getDoc(userCourseRef);
       if (userCourseSnap.exists()) {
-        toast.info("You are already enrolled in this course.");
         navigate(`/dashboard/course/${id}`);
         return;
       }
@@ -86,7 +85,6 @@ const Card = ({ course }) => {
         completedLessons: [],
         totalLessons: totalLessons, // Use the fetched totalLessons value
       });
-      toast.success("Enrollment successful!");
       navigate(`/dashboard/course/${id}`);
     } catch (error) {
       console.error("Enrollment failed:", error);

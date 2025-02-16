@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { LuMoveLeft, LuMoveRight } from "react-icons/lu";
-import { toast } from "react-toastify";
-import { useAuth } from "../../Context/AuthContext";
 const Content = ({
   lesson,
   completeLesson,
@@ -45,8 +43,6 @@ const Content = ({
       const nextLesson = lessons[currentIndex + 1];
       setSelectLesson(nextLesson); // Update the selected lesson
       setActiveIndex(currentIndex + 1); // Update the active index
-    } else {
-      toast.warn("You have reached the last lesson.");
     }
   };
   const handleGoPrev = () => {
@@ -57,8 +53,6 @@ const Content = ({
       const prevLesson = lessons[currentIndex - 1];
       setSelectLesson(prevLesson); // Update the selected lesson
       setActiveIndex(currentIndex - 1); // Update the active index
-    } else {
-      toast.warn("You have reached the first lesson.");
     }
   };
   return (
